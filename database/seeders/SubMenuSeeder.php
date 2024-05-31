@@ -36,6 +36,16 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'id' => 3,
+                'menu_id' => 1,
+                'description' => 'Fornecedores',
+                'icon' => 'nav-icon fa-solid fa-truck',
+                'route' => 'provider',
+                'actived' => true,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 4,
                 'menu_id' => 4,
                 'description' => 'Usuários',
                 'icon' => 'nav-icon fa-solid fa-users',
@@ -45,7 +55,7 @@ class SubMenuSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
-                'id' => 10,
+                'id' => 5,
                 'menu_id' => 4,
                 'description' => 'Empresa',
                 'icon' => 'nav-icon fa-solid fa-building-memo',

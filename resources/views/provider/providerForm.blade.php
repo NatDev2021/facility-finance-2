@@ -1,17 +1,17 @@
 @extends('layouts.page')
 
-@section('title', 'Clientes')
+@section('title', 'Fornecedores')
 
 @section('content_header')
-    <h1>Cadastro de Clientes</h1>
+    <h1>Cadastro de Fornecedores</h1>
 @stop
 
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <form action="{{ url('customer/save') }}" id="customer_form" method="post">
+            <form action="{{ url('provider/save') }}" id="provider_form" method="post">
                 @csrf
-                <input type="hidden" name="id_customer" id="id_customer" value="{{ $customer->id ?? '' }}" autocomplete="off">
+                <input type="hidden" name="id_provider" id="id_provider" value="{{ $provider->id ?? '' }}" autocomplete="off">
 
                 <div class="card card-primary card-outline">
                     <div class="card-header">
@@ -30,7 +30,7 @@
                                 <i class="fas fa-address-card bg-blue"></i>
                                 <div class="timeline-item">
                                     <x-adminlte-card title="Pessoa" theme="dark">
-                                        @include('customer.forms.persomForm')
+                                        @include('provider.forms.persomForm')
                                     </x-adminlte-card>
 
                                 </div>
@@ -43,7 +43,7 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-12">
-                                <a href="/customer" class="btn btn-secondary">Voltar</a>
+                                <a href="/provider" class="btn btn-secondary">Voltar</a>
                                 <button type="submit" class="btn btn-success float-right">Salvar</button>
                             </div>
                         </div>

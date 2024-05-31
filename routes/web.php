@@ -27,6 +27,7 @@ Route::get('person', [App\Http\Controllers\HomeController::class, 'person'])->na
 Route::get('customer', [App\Http\Controllers\HomeController::class, 'customer'])->name('customer');
 Route::get('users', [App\Http\Controllers\HomeController::class, 'users'])->name('users');
 Route::get('company', [App\Http\Controllers\HomeController::class, 'company'])->name('company');
+Route::get('provider', [App\Http\Controllers\HomeController::class, 'provider'])->name('provider');
 
 
 
@@ -57,6 +58,15 @@ Route::prefix('customer')->group(function () {
     Route::get('get/{id}', [App\Http\Controllers\Customer\CustomerController::class, 'getCustomer']);
     Route::get('get', [App\Http\Controllers\Customer\CustomerController::class, 'getCustomer']);
 });
+
+Route::prefix('provider')->group(function () {
+    Route::get('form', [App\Http\Controllers\Provider\ProviderController::class, 'formProvider']);
+    Route::get('edit/{id}', [App\Http\Controllers\Provider\ProviderController::class, 'editProvider']);
+    Route::post('save', [App\Http\Controllers\Provider\ProviderController::class, 'saveProvider']);
+    Route::get('get/{id}', [App\Http\Controllers\Provider\ProviderController::class, 'getProvider']);
+    Route::get('get', [App\Http\Controllers\Provider\ProviderController::class, 'getProvider']);
+});
+
 
 
 Route::prefix('company')->group(function () {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
-use App\Models\Loans;
 use App\Models\Person;
 use Illuminate\Http\Request;
 use Helper;
@@ -68,16 +67,9 @@ class CustomerController extends Controller
     {
 
         $customer = Customer::with('person')->find($id);
-        $loans = $loans = Loans::select('loans.id', 'person.name as customer', 'loans.loan_amount', 'loans.installments', 'status.description as status', 'status.color as status_color')
-            ->join('customer', 'loans.customer_id', '=', 'customer.id')
-            ->join('person', 'customer.person_id', '=', 'person.id')
-            ->join('status', 'loans.status_id', '=', 'status.id')
-            ->where('customer.id', '=', $id)
-            ->orderBy('loans.id', 'desc')
-            ->paginate(5);
+        
         return view('customer.customerForm', [
             'customer' => $customer,
-            'loans' => $loans,
             'person' => [$customer->person]
         ]);
     }

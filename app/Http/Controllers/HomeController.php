@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Customer, Person, Products, ProductsType, Status, User, Documents, Charges, Company, FinancialMovement, Loans};
+use App\Models\{Customer, Person,   Status, User,   Company, FinancialMovement, Loans, Provider};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use stdClass;
@@ -144,66 +144,28 @@ class HomeController extends Controller
         ]);
     }
 
+    public function provider()
+    {
+        $data = $this->request->get('search');
+        $provider = Provider::with('person')->whereHas('person', function ($query) use ($data) {
+            if (!empty($data)) {
+                $query->where('name', 'like', '%' . $data . '%')->orWhere('document', 'like', $data . '%');
+            }
+        })->paginate(10);
+
+        return view('provider.provider', [
+            'provider' => $provider,
+            'search' => $data
+        ]);
+    }
+
     public function status()
     {
         $status = Status::paginate(15);
         return view('status.status', ['status' => $status]);
     }
 
-    public function products()
-    {
-        $products = Products::with(['parametrizations' => function ($query) {
-            $query->where('actived', '=', true);
-        }])->paginate(15);
-        $status = Status::get();
-        $documents = Documents::get();
 
-        return view('products.products', [
-            'products' => $products,
-            'status' => $status,
-            'documents' => $documents
-        ]);
-    }
-    public function documents()
-    {
-        $documents = Documents::paginate(15);
-        return view('documents.documents', [
-            'documents' => $documents,
-        ]);
-    }
-
-    public function charges()
-    {
-        $charges = Charges::paginate(15);
-        return view('charges.charges', [
-            'charges' => $charges,
-        ]);
-    }
-
-    public function loans()
-    {
-
-
-        $loans = Loans::select('loans.id', 'person.name as customer', 'loans.loan_amount', 'loans.installments', 'loans.created_at', 'status.description as status', 'status.color as status_color')
-            ->join('customer', 'loans.customer_id', '=', 'customer.id')
-            ->join('person', 'customer.person_id', '=', 'person.id')
-            ->join('status', 'loans.status_id', '=', 'status.id')
-            ->orderBy('loans.id', 'desc')
-            ->paginate(15);
-
-        return view('loans.loans', [
-            'loans' => $loans
-        ]);
-    }
-
-    public function financialMovement()
-    {
-
-        $movements = FinancialMovement::orderBy('id', 'desc')->paginate(15);
-        return view('financial_movement.financial-movement', [
-            'movements' => $movements
-        ]);
-    }
     public function company()
     {
         $company = Company::find(1);
@@ -223,20 +185,5 @@ class HomeController extends Controller
             'countCustomer' => $countCustomer,
             'customers' => $customers
         ]);
-    }
-    public function loanReport()
-    {
-        $countLoans = Loans::all()->count();
-        $customers = Customer::with('person')->get();
-        $status = Status::get();
-        return view('reports.loanReport', [
-            'countLoans' => $countLoans,
-            'customers' => $customers,
-            'status' =>  $status
-        ]);
-    }
-    public function financialReport()
-    {
-        return view('reports.financialReport');
     }
 }

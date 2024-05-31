@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Person;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Person;
 use App\Models\PersonAddress;
 use App\Models\PersonPhone;
+use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Helper;
@@ -53,9 +55,23 @@ class PersonController extends Controller
             $idPerson = $this->updatePerson($data);
         }
 
-        $person = Person::where('id', $idPerson)->get();
+        if (isset($data['customer_check'])) {
+            $idCustomer = Customer::create([
+                'person_id' => $idPerson,
+                "id_user_ins" => $this->request->user()->id,
 
-        return view('customer.customerForm', ['person' => $person]);
+            ]);
+        }
+
+        if (isset($data['provider_check'])) {
+            $idProvider = Provider::create([
+                'person_id' => $idPerson,
+                "id_user_ins" => $this->request->user()->id,
+
+            ]);
+        }
+
+        return redirect('/person');
     }
 
     private function updatePerson($data)
