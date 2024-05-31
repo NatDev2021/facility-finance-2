@@ -48,7 +48,7 @@ class SubMenuSeeder extends Seeder
                 'id' => 4,
                 'menu_id' => 1,
                 'description' => 'Plano de Contas',
-                'icon' => 'nav-icon fa-solid fa-notebook',
+                'icon' => 'nav-icon fa-solid fa-book',
                 'route' => 'provider',
                 'actived' => true,
                 'created_at' => date('Y-m-d H:i:s'),
