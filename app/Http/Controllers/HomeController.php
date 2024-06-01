@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Customer, Person,   Status, User,   Company, FinancialMovement, Loans, Provider};
+use App\Models\{AccountingFinancial, Customer, Person,   Status, User,   Company, FinancialMovement, Loans, Provider};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use stdClass;
@@ -157,6 +157,12 @@ class HomeController extends Controller
             'provider' => $provider,
             'search' => $data
         ]);
+    }
+
+    public function accountingFinancial()
+    {
+        $accountingFinancial = AccountingFinancial::paginate(15);
+        return view('accounting_financial.accounting_financial', ['accountingFinancial' => $accountingFinancial]);
     }
 
     public function status()

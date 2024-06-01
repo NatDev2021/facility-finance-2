@@ -28,6 +28,7 @@ Route::get('customer', [App\Http\Controllers\HomeController::class, 'customer'])
 Route::get('users', [App\Http\Controllers\HomeController::class, 'users'])->name('users');
 Route::get('company', [App\Http\Controllers\HomeController::class, 'company'])->name('company');
 Route::get('provider', [App\Http\Controllers\HomeController::class, 'provider'])->name('provider');
+Route::get('accounting_financial', [App\Http\Controllers\HomeController::class, 'accountingFinancial'])->name('accounting_financial');
 
 
 
@@ -67,12 +68,17 @@ Route::prefix('provider')->group(function () {
     Route::get('get', [App\Http\Controllers\Provider\ProviderController::class, 'getProvider']);
 });
 
+Route::prefix('accounting_financial')->group(function () {
+    Route::get('form', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'formAccountingFinancial']);
+    Route::get('edit/{id}', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'editAccountingFinancial']);
+    Route::post('save', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'saveAccountingFinancial']);
+    Route::get('get/{id}', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'getAccountingFinancial']);
+    Route::get('get', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'getAccountingFinancial']);
+});
+
 
 
 Route::prefix('company')->group(function () {
     Route::post('save', [App\Http\Controllers\Company\CompanyController::class, 'saveCompany']);
     Route::get('get/{id}', [App\Http\Controllers\Company\CompanyController::class, 'getCompany']);
 });
-
-
-

@@ -5,15 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Charges extends Model
+class AccountingFinancial extends Model
 {
     use HasFactory;
 
+    public $table = 'accounting_financial';
+
     protected $fillable = [
         'description',
-        'actived',
-        'type',
+        'name',
+        'account',
+        'start_duration_date',
+        'end_duration_date',
         'id_user_ins'
-
     ];
+
+
 }
