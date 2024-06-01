@@ -109,7 +109,29 @@
     </form>
 
 
-    <form>
+    <form action="{{ url('accounting_financial/import') }}" id="import_accounting_financial_form" method="post">
+        @csrf
+        <!-- Modal -->
+        <div class="modal fade" id="importAccountingFinancialModal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importModalTitle">Importar Plano de Contas</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @include('accounting_financial.forms.import_account_financialForm')
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" id="bt_save" class="btn btn-success float-right">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 @stop
 
@@ -141,7 +163,6 @@
                 $('#accountingFinancialModal').modal('show');
             });
 
-
             $('#accounting_financial_table').on('click', "#delete_accounting_financial",
                 function() { // onclick bot�o de anexo
 
@@ -172,9 +193,13 @@
 
             $('#bt_save').on('click', function() {
 
-                if (!validateEmptyFields('description')) {
+                if (!validateEmptyFields('description', 'account')) {
                     return false;
                 }
+            });
+
+            $('#import_accounting_financial').on('click', function() {
+                $('#importAccountingFinancialModal').modal('show');
             });
 
 

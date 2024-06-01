@@ -546,6 +546,16 @@ return [
                     'location' => '//js.pusher.com/8.2.0/pusher.min.js',
                 ],
             ],
+        ],
+        'BsCustomFileInput' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/bs-custom-file-input/bs-custom-file-input.min.js',
+                ],
+            ],
         ]
     ],
 

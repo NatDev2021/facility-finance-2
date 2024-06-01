@@ -74,6 +74,8 @@ Route::prefix('accounting_financial')->group(function () {
     Route::post('save', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'saveAccountingFinancial']);
     Route::get('get/{id}', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'getAccountingFinancial']);
     Route::get('get', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'getAccountingFinancial']);
+    Route::post('read_file', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'readImportFile']);
+
 });
 
 

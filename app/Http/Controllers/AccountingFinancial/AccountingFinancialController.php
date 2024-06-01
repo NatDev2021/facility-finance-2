@@ -90,4 +90,38 @@ class AccountingFinancialController extends Controller
     {
         return AccountingFinancial::find($id);
     }
+
+    protected function readImportFile()
+    {
+        $file = $this->request->file('input_file');
+        if (empty($file)) {
+            return response([
+                'status' => 'error',
+                'message' => 'Nenhum arquivo enviado.'
+            ], 400);
+        }
+        $extension = $file->getClientOriginalExtension();
+        if ($extension !== 'CSV') {
+            return response([
+                'status' => 'error',
+                'message' => 'Formato do arquivo deve ser csv.'
+            ], 400);
+        }
+
+        $handle = fopen($file->getPathname(), "r");
+        $header = fgetcsv($handle, 1000, ";");
+        $rowsArray = array();
+
+        while ($rows = fgetcsv($handle, 1000, ";")) {
+            $row = array_combine($header, $rows);
+            $rowsArray[$row['COD_CONTA']] = $row;
+        }
+
+        return response([
+            'status' => 'success',
+            'message' => 'Arquivo lido com sucesso',
+            'data' =>
+            $rowsArray
+        ], 200);
+    }
 }
