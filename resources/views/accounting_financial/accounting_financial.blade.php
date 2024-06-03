@@ -6,11 +6,11 @@
     <div class="d-flex justify-content-between">
         <h1>Plano de Contas</h1>
         <div>
-            <button type="button" class="btn btn-outline-primary" id="import_accounting_financial"
+            <a href="accounting_financial/import" class="btn btn-outline-primary" 
                 data-target="#accountingFinancialModal">
                 <i class="fa-solid fa-upload"></i>
                 Importar
-            </button>
+            </a>
             <button type="button" class="btn btn-outline-primary" id="new_accounting_financial"
                 data-target="#accountingFinancialModal">
                 <i class="fa-solid fa-plus"></i>
@@ -109,30 +109,6 @@
     </form>
 
 
-    <form action="{{ url('accounting_financial/import') }}" id="import_accounting_financial_form" method="post">
-        @csrf
-        <!-- Modal -->
-        <div class="modal fade" id="importAccountingFinancialModal" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="importModalTitle">Importar Plano de Contas</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        @include('accounting_financial.forms.import_account_financialForm')
-                    </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" id="bt_save" class="btn btn-success float-right">Salvar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
 @stop
 
 
@@ -197,12 +173,6 @@
                     return false;
                 }
             });
-
-            $('#import_accounting_financial').on('click', function() {
-                $('#importAccountingFinancialModal').modal('show');
-            });
-
-
 
 
         });

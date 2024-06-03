@@ -91,6 +91,11 @@ class AccountingFinancialController extends Controller
         return AccountingFinancial::find($id);
     }
 
+    protected function importAccountForm()
+    {
+        
+    }
+
     protected function readImportFile()
     {
         $file = $this->request->file('input_file');
