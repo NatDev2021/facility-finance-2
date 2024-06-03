@@ -6,8 +6,7 @@
     <div class="d-flex justify-content-between">
         <h1>Plano de Contas</h1>
         <div>
-            <a href="accounting_financial/import" class="btn btn-outline-primary" 
-                data-target="#accountingFinancialModal">
+            <a href="accounting_financial/import" class="btn btn-outline-primary" data-target="#accountingFinancialModal">
                 <i class="fa-solid fa-upload"></i>
                 Importar
             </a>
@@ -53,7 +52,7 @@
                                     <td class="text-left">{{ $item->name ?? '' }}</td>
                                     <td class="text-center">{{ $item->account ?? '' }}</td>
                                     <td class="text-center"><span class="badge"
-                                            style="background-color: {{ $item->end_duration_date < date('Y-m-d') ? '#f0a8a8' : '#a8f0cb' }};">{{ $item->end_duration_date < date('Y-m-d') ? 'Inativo' : 'Ativo' }}</span>
+                                            style="background-color: {{ $item->end_duration_date != '0000-00-00' && $item->end_duration_date < date('Y-m-d') ? '#f0a8a8' : '#a8f0cb' }};">{{ $item->end_duration_date != '0000-00-00' && $item->end_duration_date < date('Y-m-d') ? 'Inativo' : 'Ativo' }}</span>
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-end">

@@ -66,10 +66,10 @@
                                 <table class="table" id="import_table">
                                     <thead>
                                         <tr style="color: #455a64; background-color: #f5f5f5">
-                                            <th>Conta</th>
-                                            <th>Nome</th>
-                                            <th>Início de Vigência</th>
-                                            <th>Fim de Vigência</th>
+                                            <th style='text-align: center; '>Conta</th>
+                                            <th style='text-align: left;'>Nome</th>
+                                            <th style='text-align: center;'>Início de Vigência</th>
+                                            <th style='text-align: center; '>Fim de Vigência</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -159,7 +159,7 @@
 
                     if (xhr.status !== 200) {
                         Toast.fire({
-                            icon: "error",
+                            icon: data.status,
                             title: data.message,
                         });
                         return false;
@@ -168,11 +168,16 @@
                     if (data.data) {
                         let objeto = data.data;
                         const array = Object.keys(objeto).map(chave => objeto[chave]);
-                        paginate(array)
+                        paginate(array);
                     } else {
                         $("#import_table tbody tr").remove();
 
                     }
+
+                    Toast.fire({
+                        icon: data.status,
+                        title: data.message,
+                    });
 
                 }
             }
@@ -196,12 +201,17 @@
             const list = {
                 create(item) {
                     var table = "";
+                    let start_date = new Date(item.start_duration_date).toLocaleDateString('pt-BR');
+                    let end_date = "";
+                    if (item.end_duration_date) {
+                        end_date = new Date(item.end_duration_date).toLocaleDateString('pt-BR');
 
+                    }
                     table = table.concat("<tr >",
                         "<td   style='text-align: center; '>" + item.account + "</td>",
-                        "<td   style='text-align: center; '>" + item.name + "</td>",
-                        "<td   style='text-align: center; '>" + item.start_duration_date + "</td>",
-                        "<td   style='text-align: center; '>" + item.end_duration_date + "</td>",
+                        "<td   style='text-align: left; '>" + item.name + "</td>",
+                        "<td   style='text-align: center; '>" + start_date + "</td>",
+                        "<td   style='text-align: center; '>" + end_date + "</td>",
                         "</tr>"
 
                     );

@@ -50,20 +50,41 @@ class ImportAccountingFinancialController extends Controller
             $year = substr($row['DT_INI_VIGEN'], 0, -2);
             $row['DT_INI_VIGEN'] = date($year . '-' . $month . '-' . '01');
 
-            $lastDay = 'NULL';
             if (!empty($row['DT_FIM_VIGEN'])) {
                 $month = substr($row['DT_FIM_VIGEN'], -2);
                 $year = substr($row['DT_FIM_VIGEN'], 0, -2);
-                $lastDay = "'" . date($year . '-' . $month . '-' . 't') . "'";
+                $row['DT_FIM_VIGEN'] =  date($year . '-' . $month . '-' . 't');
             }
+
             $rowsArray[$row['COD_CONTA']] = [
                 'account' => $row['COD_CONTA'],
                 'description' => $row['NATUREZA'],
-                'name' => $row['NOME_CONTA'],
+                'name' => utf8_decode($row['NOME_CONTA']),
                 'start_duration_date' => $row['DT_INI_VIGEN'],
-                'end_duration_date' => $lastDay,
+                'end_duration_date' => $row['DT_FIM_VIGEN'],
+                "id_user_ins" => $this->request->user()->id,
+
             ];
         }
+
+       //Atualiza as contas existentes
+        $accounts = array_column($rowsArray, 'account');
+        $getAccounts = AccountingFinancial::whereIn('account', $accounts)->get();
+        foreach ($getAccounts as $item) {
+
+            $account = AccountingFinancial::find($item['id']);
+            $account->update([
+                'description' => $rowsArray[$item['account']]['description'],
+                'name' => $rowsArray[$item['account']]['name'] ?? '',
+                'end_duration_date' => $rowsArray[$item['account']]['end_duration_date'],
+                'start_duration_date' => $rowsArray[$item['account']]['start_duration_date'],
+            ]);
+
+            unset($rowsArray[$item['account']]);
+        }
+
+        //Insere as contasque faltam
+        AccountingFinancial::insert($rowsArray);
 
         return response([
             'status' => 'success',
