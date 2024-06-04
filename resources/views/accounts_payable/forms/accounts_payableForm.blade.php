@@ -1,4 +1,4 @@
-<div class="row g-3">
+<div class="row ">
     <input type="hidden" name="id_accounting_financial" id="id_accounting_financial" value="{{ '' }}">
     <div class="col-md-8 form-group">
         <label for="inputDescription">Descrição</label>
@@ -27,7 +27,7 @@
         </x-adminlte-select2>
     </div>
 
-    <div class="col-md-3  input-group">
+    <div class="col-md-3  form-group">
         <label for="amount">Valor</label>
         <div class="input-group  date" data-target-input="nearest">
             <div class="input-group-append" data-target="#amount" data-toggle="datetimepicker">
@@ -38,7 +38,7 @@
 
         </div>
     </div>
-    <div class="col-md-3  input-group">
+    <div class="col-md-3  form-group">
         <label for="amount">Acréscimos/Juros</label>
         <div class="input-group  date" data-target-input="nearest">
             <div class="input-group-append" data-target="#amount" data-toggle="datetimepicker">
@@ -49,8 +49,8 @@
 
         </div>
     </div>
-    <div class="col-md-3  input-group">
-        <label for="amount">Abatimentos/Descontos *</label>
+    <div class="col-md-3  form-group">
+        <label for="amount">Abatimentos/Descontos </label>
         <div class="input-group  date" data-target-input="nearest">
             <div class="input-group-append" data-target="#amount" data-toggle="datetimepicker">
                 <div class="input-group-text">R$</div>
@@ -60,7 +60,7 @@
 
         </div>
     </div>
-    <div class="col-md-3  input-group">
+    <div class="col-md-3  form-group">
         <label for="amount">Total </label>
         <div class="input-group  date" data-target-input="nearest">
             <div class="input-group-append" data-target="#amount" data-toggle="datetimepicker">
@@ -72,8 +72,8 @@
         </div>
     </div>
     <div class="col-md-12 form-group">
-        <label for="debit_account">Conta de Desembolso</label>
-        <x-adminlte-select2 name="debit_account" id="debit_account">
+        <label for="disbursement_account">Conta de Desembolso</label>
+        <x-adminlte-select2 name="disbursement_account" id="disbursement_account">
             <option value="0">Salecione...</option>
 
         </x-adminlte-select2>
