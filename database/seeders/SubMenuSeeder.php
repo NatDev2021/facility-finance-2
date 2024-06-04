@@ -58,8 +58,8 @@ class SubMenuSeeder extends Seeder
                 'id' => 5,
                 'menu_id' => 2,
                 'description' => 'Contas a Pagar',
-                'icon' => 'nav-icon fa-solid fa-book',
-                'route' => 'accounting_financial',
+                'icon' => 'nav-icon fa-solid fa-up',
+                'route' => 'accounts_payable',
                 'actived' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')

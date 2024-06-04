@@ -29,6 +29,7 @@ Route::get('users', [App\Http\Controllers\HomeController::class, 'users'])->name
 Route::get('company', [App\Http\Controllers\HomeController::class, 'company'])->name('company');
 Route::get('provider', [App\Http\Controllers\HomeController::class, 'provider'])->name('provider');
 Route::get('accounting_financial', [App\Http\Controllers\HomeController::class, 'accountingFinancial'])->name('accounting_financial');
+Route::get('accounts_payable', [App\Http\Controllers\HomeController::class, 'accountsPayable'])->name('accounts_payable');
 
 
 

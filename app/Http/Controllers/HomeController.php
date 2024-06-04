@@ -161,8 +161,24 @@ class HomeController extends Controller
 
     public function accountingFinancial()
     {
-        $accountingFinancial = AccountingFinancial::paginate(15);
-        return view('accounting_financial.accounting_financial', ['accountingFinancial' => $accountingFinancial]);
+        $data = $this->request->get('search');
+        $accountingFinancial = new AccountingFinancial();
+
+        if (!empty($data)) {
+            $accountingFinancial = $accountingFinancial->where('name', 'like', '%' . $data . '%')->orWhere('account', 'like', $data . '%');
+        }
+
+        $accountingFinancial = $accountingFinancial->paginate(15);
+        return view('accounting_financial.accounting_financial', [
+            'accountingFinancial' => $accountingFinancial,
+            'search' => $data
+
+        ]);
+    }
+
+    public function accountsPayable()
+    {
+        return view('accounts_payable.accounts_payable');
     }
 
     public function status()

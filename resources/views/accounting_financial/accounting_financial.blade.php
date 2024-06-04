@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between">
         <h1>Plano de Contas</h1>
         <div>
-            <a href="accounting_financial/import" class="btn btn-outline-primary" data-target="#accountingFinancialModal">
+            <a href="accounting_financial/import" class="btn btn-outline-primary" >
                 <i class="fa-solid fa-upload"></i>
                 Importar
             </a>
@@ -27,10 +27,32 @@
         <div class="container-fluid">
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-edit"></i>
+                    <div class="row">
+                        <div class="col-md-6 d-flex align-items-center">
+                            <h3 class="card-title">
+                                <i class="fas fa-edit"></i>
+                            </h3>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end  p-0">
 
-                    </h3>
+                            <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                                <i class="fas fa-search text-end"></i>
+                            </a>
+
+                            <div class="navbar-search-block" style="display: {{ empty($search) ? 'none' : 'flex' }};">
+                                <x-adminlte-input name="search" id="search" placeholder="pesquisar" label="&nbsp;"
+                                    value="{{ $search ?? '' }}">
+                                    <x-slot name="appendSlot">
+                                        <x-adminlte-button icon="fas fa-search" theme="success" id="bt_search" />
+
+                                        <x-adminlte-button icon="fas fa-times" theme="danger" data-widget="navbar-search" />
+                                    </x-slot>
+
+                                </x-adminlte-input>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body table-responsive">
@@ -173,6 +195,14 @@
                 }
             });
 
+            $('#bt_search').on('click', function() {
+
+                var search = $('#search').val();
+
+                window.location.href = "{{ url('accounting_financial?search=') }}" + search;
+
+
+            });
 
         });
     </script>
