@@ -5,8 +5,8 @@
         <input type="text" id="description" name="description" class="form-control" value="{{ '' }}">
     </div>
     <div class="col-md-12 form-group">
-        <label for="privder">Fornecedor</label>
-        <x-adminlte-select2 name="privder" id="privder">
+        <label for="privder_id">Fornecedor</label>
+        <x-adminlte-select2 name="privder_id" id="privder_id">
             <option value="0">Salecione...</option>
             @foreach ($providers as $item)
                 <option @selected(($loan->customer_id ?? '') == $item->id) value="{{ $item->id }}">{{ $item->person->name }}</option>
@@ -133,12 +133,12 @@
     <div id ="account_frequency" class="col-md-12 row" style="display: none">
         <div class="col-md-4 form-group">
             <label for="inputDescription">Quant Parcelas/Mensalidades *</label>
-            <input type="number" id="description" name="description" class="form-control"
+            <input type="number" id="frequency_number" name="frequency_number" class="form-control"
                 value="{{ '' }}">
         </div>
         <div class="col-md-4 form-group">
             <label for="privder">Frequência de Repetição </label>
-            <x-adminlte-select2 name="privder" id="privder">
+            <x-adminlte-select2 name="frequency" id="frequency">
                 <option value="0">Salecione...</option>
 
             </x-adminlte-select2>
@@ -150,7 +150,6 @@
         $(document).ready(function() { // onloadjs
             $('#register_date').daterangepicker({
                 singleDatePicker: true,
-                startDate:'',
                 locale: {
                     "format": "DD/MM/YYYY",
                     "applyLabel": "Aplicar",

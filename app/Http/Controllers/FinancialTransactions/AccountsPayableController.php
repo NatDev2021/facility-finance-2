@@ -49,13 +49,21 @@ class AccountsPayableController extends Controller
 
     private function createAccountsPayable(array|string|null $data)
     {
-        $this->createValidator($data)->validate();
+
         $idAccount = FinancialTransactions::create([
             'description' => $data['description'] ?? '',
-            'name' => $data['name'] ?? '',
-            'account' => $data['account'] ?? '',
-            'end_duration_date' => Helper::convertToAmericanDate($data['end_duration_date'] ?? ''),
-            'start_duration_date' => Helper::convertToAmericanDate($data['start_duration_date'] ?? ''),
+            'register_date' => Helper::convertToAmericanDate($data['register_date'] ?? ''),
+            'due_date' => Helper::convertToAmericanDate($data['due_date'] ?? ''),
+            'pay_date' => Helper::convertToAmericanDate($data['pay_date'] ?? ''),
+            'value' => Helper::removeMoneyMask($data['value'] ?? 0),
+            'addition' => Helper::removeMoneyMask($data['addition'] ?? 0),
+            'discount' => Helper::removeMoneyMask($data['discount'] ?? 0),
+            'amount' => Helper::removeMoneyMask($data['amount'] ?? 0),
+            'customer_provider_id' => $data['privder_id'],
+            'credit_account_id' => $data['credit_account'],
+            'debit_account_id' => $data['debit_account'],
+            'type' => 'p',
+            'observation' => $data['observation'] ?? '',
             "id_user_ins" => $this->request->user()->id,
 
         ])->id;
