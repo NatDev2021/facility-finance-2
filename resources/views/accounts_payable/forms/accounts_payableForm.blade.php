@@ -1,10 +1,10 @@
 <div class="row ">
     <input type="hidden" name="id_accounting_financial" id="id_accounting_financial" value="{{ '' }}">
-    <div class="col-md-8 form-group">
+    <div class="col-md-12 form-group">
         <label for="inputDescription">Descrição</label>
         <input type="text" id="description" name="description" class="form-control" value="{{ '' }}">
     </div>
-    <div class="col-md-4 form-group">
+    <div class="col-md-12 form-group">
         <label for="privder">Fornecedor</label>
         <x-adminlte-select2 name="privder" id="privder">
             <option value="0">Salecione...</option>
@@ -112,4 +112,73 @@
         </div>
     </div>
 
+    
+    <div class="col-md-12 form-group">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch1">
+            <label class="custom-control-label" for="customSwitch1">Esta conta se repete?</label>
+        </div>
+    </div>
+
+    <div id ="account_frequency" class="col-md-12 row" style="display: none">
+        <div class="col-md-4 form-group">
+            <label for="inputDescription">Quant Parcelas/Mensalidades *</label>
+            <input type="number" id="description" name="description" class="form-control"
+                value="{{ '' }}">
+        </div>
+        <div class="col-md-4 form-group">
+            <label for="privder">Frequência de Repetição </label>
+            <x-adminlte-select2 name="privder" id="privder">
+                <option value="0">Salecione...</option>
+
+            </x-adminlte-select2>
+        </div>
+    </div>
 </div>
+@push('js')
+    <script>
+        $(document).ready(function() { // onloadjs
+            $('#due_date').daterangepicker({
+                singleDatePicker: false,
+
+                locale: {
+                    "format": "DD/MM/YYYY",
+                    "applyLabel": "Aplicar",
+                    "cancelLabel": "Cancelar",
+                    "daysOfWeek": [
+                        "D",
+                        "S",
+                        "T",
+                        "Q",
+                        "Q",
+                        "S",
+                        "S"
+                    ],
+                    "monthNames": [
+                        "Janeiro",
+                        "Fevereiro",
+                        "Março",
+                        "Abril",
+                        "Maio",
+                        "Junho",
+                        "Julho",
+                        "Agosto",
+                        "Setembro",
+                        "Outubro",
+                        "Novembro",
+                        "Dezembro"
+                    ]
+
+                },
+            });
+
+            $('#customSwitch1').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#account_frequency').show();
+                } else {
+                    $('#account_frequency').hide();
+                }
+            });
+        });
+    </script>
+@endpush

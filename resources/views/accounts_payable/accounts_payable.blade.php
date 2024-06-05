@@ -3,10 +3,10 @@
 @section('content_header')
     <div class="d-flex justify-content-between">
         <h1>Contas a Pagar</h1>
-        <button type="button" class="btn btn-outline-primary" id="new_accounts_payable" data-target="#accountsPayableModal">
+        <a href="accounts_payable/form" class="btn btn-outline-primary" >
             <i class="fa-solid fa-plus"></i>
             Adicionar
-        </button>
+        </a>
     </div>
 
 @stop
@@ -104,12 +104,6 @@
                                 </div>
                                 <hr />
 
-
-                                {{-- <div style="padding-top: 0px; " class="d-flex justify-content-end gap-2">
-                                    <button type="submit" name="btn_filtro" id="btn_filtro"    class="btn-block btn-secondary">Aplicar Filtro</button>
-                                    <button type="button" name="btb_exportar" id="btb_exportar" class="btn-block btn-secondary">Exportar</button>
-                                </div> --}}
-
                                 <div class="d-flex justify-content-end">
                                     <div>
                                         <button type="submit" class="btn btn-outline-success btn-sm"
@@ -155,30 +149,6 @@
 
     </div>
 
-    <form action="{{ url('accounts_payable/save') }}" id="accounts_payable" method="post">
-        @csrf
-        <!-- Modal -->
-        <div class="modal fade" id="accountsPayableModal" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="ModalTitle">Nova Conta</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        @include('accounts_payable.forms.accounts_payableForm')
-                    </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" id="bt_save" class="btn btn-success float-right">Salvar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
 @stop
 
 @push('js')
@@ -216,11 +186,6 @@
                     ]
 
                 },
-            });
-
-            $('#new_accounts_payable').on('click', function() {
-                // cleanData();
-                $('#accountsPayableModal').modal('show');
             });
 
         });

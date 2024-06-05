@@ -16,6 +16,14 @@ class AccountsPayableController extends Controller
         parent::__construct($request);
     }
 
+
+    public function formAccountsPayable()
+    {
+        
+
+        return view('accounts_payable.accounts_payableForm');
+    }
+
     public function saveAccountsPayable()
     {
         $data = $this->request->post();
