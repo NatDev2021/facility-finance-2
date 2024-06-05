@@ -13,7 +13,12 @@ class FinancialTransactions extends Model
 
     protected $fillable = [
         'description',
-        'date_due',
+        'register_date',
+        'due_date',
+        'pay_date',
+        'value',
+        'addition',
+        'discount',
         'amount',
         'customer_provider_id',
         'credit_account_id',

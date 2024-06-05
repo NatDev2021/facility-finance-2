@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\Helper;
+use App\Models\AccountingFinancial;
+use App\Models\CompanyPaymentAccounts;
 use App\Models\FinancialTransactions;
+use App\Models\Provider;
 
 class AccountsPayableController extends Controller
 {
@@ -19,9 +22,15 @@ class AccountsPayableController extends Controller
 
     public function formAccountsPayable()
     {
-        
-
-        return view('accounts_payable.accounts_payableForm');
+        $providers = Provider::with('person')->get();
+        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
+            ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
+        $disbursementAccounts = CompanyPaymentAccounts::get();
+        return view('accounts_payable.accounts_payableForm', [
+            'providers' =>  $providers,
+            'accountFinancial' => $accountFinancial,
+            'disbursementAccounts' =>  $disbursementAccounts
+        ]);
     }
 
     public function saveAccountsPayable()
