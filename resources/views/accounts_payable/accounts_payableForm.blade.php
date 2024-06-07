@@ -91,11 +91,12 @@
                 }
 
 
-                if (parseFloat($('frequency_number').val()) < 1) {
+                if (parseFloat($('#frequency_number').val()) < 1) {
 
+                    $('#frequency_number').css({"border": "1px solid red"});
                     Toast.fire({
                         icon: 'error',
-                        title: 'O número de parcelas a reptir deve ser maior do que 0',
+                        title: 'O número de parcelas a reptir deve ser maior do que 0.',
                     });
                     return false;
                 }
