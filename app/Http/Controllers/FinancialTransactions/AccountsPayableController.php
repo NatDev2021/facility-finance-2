@@ -107,6 +107,31 @@ class AccountsPayableController extends Controller
         return true;
     }
 
+    private function updateAccountsPayable(array|string|null $data)
+    {
+        $account = FinancialTransactions::find($data['id_financial_transactions']);
+        $value = Helper::removeMoneyMask($data['value'] ?? 0);
+        $addition = Helper::removeMoneyMask($data['addition'] ?? 0);
+        $discount = Helper::removeMoneyMask($data['discount'] ?? 0);
+        $amount = ($value + $addition - $discount);
+        $account->update([
+            'description' => $data['description'] ?? '',
+            'register_date' => Helper::convertToAmericanDate($data['register_date'] ?? null),
+            'due_date' => Helper::convertToAmericanDate($data['due_date'] ?? null),
+            'pay_date' => Helper::convertToAmericanDate($data['pay_date'] ?? null),
+            'value' => $value,
+            'addition' =>  $addition,
+            'discount' => $discount,
+            'amount' => $amount,
+            'customer_provider_id' => $data['provider_id'],
+            'credit_account_id' => $data['credit_account'],
+            'debit_account_id' => $data['debit_account'],
+        ]);
+        toast('Conta atualizada.', 'success');
+        return true;
+    }
+
+
     private function getNewDate($dateReference, $frequency, $firstDueDate, $oldDate)
     {
         return DateHelper::dueDate($dateReference, $frequency, $firstDueDate, $oldDate);

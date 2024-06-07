@@ -1,5 +1,6 @@
 <div class="row ">
-    <input type="hidden" name="id_accounting_financial" id="id_accounting_financial" value="{{ '' }}">
+    <input type="hidden" name="id_financial_transactions" id="id_financial_transactions"
+        value="{{ $financialTransaction->id ?? '' }}">
     <div class="col-md-12 form-group">
         <label for="inputDescription">Descrição</label>
         <input type="text" id="description" name="description" class="form-control"
@@ -130,32 +131,33 @@
         </div>
     </div>
 
-
-    <div class="col-md-12 form-group">
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="enable_frequency" name="enable_frequency">
-            <label class="custom-control-label" for="enable_frequency">Esta conta se repete?</label>
+    @empty($financialTransaction->id)
+        <div class="col-md-12 form-group">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="enable_frequency" name="enable_frequency">
+                <label class="custom-control-label" for="enable_frequency">Esta conta se repete?</label>
+            </div>
         </div>
-    </div>
 
-    <div id ="account_frequency" class="col-md-12 row" style="display: none">
-        <div class="col-md-4 form-group">
-            <label for="inputDescription">Quant Parcelas/Mensalidades *</label>
-            <input type="number" id="frequency_number" name="frequency_number" class="form-control"
-                value="{{ '' }}">
-        </div>
-        <div class="col-md-4 form-group">
-            <label for="privder">Frequência de Repetição </label>
-            <x-adminlte-select2 name="frequency" id="frequency">
-                <option selected value="30">MENSAL</option>
-                <option value="365">ANUAL</option>
-                <option value="7">SEMANAL</option>
-                <option value="15">QUINZENAL</option>
-                <option value="1">DIARIO</option>
+        <div id ="account_frequency" class="col-md-12 row" style="display: none">
+            <div class="col-md-4 form-group">
+                <label for="inputDescription">Quant Parcelas/Mensalidades *</label>
+                <input type="number" id="frequency_number" name="frequency_number" class="form-control"
+                    value="{{ '' }}">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="privder">Frequência de Repetição </label>
+                <x-adminlte-select2 name="frequency" id="frequency">
+                    <option selected value="30">MENSAL</option>
+                    <option value="365">ANUAL</option>
+                    <option value="7">SEMANAL</option>
+                    <option value="15">QUINZENAL</option>
+                    <option value="1">DIARIO</option>
 
-            </x-adminlte-select2>
+                </x-adminlte-select2>
+            </div>
         </div>
-    </div>
+    @endempty
 </div>
 @push('js')
     <script>
