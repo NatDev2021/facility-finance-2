@@ -180,8 +180,28 @@ class HomeController extends Controller
     {
         $accountsPayable = FinancialTransactions::select('financial_transactions.id',  'person.name as provider', 'financial_transactions.due_date', 'financial_transactions.pay_date',  DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'), 'financial_transactions.description', 'financial_transactions.amount')
             ->join('provider', 'financial_transactions.customer_provider_id', '=', 'provider.id')
-            ->join('person', 'provider.person_id', '=', 'person.id')
-            ->where('type', '=', 'p')
+            ->join('person', 'provider.person_id', '=', 'person.id');
+
+
+        if (!empty($_GET['description'])) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.description', 'like',  '%' . $_GET['description'] . '%');
+        }
+
+        if (!empty($_GET['privder'])) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.customer_provider_id', '=',  $_GET['privder']);
+        }
+
+        if (!empty($_GET['due_date'])) {
+            // Use explode para separar as duas datas
+            $dates = explode(' - ', $_GET['due_date']);
+
+            // Armazene as datas em variáveis separadas
+            $startDate = $dates[0];
+            $endDate = $dates[1];
+            $accountsPayable =  $accountsPayable->where('financial_transactions.due_date', '=',  $_GET['privder']);
+        }
+
+        $accountsPayable =  $accountsPayable->where('type', '=', 'p')
             ->orderBy('financial_transactions.id', 'desc')
             ->paginate(15);
 
