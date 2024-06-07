@@ -2,14 +2,15 @@
     <input type="hidden" name="id_accounting_financial" id="id_accounting_financial" value="{{ '' }}">
     <div class="col-md-12 form-group">
         <label for="inputDescription">Descrição</label>
-        <input type="text" id="description" name="description" class="form-control" value="{{ '' }}">
+        <input type="text" id="description" name="description" class="form-control"
+            value="{{ $financialTransaction->description ?? '' }}">
     </div>
     <div class="col-md-12 form-group">
         <label for="provider_id">Fornecedor</label>
         <x-adminlte-select2 name="provider_id" id="provider_id">
             <option value="0">Salecione...</option>
             @foreach ($providers as $item)
-                <option @selected(($loan->customer_id ?? '') == $item->id) value="{{ $item->id }}">{{ $item->person->name }}</option>
+                <option @selected(($financialTransaction->customer_provider_id ?? '') == $item->id) value="{{ $item->id }}">{{ $item->person->name }}</option>
             @endforeach
         </x-adminlte-select2>
     </div>
@@ -18,7 +19,7 @@
         <x-adminlte-select2 name="credit_account" id="credit_account">
             <option value="0">Salecione...</option>
             @foreach ($accountFinancial as $item)
-                <option @selected(($loan->customer_id ?? '') == $item->id) value="{{ $item->id }}">
+                <option @selected(($financialTransaction->credit_account_id ?? '') == $item->id) value="{{ $item->id }}">
                     {{ $item->account . ' - ' . $item->name }}
                 </option>
             @endforeach
@@ -30,7 +31,7 @@
         <x-adminlte-select2 name="debit_account" id="debit_account">
             <option value="0">Salecione...</option>
             @foreach ($accountFinancial as $item)
-                <option @selected(($loan->customer_id ?? '') == $item->id) value="{{ $item->id }}">
+                <option @selected(($financialTransaction->debit_account_id ?? '') == $item->id) value="{{ $item->id }}">
                     {{ $item->account . ' - ' . $item->name }}
                 </option>
             @endforeach
@@ -43,7 +44,8 @@
                 <div class="input-group-text">R$</div>
             </div>
             <input type="text" name="value" id="value" class="form-control text-right" data-target="#value"
-                data-mask="#.##0,00" data-mask-reverse="true" onkeyup="updateAmount()" />
+                value="{{ $financialTransaction->value ?? '' }}" data-mask="#.##0,00" data-mask-reverse="true"
+                onkeyup="updateAmount()" />
 
         </div>
     </div>
@@ -54,7 +56,8 @@
                 <div class="input-group-text">R$</div>
             </div>
             <input type="text" name="addition" id="addition" class="form-control text-right" data-target="#addition"
-                data-mask="#.##0,00" data-mask-reverse="true" onkeyup="updateAmount()" />
+                data-mask="#.##0,00" data-mask-reverse="true" value="{{ $financialTransaction->addition ?? '' }}"
+                onkeyup="updateAmount()" />
 
         </div>
     </div>
@@ -65,7 +68,8 @@
                 <div class="input-group-text">R$</div>
             </div>
             <input type="text" name="discount" id="discount" class="form-control text-right" data-target="#discount"
-                data-mask="#.##0,00" data-mask-reverse="true" onkeyup="updateAmount()" />
+                value="{{ $financialTransaction->discount ?? '' }}" data-mask="#.##0,00" data-mask-reverse="true"
+                onkeyup="updateAmount()" />
 
         </div>
     </div>
@@ -76,7 +80,8 @@
                 <div class="input-group-text">R$</div>
             </div>
             <input type="text" name="amount" id="amount" class="form-control text-right" data-target="#amount"
-                data-mask="#.##0,00" data-mask-reverse="true" disabled />
+                value="{{ $financialTransaction->amount ?? '' }}" data-mask="#.##0,00" data-mask-reverse="true"
+                disabled />
 
         </div>
     </div>
@@ -85,7 +90,7 @@
         <x-adminlte-select2 name="disbursement_account" id="disbursement_account">
             <option value="0">Salecione...</option>
             @foreach ($disbursementAccounts as $item)
-                <option @selected(($loan->customer_id ?? '') == $item->id) value="{{ $item->id }}">
+                <option @selected(($financialTransaction->amount ?? '') == $item->id) value="{{ $item->id }}">
                     {{ $item->account . ' - ' . $item->description }}
                 </option>
             @endforeach
@@ -95,7 +100,8 @@
         <label for="inputDescription">Data de Cadastro</label>
 
         <div class="input-group date" data-target-input="nearest">
-            <input type="text" name="register_date" id="register_date" class="form-control" />
+            <input type="text" name="register_date" id="register_date" class="form-control"
+                value="{{ Helper::convertToBrazilianDate($financialTransaction->register_date ?? '') }}" />
             <div class="input-group-append" data-target="#register_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
@@ -105,7 +111,8 @@
         <label for="inputDescription">Vencimento</label>
 
         <div class="input-group date" data-target-input="nearest">
-            <input type="text" name="due_date" id="due_date" class="form-control" value="" />
+            <input type="text" name="due_date" id="due_date" class="form-control"
+                value="{{ Helper::convertToBrazilianDate($financialTransaction->due_date ?? '') }}" />
             <div class="input-group-append" data-target="#due_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
@@ -115,7 +122,8 @@
         <label for="inputDescription">Data do Pagamento</label>
 
         <div class="input-group date" data-target-input="nearest">
-            <input type="text" name="pay_date" id="pay_date" class="form-control" />
+            <input type="text" name="pay_date" id="pay_date" class="form-control"
+                value="{{ Helper::convertToBrazilianDate($financialTransaction->pay_date ?? '') }}" />
             <div class="input-group-append" data-target="#pay_date" data-toggle=" ">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
@@ -187,7 +195,7 @@
 
             $('#due_date').daterangepicker({
                 singleDatePicker: true,
-
+                autoUpdateInput: false,
                 locale: {
                     "format": "DD/MM/YYYY",
                     "applyLabel": "Aplicar",
@@ -218,11 +226,10 @@
 
                 },
             });
-            $('#due_date').val('');
 
             $('#pay_date').daterangepicker({
                 singleDatePicker: true,
-
+                autoUpdateInput: false,
                 locale: {
                     "format": "DD/MM/YYYY",
                     "applyLabel": "Aplicar",
@@ -253,7 +260,22 @@
 
                 },
             });
-            $('#pay_date').val('');
+
+            $('#due_date').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY'));
+            });
+
+            $('#due_date').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+
+            $('#pay_date').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY'));
+            });
+
+            $('#pay_date').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
 
             $('#enable_frequency').change(function() {
                 if ($(this).is(':checked')) {

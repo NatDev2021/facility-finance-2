@@ -87,7 +87,7 @@ Route::prefix('accounting_financial')->group(function () {
 
 Route::prefix('accounts_payable')->group(function () {
     Route::get('form', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'formAccountsPayable']);
-    Route::get('edit/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'editCustomer']);
+    Route::get('edit/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'editAccountsPayable']);
     Route::post('save', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'saveAccountsPayable']);
     Route::get('get/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getCustomer']);
     Route::get('get', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getCustomer']);

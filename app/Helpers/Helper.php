@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Helpers;
+
 use DateTime;
 
 class Helper
@@ -106,58 +107,66 @@ class Helper
         return number_format($value, 2, ".", "");
     }
 
-    public static function convertToBrazilianDateHour($date) {
+    public static function convertToBrazilianDateHour($date)
+    {
         // Create a DateTime object with the provided date
         $dateObj = DateTime::createFromFormat('Y-m-d H:i:s', $date);
-        
+
         // Check if there was an error during conversion
         if (!$dateObj) {
             return "Error converting the date";
         }
-        
+
         // Format the date into Brazilian standard
         $brazilianDate = $dateObj->format('d/m/Y H:i:s');
-        
+
         return $brazilianDate;
     }
 
-    public static function convertToBrazilianDate($date) {
+    public static function convertToBrazilianDate($date)
+    {
+
+        if (empty($date)) {
+            return $date;
+        }
         // Create a DateTime object with the provided date
         $dateObj = DateTime::createFromFormat('Y-m-d', $date);
-        
+
         // Check if there was an error during conversion
         if (!$dateObj) {
             return "Error converting the date";
         }
-        
+
         // Format the date into Brazilian standard
         $brazilianDate = $dateObj->format('d/m/Y');
-        
+
         return $brazilianDate;
     }
 
-    public static function convertToAmericanDate($brazilianDate) {
+    public static function convertToAmericanDate($brazilianDate)
+    {
         // First, check if the date is in the expected format (DD/MM/YYYY)
         if (preg_match('/^(\d{2})\/(\d{2})\/(\d{4})$/', $brazilianDate, $matches)) {
             // Extract the date components
             $day = $matches[1];
             $month = $matches[2];
             $year = $matches[3];
-            
+
             // Format the date in the American format (YYYY-MM-DD)
             $americanDate = "$year-$month-$day";
-            
+
             return $americanDate;
         } else {
             // If the date is not in the expected format, return false
             return null;
         }
     }
-    
 
-   public static function validateEmail($email) {
 
-        if(empty($email)){
+    public static function validateEmail($email)
+    {
+
+        if (empty($email)) {
             return false;
         }
 
@@ -165,17 +174,15 @@ class Helper
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
-    
+
         // Extract the domain from the email
         list($username, $domain) = explode('@', $email);
-    
+
         // Check if the domain has valid MX (Mail Exchange) records
         if (!checkdnsrr($domain, 'MX')) {
             return false;
         }
-    
+
         return true;
     }
-    
-    
 }

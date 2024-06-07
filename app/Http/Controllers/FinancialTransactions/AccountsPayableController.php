@@ -33,6 +33,23 @@ class AccountsPayableController extends Controller
         ]);
     }
 
+    public function editAccountsPayable($id)
+    {
+
+        $financialTransaction = FinancialTransactions::find($id);
+        $providers = Provider::with('person')->get();
+        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
+            ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
+        $disbursementAccounts = CompanyPaymentAccounts::get();
+
+        return view('accounts_payable.accounts_payableForm', [
+            'financialTransaction' => $financialTransaction,
+            'providers' =>  $providers,
+            'accountFinancial' => $accountFinancial,
+            'disbursementAccounts' =>  $disbursementAccounts
+        ]);
+    }
+
     public function saveAccountsPayable()
     {
         $data = $this->request->post();

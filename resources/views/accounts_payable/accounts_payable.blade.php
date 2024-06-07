@@ -151,7 +151,8 @@
                                         <td>
                                             <div class="d-flex justify-content-end">
                                                 <a id="edit_accounting_financial" class="text-muted mr-3"
-                                                    style="cursor: pointer;" title="Editar">
+                                                    style="cursor: pointer;" title="Editar"
+                                                    href="accounts_payable/edit/{{ $item->id }}">
                                                     <i class="fas fa-search"></i>
                                                 </a>
                                                 <a id="delete_accounting_financial" class="text-muted"
@@ -182,7 +183,6 @@
 
 @push('js')
     <script>
-
         $(document).ready(function() { // onloadjs
             $('#due_date').daterangepicker({
                 singleDatePicker: false,
