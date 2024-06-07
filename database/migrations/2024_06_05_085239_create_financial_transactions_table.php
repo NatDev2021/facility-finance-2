@@ -18,9 +18,9 @@ return new class extends Migration
             $table->decimal('addition');
             $table->decimal('discount');
             $table->decimal('amount');
-            $table->date('register_date');
-            $table->date('due_date');
-            $table->date('pay_date');
+            $table->date('register_date')->nullable();
+            $table->date('due_date')->nullable();
+            $table->date('pay_date')->nullable();
             $table->foreignId('customer_provider_id')->unsigned()->index()->nullable();
             $table->foreignId('credit_account_id')->unsigned()->index()->nullable();
             $table->foreign('credit_account_id')->references('id')->on('accounting_financial')->onDelete('cascade');

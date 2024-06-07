@@ -44,6 +44,32 @@ function validateEmptySelect(...ids) {
     return true;
 }
 
+function validateEmptySelect2(...ids) {
+    let emptyFields = false;
+
+    ids.forEach((id) => {
+        var element = document.getElementById(id);
+        var parent = element.parentNode;
+        var span =parent.children[1];
+
+        if (!element.value.trim() || element.value.trim() == 0) {
+            span.style.border = "1px solid red";
+            emptyFields = true;
+        } else {
+            span.style.border = ""; // Remove red border if not empty
+        }
+    });
+
+    if (emptyFields) {
+        Toast.fire({
+            icon: "error",
+            title: "Por favor, preencha todos os campos obrigatórios!",
+        });
+        return false;
+    }
+    return true;
+}
+
 function arrayColumn(arr, columnKey) {
     return arr.map(function (obj) {
         return obj[columnKey];

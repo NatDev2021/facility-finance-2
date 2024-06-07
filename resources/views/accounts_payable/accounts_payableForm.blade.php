@@ -36,7 +36,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <a href="/accounts_payable" class="btn btn-secondary">Voltar</a>
-                                        <button type="submit" class="btn btn-success float-right">Salvar</button>
+                                        <button type="submit" id="save"
+                                            class="btn btn-success float-right">Salvar</button>
 
                                     </div>
                                 </div>
@@ -72,3 +73,37 @@
     </div>
 
 @stop
+
+@push('js')
+    <script>
+        $('#save').on("click", function() {
+
+            let validateFields = validateEmptyFields('description', 'value', 'register_date', 'due_date');
+            let validateSelect2 = validateEmptySelect2('provider_id', 'credit_account', 'debit_account');
+            if (!validateFields || !validateSelect2) {
+                return false;
+            }
+
+            if ($('#enable_frequency').is(':checked')) {
+
+                if (!validateEmptyFields('frequency_number')) {
+                    return false;
+                }
+
+
+                if (parseFloat($('frequency_number').val()) < 1) {
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'O número de parcelas a reptir deve ser maior do que 0',
+                    });
+                    return false;
+                }
+
+            }
+
+            return false;
+
+        });
+    </script>
+@endpush

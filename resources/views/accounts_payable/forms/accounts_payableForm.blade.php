@@ -5,8 +5,8 @@
         <input type="text" id="description" name="description" class="form-control" value="{{ '' }}">
     </div>
     <div class="col-md-12 form-group">
-        <label for="privder_id">Fornecedor</label>
-        <x-adminlte-select2 name="privder_id" id="privder_id">
+        <label for="provider_id">Fornecedor</label>
+        <x-adminlte-select2 name="provider_id" id="provider_id">
             <option value="0">Salecione...</option>
             @foreach ($providers as $item)
                 <option @selected(($loan->customer_id ?? '') == $item->id) value="{{ $item->id }}">{{ $item->person->name }}</option>
@@ -43,7 +43,7 @@
                 <div class="input-group-text">R$</div>
             </div>
             <input type="text" name="value" id="value" class="form-control text-right" data-target="#value"
-                data-mask="#.##0,00" data-mask-reverse="true" />
+                data-mask="#.##0,00" data-mask-reverse="true" onkeyup="updateAmount()" />
 
         </div>
     </div>
@@ -54,7 +54,7 @@
                 <div class="input-group-text">R$</div>
             </div>
             <input type="text" name="addition" id="addition" class="form-control text-right" data-target="#addition"
-                data-mask="#.##0,00" data-mask-reverse="true" />
+                data-mask="#.##0,00" data-mask-reverse="true" onkeyup="updateAmount()" />
 
         </div>
     </div>
@@ -65,7 +65,7 @@
                 <div class="input-group-text">R$</div>
             </div>
             <input type="text" name="discount" id="discount" class="form-control text-right" data-target="#discount"
-                data-mask="#.##0,00" data-mask-reverse="true" />
+                data-mask="#.##0,00" data-mask-reverse="true" onkeyup="updateAmount()" />
 
         </div>
     </div>
@@ -94,7 +94,7 @@
     <div class="col-md-4 form-group">
         <label for="inputDescription">Data de Cadastro</label>
 
-        <div class="input-group date"  data-target-input="nearest">
+        <div class="input-group date" data-target-input="nearest">
             <input type="text" name="register_date" id="register_date" class="form-control" />
             <div class="input-group-append" data-target="#register_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -104,8 +104,8 @@
     <div class="col-md-4 form-group">
         <label for="inputDescription">Vencimento</label>
 
-        <div class="input-group date"  data-target-input="nearest">
-            <input type="text" name="due_date" id="due_date" class="form-control" value=""/>
+        <div class="input-group date" data-target-input="nearest">
+            <input type="text" name="due_date" id="due_date" class="form-control" value="" />
             <div class="input-group-append" data-target="#due_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
@@ -114,7 +114,7 @@
     <div class="col-md-4 form-group">
         <label for="inputDescription">Data do Pagamento</label>
 
-        <div class="input-group date"  data-target-input="nearest">
+        <div class="input-group date" data-target-input="nearest">
             <input type="text" name="pay_date" id="pay_date" class="form-control" />
             <div class="input-group-append" data-target="#pay_date" data-toggle=" ">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -125,8 +125,8 @@
 
     <div class="col-md-12 form-group">
         <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitch1">
-            <label class="custom-control-label" for="customSwitch1">Esta conta se repete?</label>
+            <input type="checkbox" class="custom-control-input" id="enable_frequency" name="enable_frequency">
+            <label class="custom-control-label" for="enable_frequency">Esta conta se repete?</label>
         </div>
     </div>
 
@@ -139,7 +139,11 @@
         <div class="col-md-4 form-group">
             <label for="privder">Frequência de Repetição </label>
             <x-adminlte-select2 name="frequency" id="frequency">
-                <option value="0">Salecione...</option>
+                <option selected value="30">MENSAL</option>
+                <option value="365">ANUAL</option>
+                <option value="7">SEMANAL</option>
+                <option value="15">QUINZENAL</option>
+                <option value="1">DIARIO</option>
 
             </x-adminlte-select2>
         </div>
@@ -251,13 +255,43 @@
             });
             $('#pay_date').val('');
 
-            $('#customSwitch1').change(function() {
+            $('#enable_frequency').change(function() {
                 if ($(this).is(':checked')) {
                     $('#account_frequency').show();
                 } else {
                     $('#account_frequency').hide();
                 }
             });
+
+
         });
+
+        function updateAmount() {
+            let value = $('#value').val();
+            value = value.replace(".", "");
+            value = value.replace(",", ".");
+            let discount = $('#discount').val();
+            discount = discount.replace(".", "");
+            discount = discount.replace(",", ".");
+            let addition = $('#addition').val();
+            addition = addition.replace(".", "");
+            addition = addition.replace(",", ".");
+
+            if (value.trim() == "") {
+                value = 0;
+            }
+
+            if (discount.trim() == "") {
+                discount = 0;
+            }
+            if (addition.trim() == "") {
+                addition = 0;
+            }
+
+            var amount = parseFloat(value) + parseFloat(addition) - parseFloat(discount);
+            $('#amount').val(amount.toLocaleString('pt-br', {
+                minimumFractionDigits: 2
+            }));
+        }
     </script>
 @endpush

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{AccountingFinancial, Customer, Person,   Status, User,   Company, FinancialMovement, Loans, Provider};
+use App\Models\{AccountingFinancial, Customer, Person,   Status, User,   Company, FinancialTransactions, Loans, Provider};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use stdClass;
@@ -178,7 +178,45 @@ class HomeController extends Controller
 
     public function accountsPayable()
     {
-        return view('accounts_payable.accounts_payable');
+        $accountsPayable = FinancialTransactions::select('financial_transactions.id',  'person.name as provider', 'financial_transactions.due_date', 'financial_transactions.pay_date',  DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'), 'financial_transactions.description', 'financial_transactions.amount')
+            ->join('provider', 'financial_transactions.customer_provider_id', '=', 'provider.id')
+            ->join('person', 'provider.person_id', '=', 'person.id')
+            ->where('type', '=', 'p')
+            ->orderBy('financial_transactions.id', 'desc')
+            ->paginate(15);
+
+
+        foreach ($accountsPayable as &$item) {
+            if (!empty($item['pay_date'])) {
+                $item['status'] = [
+                    'message' => 'Pago',
+                    'color' => '#a8f0cb'
+                ];
+            } else {
+                if ($item['date_diff_payment'] > 0) {
+                    $item['status'] = [
+                        'message' => 'Vence em ' . $item['date_diff_payment'] . ' dias.',
+                        'color' => '#a8f0cb'
+                    ];
+                } else if ($item['date_diff_payment'] < 0) {
+                    $item['status'] = [
+                        'message' => 'Venceu há ' . abs($item['date_diff_payment']) . ' dias.',
+                        'color' => '#f0a8a8'
+                    ];
+                } else {
+                    $item['status'] = [
+                        'message' => 'Vence Hoje.',
+                        'color' => '#eff0a8;
+                        '
+                    ];
+                }
+            }
+        }
+
+
+        return view('accounts_payable.accounts_payable', [
+            'accountsPayable' => $accountsPayable
+        ]);
     }
 
     public function status()

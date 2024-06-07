@@ -5,7 +5,7 @@ namespace App\Http\Controllers\FinancialTransactions;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Helpers\Helper;
+use App\Helpers\{Helper, DateHelper};
 use App\Models\AccountingFinancial;
 use App\Models\CompanyPaymentAccounts;
 use App\Models\FinancialTransactions;
@@ -50,24 +50,48 @@ class AccountsPayableController extends Controller
     private function createAccountsPayable(array|string|null $data)
     {
 
-        $idAccount = FinancialTransactions::create([
+        $value = Helper::removeMoneyMask($data['value'] ?? 0);
+        $addition = Helper::removeMoneyMask($data['addition'] ?? 0);
+        $discount = Helper::removeMoneyMask($data['discount'] ?? 0);
+        $amount = ($value + $addition - $discount);
+
+
+        $arrayData = [
             'description' => $data['description'] ?? '',
-            'register_date' => Helper::convertToAmericanDate($data['register_date'] ?? ''),
-            'due_date' => Helper::convertToAmericanDate($data['due_date'] ?? ''),
-            'pay_date' => Helper::convertToAmericanDate($data['pay_date'] ?? ''),
-            'value' => Helper::removeMoneyMask($data['value'] ?? 0),
-            'addition' => Helper::removeMoneyMask($data['addition'] ?? 0),
-            'discount' => Helper::removeMoneyMask($data['discount'] ?? 0),
-            'amount' => Helper::removeMoneyMask($data['amount'] ?? 0),
-            'customer_provider_id' => $data['privder_id'],
+            'register_date' => Helper::convertToAmericanDate($data['register_date'] ?? null),
+            'due_date' => Helper::convertToAmericanDate($data['due_date'] ?? null),
+            'pay_date' => Helper::convertToAmericanDate($data['pay_date'] ?? null),
+            'value' => $value,
+            'addition' =>  $addition,
+            'discount' => $discount,
+            'amount' => $amount,
+            'customer_provider_id' => $data['provider_id'],
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
             'type' => 'p',
             'observation' => $data['observation'] ?? '',
             "id_user_ins" => $this->request->user()->id,
 
-        ])->id;
+        ];
+        FinancialTransactions::create($arrayData);
+        if (!empty($data['enable_frequency']) && $data['frequency_number'] > 0) {
+
+            $data['pay_date'] = null;
+            $dateDue = Helper::convertToAmericanDate($data['due_date'] ?? null);
+            $dateReference = $dateDue;
+            for ($i = 1; $i <= $data['frequency_number']; $i++) {
+                $newDate =  $this->getNewDate($dateReference, $data['frequency'], $dateDue, $dateReference);
+                $arrayData['due_date'] = $newDate;
+                FinancialTransactions::create($arrayData);
+                $dateReference = $newDate;
+            }
+        }
         toast('Conta criada.', 'success');
-        return $idAccount;
+        return true;
+    }
+
+    private function getNewDate($dateReference, $frequency, $firstDueDate, $oldDate)
+    {
+        return DateHelper::dueDate($dateReference, $frequency, $firstDueDate, $oldDate);
     }
 }

@@ -150,7 +150,7 @@ class Helper
             return $americanDate;
         } else {
             // If the date is not in the expected format, return false
-            return false;
+            return null;
         }
     }
     

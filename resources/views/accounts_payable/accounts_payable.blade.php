@@ -3,7 +3,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between">
         <h1>Contas a Pagar</h1>
-        <a href="accounts_payable/form" class="btn btn-outline-primary" >
+        <a href="accounts_payable/form" class="btn btn-outline-primary">
             <i class="fa-solid fa-plus"></i>
             Adicionar
         </a>
@@ -106,12 +106,12 @@
 
                                 <div class="d-flex justify-content-end">
                                     <div>
-                                        <button type="submit" class="btn btn-outline-success btn-sm"
+                                        <button type="submit" class="btn btn-dark btn-sm"
                                             data-target="#accountingFinancialModal">
                                             Pesquisar
                                         </button>
-                                        <button type="button" class="btn btn-outline-dark btn-sm"
-                                            id="new_accounting_financial" data-target="#accountingFinancialModal">
+                                        <button type="button" class="btn btn-dark btn-sm" id="new_accounting_financial"
+                                            data-target="#accountingFinancialModal">
                                             Exportar
                                         </button>
                                     </div>
@@ -136,10 +136,39 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($accountsPayable as $item)
+                                    <tr>
+                                        <td id="id">{{ $item->id }}</td>
+                                        <td class="text-left">{{ date('d/m/Y', strtotime($item->due_date ?? '')) }}</td>
+                                        <td class="text-center">{{ $item->description ?? '' }}</td>
+                                        <td class="text-center">{{ $item->provider ?? '' }}</td>
 
+                                        <td class="text-center"><span class="badge"
+                                                style="background-color: {{ $item->status['color'] }};">{{ $item->status['message'] }}</span>
+                                        </td>
+                                        <td class="text-center">{{ $item->amount ?? '' }}</td>
+
+                                        <td>
+                                            <div class="d-flex justify-content-end">
+                                                <a id="edit_accounting_financial" class="text-muted mr-3"
+                                                    style="cursor: pointer;" title="Editar">
+                                                    <i class="fas fa-search"></i>
+                                                </a>
+                                                <a id="delete_accounting_financial" class="text-muted"
+                                                    style="cursor: pointer;" title="Excluir">
+                                                    <i class="fa-regular fa-trash-can" style="color: red"></i>
+                                                </a>
+                                            </div>
+
+
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                         <div class="mt-3">
+                            {{ $accountsPayable->links() }}
+
                         </div>
                     </div>
                 </div>
@@ -153,6 +182,7 @@
 
 @push('js')
     <script>
+
         $(document).ready(function() { // onloadjs
             $('#due_date').daterangepicker({
                 singleDatePicker: false,
@@ -199,6 +229,5 @@
                 $('#title_filter_span').text('Ocultar Filtro');
             }
         }
-
     </script>
 @endpush
