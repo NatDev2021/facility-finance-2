@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{AccountingFinancial, Customer, Person,   Status, User,   Company, FinancialTransactions, Loans, Provider};
+use App\Models\{AccountingFinancial, Customer, Person,   Status, User,   Company, CompanyPaymentAccounts, FinancialTransactions, Loans, Provider};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use stdClass;
-use Helper;
+use App\Helpers\{Helper};
 
 class HomeController extends Controller
 {
@@ -178,6 +178,11 @@ class HomeController extends Controller
 
     public function accountsPayable()
     {
+
+
+        $providers = Provider::with('person')->get();
+        $accountFinancial = AccountingFinancial::get();
+
         $accountsPayable = FinancialTransactions::select('financial_transactions.id',  'person.name as provider', 'financial_transactions.due_date', 'financial_transactions.pay_date',  DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'), 'financial_transactions.description', 'financial_transactions.amount')
             ->join('provider', 'financial_transactions.customer_provider_id', '=', 'provider.id')
             ->join('person', 'provider.person_id', '=', 'person.id');
@@ -187,8 +192,8 @@ class HomeController extends Controller
             $accountsPayable =  $accountsPayable->where('financial_transactions.description', 'like',  '%' . $_GET['description'] . '%');
         }
 
-        if (!empty($_GET['privder'])) {
-            $accountsPayable =  $accountsPayable->where('financial_transactions.customer_provider_id', '=',  $_GET['privder']);
+        if (!empty($_GET['provider_id']) && $_GET['provider_id'] != 0) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.customer_provider_id', '=',  $_GET['provider_id']);
         }
 
         if (!empty($_GET['due_date'])) {
@@ -196,15 +201,31 @@ class HomeController extends Controller
             $dates = explode(' - ', $_GET['due_date']);
 
             // Armazene as datas em variáveis separadas
-            $startDate = $dates[0];
-            $endDate = $dates[1];
-            $accountsPayable =  $accountsPayable->where('financial_transactions.due_date', '=',  $_GET['privder']);
+            $startDate = Helper::convertToAmericanDate($dates[0]);
+            $endDate = Helper::convertToAmericanDate($dates[1]);
+            $accountsPayable =  $accountsPayable->where('financial_transactions.due_date', '>=',  $startDate);
+            $accountsPayable =  $accountsPayable->where('financial_transactions.due_date', '<=',  $endDate);
         }
+
+        if (!empty($_GET['credit_account']) && $_GET['credit_account'] != 0) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.credit_account_id', '=',  $_GET['credit_account']);
+        }
+
+        if (!empty($_GET['debit_account']) && $_GET['debit_account'] != 0) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.debit_account_id', '=',  $_GET['debit_account']);
+        }
+
+        if (!empty($_GET['amount'])) {
+            $amount = Helper::removeMoneyMask($_GET['amount']);
+
+            $accountsPayable =  $accountsPayable->where('financial_transactions.amount', '=', $amount);
+        }
+
+
 
         $accountsPayable =  $accountsPayable->where('type', '=', 'p')
             ->orderBy('financial_transactions.id', 'desc')
             ->paginate(15);
-
 
         foreach ($accountsPayable as &$item) {
             if (!empty($item['pay_date'])) {
@@ -235,7 +256,9 @@ class HomeController extends Controller
 
 
         return view('accounts_payable.accounts_payable', [
-            'accountsPayable' => $accountsPayable
+            'accountsPayable' => $accountsPayable,
+            'providers' => $providers,
+            'accountFinancial' => $accountFinancial,
         ]);
     }
 

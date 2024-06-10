@@ -264,7 +264,7 @@
             });
 
             $('#due_date').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MM/DD/YYYY'));
+                $(this).val(picker.startDate.format('DD/MM/YYYY'));
             });
 
             $('#due_date').on('cancel.daterangepicker', function(ev, picker) {
@@ -272,7 +272,7 @@
             });
 
             $('#pay_date').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MM/DD/YYYY'));
+                $(this).val(picker.startDate.format('DD/MM/YYYY'));
             });
 
             $('#pay_date').on('cancel.daterangepicker', function(ev, picker) {

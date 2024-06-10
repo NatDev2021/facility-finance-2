@@ -48,9 +48,12 @@
                                     </div>
                                     <div class="col-md-5 input-group-sm">
                                         <label for="privder">Fornecedor</label>
-                                        <x-adminlte-select2 name="privder" id="privder">
+                                        <x-adminlte-select2 name="provider_id" id="provider_id">
                                             <option value="0">Salecione...</option>
-
+                                            @foreach ($providers as $item)
+                                                <option @selected(($financialTransaction->customer_provider_id ?? '') == $item->id) value="{{ $item->id }}">
+                                                    {{ $item->person->name }}</option>
+                                            @endforeach
                                         </x-adminlte-select2>
                                     </div>
 
@@ -75,7 +78,11 @@
                                         <label for="credit_account">Conta Crédito</label>
                                         <x-adminlte-select2 name="credit_account" id="credit_account">
                                             <option value="0">Salecione...</option>
-
+                                            @foreach ($accountFinancial as $item)
+                                                <option @selected(($financialTransaction->debit_account_id ?? '') == $item->id) value="{{ $item->id }}">
+                                                    {{ $item->account . ' - ' . $item->name }}
+                                                </option>
+                                            @endforeach
                                         </x-adminlte-select2>
                                     </div>
 
@@ -83,7 +90,11 @@
                                         <label for="debit_account">Conta Débito</label>
                                         <x-adminlte-select2 name="debit_account" id="debit_account">
                                             <option value="0">Salecione...</option>
-
+                                            @foreach ($accountFinancial as $item)
+                                                <option @selected(($financialTransaction->credit_account_id ?? '') == $item->id) value="{{ $item->id }}">
+                                                    {{ $item->account . ' - ' . $item->name }}
+                                                </option>
+                                            @endforeach
                                         </x-adminlte-select2>
                                     </div>
 
@@ -146,7 +157,8 @@
                                         <td class="text-center"><span class="badge"
                                                 style="background-color: {{ $item->status['color'] }};">{{ $item->status['message'] }}</span>
                                         </td>
-                                        <td class="text-center">{{ $item->amount ?? '' }}</td>
+                                        <td class="text-center">{{ Helper::formatBrazilianNumber($item->amount ?? '') }}
+                                        </td>
 
                                         <td>
                                             <div class="d-flex justify-content-end">
@@ -186,6 +198,7 @@
         $(document).ready(function() { // onloadjs
             $('#due_date').daterangepicker({
                 singleDatePicker: false,
+                autoUpdateInput: false,
 
                 locale: {
                     "format": "DD/MM/YYYY",
@@ -218,6 +231,14 @@
                 },
             });
 
+        });
+
+        $('#due_date').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+        });
+
+        $('#due_date').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
         });
 
         function showFilter() {

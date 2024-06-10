@@ -2,7 +2,7 @@
 @section('title', 'Plano de Contas')
 @section('content_header')
     <div class="d-flex justify-content-between">
-        <h1>Nova Conta a Pagar</h1>
+        <h1>{{empty($financialTransaction->id)? 'Nova': 'Editar'}} Conta a Pagar</h1>
     </div>
 
 @stop
