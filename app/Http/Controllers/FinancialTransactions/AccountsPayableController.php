@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FinancialTransactions;
 
 use App\Http\Controllers\Controller;
+use App\Models\FinancialTransactionsFiles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\{Helper, DateHelper};
@@ -10,6 +11,7 @@ use App\Models\AccountingFinancial;
 use App\Models\CompanyPaymentAccounts;
 use App\Models\FinancialTransactions;
 use App\Models\Provider;
+use Illuminate\Support\Facades\Storage;
 
 class AccountsPayableController extends Controller
 {
@@ -55,12 +57,12 @@ class AccountsPayableController extends Controller
         $data = $this->request->post();
 
         if (empty($data['id_financial_transactions'])) {
-            $this->createAccountsPayable($data);
+            $idAccount =  $this->createAccountsPayable($data);
         } else {
-            $this->updateAccountsPayable($data);
+            $idAccount =  $this->updateAccountsPayable($data);
         }
 
-        return redirect('/accounts_payable');
+        return redirect('/edit/' . $idAccount);
     }
 
 
@@ -90,7 +92,7 @@ class AccountsPayableController extends Controller
             "id_user_ins" => $this->request->user()->id,
 
         ];
-        FinancialTransactions::create($arrayData);
+      $idAccount =   FinancialTransactions::create($arrayData)->id;
         if (!empty($data['enable_frequency']) && $data['frequency_number'] > 0) {
 
             $data['pay_date'] = null;
@@ -104,7 +106,7 @@ class AccountsPayableController extends Controller
             }
         }
         toast('Conta criada.', 'success');
-        return true;
+        return $idAccount;
     }
 
     private function updateAccountsPayable(array|string|null $data)
@@ -127,8 +129,15 @@ class AccountsPayableController extends Controller
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
         ]);
+
+        $file = $this->request->file('input_file');
+
+        if (!empty($file)) {
+            $this->saveFiles($data['id_financial_transactions'], $file);
+        }
+
         toast('Conta atualizada.', 'success');
-        return true;
+        return $data['id_financial_transactions'];
     }
 
     public function deleteAccountingPayable($id)
@@ -145,5 +154,28 @@ class AccountsPayableController extends Controller
     private function getNewDate($dateReference, $frequency, $firstDueDate, $oldDate)
     {
         return DateHelper::dueDate($dateReference, $frequency, $firstDueDate, $oldDate);
+    }
+
+    private function saveFiles($idTransaction, $files)
+    {
+
+        foreach ($files as $file) {
+
+            $path =   Storage::disk('local')->put($idTransaction . '/' . $file->getClientOriginalName(), $file);
+
+            FinancialTransactionsFiles::create([
+                'transaction_id' => $idTransaction,
+                'file_name' => $file->getClientOriginalName(),
+                'file_size' =>  $file->getSize(),
+                'mime_type' =>  $file->getMimeType(),
+                'path' =>  $path,
+                "id_user_ins" => $this->request->user()->id,
+            ]);
+        }
+    }
+    public function downloadFile($idFile)
+    {
+        $file = FinancialTransactionsFiles::find($idFile);
+        return Storage::download($file['path'], $file['file_name']);
     }
 }

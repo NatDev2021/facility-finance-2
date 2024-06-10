@@ -2,7 +2,7 @@
 @section('title', 'Plano de Contas')
 @section('content_header')
     <div class="d-flex justify-content-between">
-        <h1>{{empty($financialTransaction->id)? 'Nova': 'Editar'}} Conta a Pagar</h1>
+        <h1>{{ empty($financialTransaction->id) ? 'Nova' : 'Editar' }} Conta a Pagar</h1>
     </div>
 
 @stop
@@ -46,24 +46,48 @@
 
                         </div>
                     </div>
-                    <div class="col-3">
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">
-                                <h3 class="card-title">
-                                    <i class="fa-regular fa-lightbulb"></i>
-                                    Dica do Sistema
+                    <div class="col-3 ">
+                        <div class="row">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="fa-regular fa-lightbulb"></i>
+                                        Dica do Sistema
 
-                                </h3>
+                                    </h3>
+                                </div>
+
+                                <div class="card-body table-responsive">
+                                    <p> - O plano de contas facilita agrupar melhor suas contas em categorias.</p>
+                                    <p> - Os campos marcados com <span class="text-danger"> (*)</span> são obrigatórios.</p>
+                                </div>
+
+
                             </div>
-
-                            <div class="card-body table-responsive">
-                                <p> - O plano de contas facilita agrupar melhor suas contas em categorias.</p>
-                                <p> - Os campos marcados com <span class="text-danger"> (*)</span> são obrigatórios.</p>
-                            </div>
-
-
                         </div>
+                        @if (!empty($financialTransaction->id))
+                            <div class="row">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            <i class="fa-regular fa-folder-open"></i>
+                                            Documentos
+
+                                        </h3>
+                                    </div>
+
+                                    <div class="card-body table-responsive">
+                                        @include('accounts_payable.forms.import_filesForm')
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
+
                 </div>
 
             </form>
@@ -93,7 +117,9 @@
 
                 if (parseFloat($('#frequency_number').val()) < 1) {
 
-                    $('#frequency_number').css({"border": "1px solid red"});
+                    $('#frequency_number').css({
+                        "border": "1px solid red"
+                    });
                     Toast.fire({
                         icon: 'error',
                         title: 'O número de parcelas a reptir deve ser maior do que 0.',
