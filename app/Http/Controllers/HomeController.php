@@ -259,6 +259,7 @@ class HomeController extends Controller
             'accountsPayable' => $accountsPayable,
             'providers' => $providers,
             'accountFinancial' => $accountFinancial,
+            'search' => $_GET
         ]);
     }
 

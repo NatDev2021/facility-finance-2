@@ -75,6 +75,7 @@ Route::prefix('accounting_financial')->group(function () {
     Route::post('save', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'saveAccountingFinancial']);
     Route::get('get/{id}', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'getAccountingFinancial']);
     Route::get('get', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'getAccountingFinancial']);
+    Route::get('delete/{id}', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'deleteAccountingFinancial']);
 
     Route::prefix('import')->group(function () {
         Route::get('/', [App\Http\Controllers\AccountingFinancial\ImportAccountingFinancialController::class, 'importAccounting']);
@@ -89,8 +90,10 @@ Route::prefix('accounts_payable')->group(function () {
     Route::get('form', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'formAccountsPayable']);
     Route::get('edit/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'editAccountsPayable']);
     Route::post('save', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'saveAccountsPayable']);
-    Route::get('get/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getCustomer']);
-    Route::get('get', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getCustomer']);
+    Route::get('get/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getAccountsPayable']);
+    Route::get('get', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getAccountsPayable']);
+    Route::get('delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteAccountingPayable']);
+
 });
 
 

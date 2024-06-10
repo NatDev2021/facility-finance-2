@@ -44,14 +44,14 @@
                                     <div class="col-md-5  input-group-sm">
                                         <label for="description">Descrição</label>
                                         <input type="text" id="description" name="description" class="form-control"
-                                            value="{{ '' }}">
+                                            value="{{ $search['description'] ?? '' }}">
                                     </div>
                                     <div class="col-md-5 input-group-sm">
                                         <label for="privder">Fornecedor</label>
                                         <x-adminlte-select2 name="provider_id" id="provider_id">
                                             <option value="0">Salecione...</option>
                                             @foreach ($providers as $item)
-                                                <option @selected(($financialTransaction->customer_provider_id ?? '') == $item->id) value="{{ $item->id }}">
+                                                <option @selected(($search['provider_id'] ?? '') == $item->id) value="{{ $item->id }}">
                                                     {{ $item->person->name }}</option>
                                             @endforeach
                                         </x-adminlte-select2>
@@ -69,7 +69,7 @@
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
                                             <input type="text" name="due_date" id="due_date" class="form-control"
-                                                data-target="#due_date" />
+                                                value="{{ $search['due_date'] ?? '' }}" data-target="#due_date" />
                                         </div>
                                     </div>
 
@@ -79,7 +79,7 @@
                                         <x-adminlte-select2 name="credit_account" id="credit_account">
                                             <option value="0">Salecione...</option>
                                             @foreach ($accountFinancial as $item)
-                                                <option @selected(($financialTransaction->debit_account_id ?? '') == $item->id) value="{{ $item->id }}">
+                                                <option @selected(($search['credit_account'] ?? '') == $item->id) value="{{ $item->id }}">
                                                     {{ $item->account . ' - ' . $item->name }}
                                                 </option>
                                             @endforeach
@@ -91,7 +91,7 @@
                                         <x-adminlte-select2 name="debit_account" id="debit_account">
                                             <option value="0">Salecione...</option>
                                             @foreach ($accountFinancial as $item)
-                                                <option @selected(($financialTransaction->credit_account_id ?? '') == $item->id) value="{{ $item->id }}">
+                                                <option @selected(($search['debit_account'] ?? '') == $item->id) value="{{ $item->id }}">
                                                     {{ $item->account . ' - ' . $item->name }}
                                                 </option>
                                             @endforeach
@@ -107,7 +107,7 @@
                                             </div>
                                             <input type="text" name="amount" id="amount"
                                                 class="form-control text-right" data-target="#amount" data-mask="#.##0,00"
-                                                data-mask-reverse="true" />
+                                                value="{{ $search['amount'] ?? '' }}" data-mask-reverse="true" />
 
                                         </div>
                                     </div>
@@ -133,7 +133,7 @@
                         </form>
                     </div>
                     <div style="padding-top: 15px" class="table-responsive">
-                        <table id="accounting_financial_table" class="table table-striped table-valign-middle ">
+                        <table id="accounts_payable_table" class="table table-striped table-valign-middle ">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -167,7 +167,7 @@
                                                     href="accounts_payable/edit/{{ $item->id }}">
                                                     <i class="fas fa-search"></i>
                                                 </a>
-                                                <a id="delete_accounting_financial" class="text-muted"
+                                                <a id="delete_accounts_payable" class="text-muted"
                                                     style="cursor: pointer;" title="Excluir">
                                                     <i class="fa-regular fa-trash-can" style="color: red"></i>
                                                 </a>
@@ -230,6 +230,45 @@
 
                 },
             });
+
+
+            $('#accounts_payable_table').on('click', "#delete_accounts_payable",
+
+                function() { // onclick bot�o de anexo
+
+                    var row = $(this).parents('tr');
+                    var codAccountingPayable = $(row.children('#id'))[0].innerHTML;
+
+                    Swal.fire({
+                        title: "Tem certeza?",
+                        text: "Você não poderá reverter isso!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        reverseButtons: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonText: "Sim, excluir"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            window.location = "{{ url('accounts_payable/delete') }}" + "/" +
+                                codAccountingPayable;
+
+                        }
+                    });
+
+
+                });
+
+
+            $('#bt_save').on('click', function() {
+
+                if (!validateEmptyFields('description', 'account')) {
+                    return false;
+                }
+            });
+            f
 
         });
 

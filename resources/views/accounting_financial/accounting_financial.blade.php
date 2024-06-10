@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between">
         <h1>Plano de Contas</h1>
         <div>
-            <a href="accounting_financial/import" class="btn btn-outline-primary" >
+            <a href="accounting_financial/import" class="btn btn-outline-primary">
                 <i class="fa-solid fa-upload"></i>
                 Importar
             </a>
@@ -161,6 +161,7 @@
             });
 
             $('#accounting_financial_table').on('click', "#delete_accounting_financial",
+
                 function() { // onclick bot�o de anexo
 
                     var row = $(this).parents('tr');
@@ -188,7 +189,8 @@
 
                 });
 
-            $('#bt_save').on('click', function() {
+            
+                $('#bt_save').on('click', function() {
 
                 if (!validateEmptyFields('description', 'account')) {
                     return false;

@@ -131,6 +131,16 @@ class AccountsPayableController extends Controller
         return true;
     }
 
+    public function deleteAccountingPayable($id)
+    {
+
+        $account = FinancialTransactions::find($id);
+        $account->delete();
+
+
+        toast('Conta excluida.', 'success');
+        return redirect('/accounts_payable');
+    }
 
     private function getNewDate($dateReference, $frequency, $firstDueDate, $oldDate)
     {

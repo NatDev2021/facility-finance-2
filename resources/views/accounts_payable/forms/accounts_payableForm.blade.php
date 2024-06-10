@@ -38,54 +38,6 @@
             @endforeach
         </x-adminlte-select2>
     </div>
-    <div class="col-md-3  form-group">
-        <label for="value">Valor</label>
-        <div class="input-group  date" data-target-input="nearest">
-            <div class="input-group-append" data-target="#value" data-toggle="datetimepicker">
-                <div class="input-group-text">R$</div>
-            </div>
-            <input type="text" name="value" id="value" class="form-control text-right" data-target="#value"
-                value="{{ $financialTransaction->value ?? '' }}" data-mask="#.##0,00" data-mask-reverse="true"
-                onkeyup="updateAmount()" />
-
-        </div>
-    </div>
-    <div class="col-md-3  form-group">
-        <label for="addition">Acréscimos/Juros</label>
-        <div class="input-group  date" data-target-input="nearest">
-            <div class="input-group-append" data-target="#addition" data-toggle="datetimepicker">
-                <div class="input-group-text">R$</div>
-            </div>
-            <input type="text" name="addition" id="addition" class="form-control text-right" data-target="#addition"
-                data-mask="#.##0,00" data-mask-reverse="true" value="{{ $financialTransaction->addition ?? '' }}"
-                onkeyup="updateAmount()" />
-
-        </div>
-    </div>
-    <div class="col-md-3  form-group">
-        <label for="discount">Abatimentos/Descontos </label>
-        <div class="input-group  date" data-target-input="nearest">
-            <div class="input-group-append" data-target="#discount" data-toggle="datetimepicker">
-                <div class="input-group-text">R$</div>
-            </div>
-            <input type="text" name="discount" id="discount" class="form-control text-right" data-target="#discount"
-                value="{{ $financialTransaction->discount ?? '' }}" data-mask="#.##0,00" data-mask-reverse="true"
-                onkeyup="updateAmount()" />
-
-        </div>
-    </div>
-    <div class="col-md-3  form-group">
-        <label for="amount">Total </label>
-        <div class="input-group  date" data-target-input="nearest">
-            <div class="input-group-append" data-target="#amount" data-toggle="datetimepicker">
-                <div class="input-group-text">R$</div>
-            </div>
-            <input type="text" name="amount" id="amount" class="form-control text-right" data-target="#amount"
-                value="{{ $financialTransaction->amount ?? '' }}" data-mask="#.##0,00" data-mask-reverse="true"
-                disabled />
-
-        </div>
-    </div>
     <div class="col-md-12 form-group">
         <label for="disbursement_account">Conta de Desembolso</label>
         <x-adminlte-select2 name="disbursement_account" id="disbursement_account">
@@ -97,6 +49,7 @@
             @endforeach
         </x-adminlte-select2>
     </div>
+
     <div class="col-md-4 form-group">
         <label for="inputDescription">Data de Cadastro</label>
 
@@ -130,7 +83,54 @@
             </div>
         </div>
     </div>
+    <div class="col-md-3  form-group">
+        <label for="value">Valor</label>
+        <div class="input-group  date" data-target-input="nearest">
+            <div class="input-group-append" data-target="#value" data-toggle="datetimepicker">
+                <div class="input-group-text">R$</div>
+            </div>
+            <input type="text" name="value" id="value" class="form-control text-right" data-target="#value"
+                value="{{ $financialTransaction->value ?? '' }}" data-mask="#.##0,00" data-mask-reverse="true"
+                onkeyup="updateAmount()" />
 
+        </div>
+    </div>
+    <div class="col-md-3  form-group">
+        <label for="addition">Acréscimos/Juros</label>
+        <div class="input-group  date" data-target-input="nearest">
+            <div class="input-group-append" data-target="#addition" data-toggle="datetimepicker">
+                <div class="input-group-text">R$</div>
+            </div>
+            <input type="text" name="addition" id="addition" class="form-control text-right"
+                data-target="#addition" data-mask="#.##0,00" data-mask-reverse="true"
+                value="{{ $financialTransaction->addition ?? '' }}" onkeyup="updateAmount()" />
+
+        </div>
+    </div>
+    <div class="col-md-3  form-group">
+        <label for="discount">Abatimentos/Descontos </label>
+        <div class="input-group  date" data-target-input="nearest">
+            <div class="input-group-append" data-target="#discount" data-toggle="datetimepicker">
+                <div class="input-group-text">R$</div>
+            </div>
+            <input type="text" name="discount" id="discount" class="form-control text-right"
+                data-target="#discount" value="{{ $financialTransaction->discount ?? '' }}" data-mask="#.##0,00"
+                data-mask-reverse="true" onkeyup="updateAmount()" />
+
+        </div>
+    </div>
+    <div class="col-md-3  form-group">
+        <label for="amount">Total </label>
+        <div class="input-group  date" data-target-input="nearest">
+            <div class="input-group-append" data-target="#amount" data-toggle="datetimepicker">
+                <div class="input-group-text">R$</div>
+            </div>
+            <input type="text" name="amount" id="amount" class="form-control text-right"
+                data-target="#amount" value="{{ $financialTransaction->amount ?? '' }}" data-mask="#.##0,00"
+                data-mask-reverse="true" disabled />
+
+        </div>
+    </div>
     @empty($financialTransaction->id)
         <div class="col-md-12 form-group">
             <div class="custom-control custom-switch">

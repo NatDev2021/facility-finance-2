@@ -63,19 +63,18 @@ class AccountingFinancialController extends Controller
     public function deleteAccountingFinancial($id)
     {
 
-        $status = Status::with(['initialStatus', 'finalStatus', 'loans'])->find($id);
+        $accounts = AccountingFinancial::with(['creditAccount', 'debitAccount'])->find($id);
 
-        //TODO: Alterar validação por não estar performatica.
 
-        if (!empty($status->initialStatus[0]) || !empty($status->finalStatus[0]) ||  !empty($status->loans[0])) {
+        if (!empty($accounts->creditAccount) || !empty($accounts->debitAccount)) {
 
-            alert()->error('Ops!', 'Status vinculados a produtos/contratos não podem ser excluidos.');
-            return redirect('/status');
+            alert()->error('Ops!', 'Contas vinculadas a pagamentos/recebimentos não podem ser excluidas.');
+            return redirect('/accounting_financial');
         }
 
-        $status->delete();
-        toast('Status excluido.', 'success');
-        return redirect('/status');
+        $accounts->delete();
+        toast('Conta excluida.', 'success');
+        return redirect('/accounting_financial');
     }
 
     private function createValidator(array|string|null $data)
