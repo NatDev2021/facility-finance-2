@@ -62,7 +62,7 @@ class AccountsPayableController extends Controller
             $idAccount =  $this->updateAccountsPayable($data);
         }
 
-        return redirect('/edit/' . $idAccount);
+        return redirect('accounts_payable/edit/' . $idAccount);
     }
 
 
@@ -131,6 +131,8 @@ class AccountsPayableController extends Controller
         ]);
 
         $file = $this->request->file('input_file');
+
+        print_r($file);die;
 
         if (!empty($file)) {
             $this->saveFiles($data['id_financial_transactions'], $file);
