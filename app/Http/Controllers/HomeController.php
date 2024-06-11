@@ -263,12 +263,10 @@ class HomeController extends Controller
         ]);
     }
 
-    public function status()
+    public function banksAccounts()
     {
-        $status = Status::paginate(15);
-        return view('status.status', ['status' => $status]);
+        return view('banks_accounts.banks_accounts');
     }
-
 
     public function company()
     {

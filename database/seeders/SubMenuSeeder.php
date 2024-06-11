@@ -56,6 +56,16 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'id' => 5,
+                'menu_id' => 1,
+                'description' => 'Contas Bancárias',
+                'icon' => 'nav-icon fa-regular fa-building-columns',
+                'route' => 'banks_accounts',
+                'actived' => true,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 6,
                 'menu_id' => 2,
                 'description' => 'Contas a Pagar',
                 'icon' => 'nav-icon fa-solid fa-up',
@@ -65,7 +75,17 @@ class SubMenuSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
-                'id' => 6,
+                'id' => 7,
+                'menu_id' => 2,
+                'description' => 'Contas a Receber',
+                'icon' => 'nav-icon fa-solid fa-down',
+                'route' => 'accounts_payable',
+                'actived' => true,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 8,
                 'menu_id' => 4,
                 'description' => 'Usuários',
                 'icon' => 'nav-icon fa-solid fa-users',
@@ -75,7 +95,7 @@ class SubMenuSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
-                'id' => 7,
+                'id' => 9,
                 'menu_id' => 4,
                 'description' => 'Empresa',
                 'icon' => 'nav-icon fa-solid fa-building-memo',

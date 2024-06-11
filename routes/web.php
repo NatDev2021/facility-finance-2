@@ -30,6 +30,7 @@ Route::get('company', [App\Http\Controllers\HomeController::class, 'company'])->
 Route::get('provider', [App\Http\Controllers\HomeController::class, 'provider'])->name('provider');
 Route::get('accounting_financial', [App\Http\Controllers\HomeController::class, 'accountingFinancial'])->name('accounting_financial');
 Route::get('accounts_payable', [App\Http\Controllers\HomeController::class, 'accountsPayable'])->name('accounts_payable');
+Route::get('banks_accounts', [App\Http\Controllers\HomeController::class, 'banksAccounts'])->name('banks_accounts');
 
 
 
@@ -95,6 +96,7 @@ Route::prefix('accounts_payable')->group(function () {
     Route::get('get', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getAccountsPayable']);
     Route::get('delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteAccountingPayable']);
     Route::get('files/download/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'downloadFile']);
+    Route::get('files/delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteFile']);
 
 });
 

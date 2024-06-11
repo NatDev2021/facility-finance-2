@@ -181,4 +181,12 @@ class AccountsPayableController extends Controller
         $file = FinancialTransactionsFiles::find($idFile);
         return Storage::download($file['path'], $file['file_name']);
     }
+    public function deleteFile($idFile)
+    {
+        $file = FinancialTransactionsFiles::find($idFile);
+        $idTransaction = $file['transaction_id'];
+        $file->delete();
+        toast('Docmento excluido.', 'success');
+        return redirect('accounts_payable/edit/' . $idTransaction);
+    }
 }
