@@ -153,7 +153,8 @@
                             $('#accountingFinancialModal').modal('show');
                         }
                     });
-                });
+                }
+            );
 
             $('#new_accounting_financial').on('click', function() {
                 cleanData();
@@ -189,8 +190,8 @@
 
                 });
 
-            
-                $('#bt_save').on('click', function() {
+
+            $('#bt_save').on('click', function() {
 
                 if (!validateEmptyFields('description', 'account')) {
                     return false;

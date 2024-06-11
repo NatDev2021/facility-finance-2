@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{AccountingFinancial, Customer, Person,   Status, User,   Company, CompanyPaymentAccounts, FinancialTransactions, Loans, Provider};
+use App\Models\{AccountingFinancial, Banks, Customer, Person,   Status, User,   Company, CompanyPaymentAccounts, FinancialTransactions, Loans, Provider};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use stdClass;
@@ -265,7 +265,12 @@ class HomeController extends Controller
 
     public function banksAccounts()
     {
-        return view('banks_accounts.banks_accounts');
+        $banksAccounts = CompanyPaymentAccounts::paginate(15);
+        $banks = Banks::get();
+        return view('banks_accounts.banks_accounts',[
+            'banksAccounts' => $banksAccounts,
+            'banks' => $banks
+        ]);
     }
 
     public function company()

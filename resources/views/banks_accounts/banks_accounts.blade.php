@@ -7,8 +7,8 @@
         <h1>Contas Bancárias</h1>
         <div>
 
-            <button type="button" class="btn btn-outline-primary" id="new_accounting_financial"
-                data-target="#accountingFinancialModal">
+            <button type="button" class="btn btn-outline-primary" id="new_bank_account"
+                data-target="#banksAccountsModal">
                 <i class="fa-solid fa-plus"></i>
                 Adicionar
             </button>
@@ -57,18 +57,45 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th class="text-left">Nome</th>
+                                <th class="text-left">Descrição</th>
+                                <th class="text-center">Banco</th>
+                                <th class="text-center">Agencia</th>
                                 <th class="text-center">Conta</th>
-                                <th class="text-center">Status</th>
-
+                                <th class="text-center">Chave Pix</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($banksAccounts as $item)
+                                <tr>
+                                    <td id="id">{{ $item->id }}</td>
+                                    <td class="text-left">{{ $item->description ?? '' }}</td>
+                                    <td class="text-center">{{ $item->bank_id ?? '' }}</td>
+                                    <td class="text-center">{{ $item->agency ?? '' }}</td>
+                                    <td class="text-center">{{ ($item->account ?? '') . '-' . ($item->account_dig ?? '') }}</td>
+                                    <td class="text-center">{{ $item->pix_key ?? '' }}</td>
 
+                                    <td>
+                                        <div class="d-flex justify-content-end">
+                                            <a id="edit_accounting_financial" class="text-muted mr-3"
+                                                style="cursor: pointer;" title="Editar">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                            <a id="delete_accounting_financial" class="text-muted" style="cursor: pointer;"
+                                                title="Excluir">
+                                                <i class="fa-regular fa-trash-can" style="color: red"></i>
+                                            </a>
+                                        </div>
+
+
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                     <div class="mt-3">
+                        {{ $banksAccounts->links() }}
+
                     </div>
                 </div>
 
@@ -77,10 +104,10 @@
 
     </div>
 
-    <form action="{{ url('accounting_financial/save') }}" id="accounting_financial_form" method="post">
+    <form action="{{ url('banks_accounts/save') }}" id="banks_accounts_form" method="post">
         @csrf
         <!-- Modal -->
-        <div class="modal fade" id="accountingFinancialModal" tabindex="-1" role="dialog"
+        <div class="modal fade" id="banksAccountsModal" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -91,6 +118,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        @include('banks_accounts.forms.banks_accountsForm')
+
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -103,3 +132,16 @@
 
 
 @stop
+
+@push('js')
+    <script>
+        $(document).ready(function() { // onloadjs
+
+            $('#new_bank_account').on('click', function() {
+                // cleanData();
+                $('#banksAccountsModal').modal('show');
+            });
+
+        });
+    </script>
+@endpush
