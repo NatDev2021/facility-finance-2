@@ -12,7 +12,7 @@
 
     <div class="content">
         <div class="container-fluid">
-            <form action="{{ url('accounts_payable/save') }}" id="accounts_payable" method="post">
+            <form action="{{ url('accounts_payable/save') }}" id="accounts_payable" method="post" enctype="multipart/form-data">
                 @csrf
 
                 <div class="row">
@@ -77,6 +77,7 @@
                                     </div>
 
                                     <div class="card-body table-responsive">
+                                        
                                         @include('accounts_payable.forms.import_filesForm')
 
                                     </div>

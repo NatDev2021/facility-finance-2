@@ -39,6 +39,7 @@ class AccountsPayableController extends Controller
     {
 
         $financialTransaction = FinancialTransactions::find($id);
+        $transactionFiles = FinancialTransactionsFiles::where('transaction_id', '=', $id)->paginate(4);
         $providers = Provider::with('person')->get();
         $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
             ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
@@ -46,6 +47,7 @@ class AccountsPayableController extends Controller
 
         return view('accounts_payable.accounts_payableForm', [
             'financialTransaction' => $financialTransaction,
+            'transactionFiles' =>  $transactionFiles,
             'providers' =>  $providers,
             'accountFinancial' => $accountFinancial,
             'disbursementAccounts' =>  $disbursementAccounts
@@ -92,7 +94,7 @@ class AccountsPayableController extends Controller
             "id_user_ins" => $this->request->user()->id,
 
         ];
-      $idAccount =   FinancialTransactions::create($arrayData)->id;
+        $idAccount =   FinancialTransactions::create($arrayData)->id;
         if (!empty($data['enable_frequency']) && $data['frequency_number'] > 0) {
 
             $data['pay_date'] = null;
@@ -132,7 +134,6 @@ class AccountsPayableController extends Controller
 
         $file = $this->request->file('input_file');
 
-        print_r($file);die;
 
         if (!empty($file)) {
             $this->saveFiles($data['id_financial_transactions'], $file);

@@ -32,7 +32,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app/contracts/'),
+            'root' => storage_path('app/FinancialTransactions/'),
             'throw' => false,
         ],
 

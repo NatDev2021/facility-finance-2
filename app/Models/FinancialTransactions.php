@@ -27,4 +27,11 @@ class FinancialTransactions extends Model
         'observation',
         'id_user_ins',
     ];
+
+
+    public function transactionFiles()
+    {
+        return $this->hasMany(FinancialTransactionsFiles::class, 'transaction_id');
+
+    }
 }
