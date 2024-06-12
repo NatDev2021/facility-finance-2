@@ -7,8 +7,7 @@
         <h1>Contas Bancárias</h1>
         <div>
 
-            <button type="button" class="btn btn-outline-primary" id="new_bank_account"
-                data-target="#banksAccountsModal">
+            <button type="button" class="btn btn-outline-primary" id="new_bank_account" data-target="#banksAccountsModal">
                 <i class="fa-solid fa-plus"></i>
                 Adicionar
             </button>
@@ -72,7 +71,8 @@
                                     <td class="text-left">{{ $item->description ?? '' }}</td>
                                     <td class="text-center">{{ $item->bank_id ?? '' }}</td>
                                     <td class="text-center">{{ $item->agency ?? '' }}</td>
-                                    <td class="text-center">{{ ($item->account ?? '') . '-' . ($item->account_dig ?? '') }}</td>
+                                    <td class="text-center">{{ ($item->account ?? '') . '-' . ($item->account_dig ?? '') }}
+                                    </td>
                                     <td class="text-center">{{ $item->pix_key ?? '' }}</td>
 
                                     <td>
@@ -141,6 +141,8 @@
                 // cleanData();
                 $('#banksAccountsModal').modal('show');
             });
+
+
 
         });
     </script>
