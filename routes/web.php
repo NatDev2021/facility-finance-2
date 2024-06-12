@@ -75,17 +75,13 @@ Route::prefix('accounting_financial')->group(function () {
     Route::get('edit/{id}', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'editAccountingFinancial']);
     Route::post('save', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'saveAccountingFinancial']);
     Route::get('get/{id}', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'getAccountingFinancial']);
-    Route::get('get', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'getAccountingFinancial']);
     Route::get('delete/{id}', [App\Http\Controllers\AccountingFinancial\AccountingFinancialController::class, 'deleteAccountingFinancial']);
 
     Route::prefix('import')->group(function () {
         Route::get('/', [App\Http\Controllers\AccountingFinancial\ImportAccountingFinancialController::class, 'importAccounting']);
         Route::post('save', [App\Http\Controllers\AccountingFinancial\ImportAccountingFinancialController::class, 'saveImportFile']);
-
     });
-
 });
-
 
 
 Route::prefix('accounts_payable')->group(function () {
@@ -93,13 +89,19 @@ Route::prefix('accounts_payable')->group(function () {
     Route::get('edit/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'editAccountsPayable']);
     Route::post('save', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'saveAccountsPayable']);
     Route::get('get/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getAccountsPayable']);
-    Route::get('get', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getAccountsPayable']);
     Route::get('delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteAccountingPayable']);
     Route::get('files/download/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'downloadFile']);
     Route::get('files/delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteFile']);
-
 });
 
+
+Route::prefix('banks_accounts')->group(function () {
+
+    Route::post('save', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'saveBanksAccounts']);
+    Route::get('get/{id}', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'getBanksAccounts']);
+    Route::get('delete/{id}', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'deleteBanksAccounts']);
+
+});
 
 
 Route::prefix('company')->group(function () {

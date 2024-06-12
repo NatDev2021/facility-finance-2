@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="card-body table-responsive">
-                    <table id="accounting_financial_table" class="table table-striped table-valign-middle ">
+                    <table id="banks_accounts_table" class="table table-striped table-valign-middle ">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -69,7 +69,7 @@
                                 <tr>
                                     <td id="id">{{ $item->id }}</td>
                                     <td class="text-left">{{ $item->description ?? '' }}</td>
-                                    <td class="text-center">{{ $item->bank_id ?? '' }}</td>
+                                    <td class="text-center">{{ $item->bank->name ?? '' }}</td>
                                     <td class="text-center">{{ $item->agency ?? '' }}</td>
                                     <td class="text-center">{{ ($item->account ?? '') . '-' . ($item->account_dig ?? '') }}
                                     </td>
@@ -77,11 +77,11 @@
 
                                     <td>
                                         <div class="d-flex justify-content-end">
-                                            <a id="edit_accounting_financial" class="text-muted mr-3"
-                                                style="cursor: pointer;" title="Editar">
+                                            <a id="edit_banks_accounts" class="text-muted mr-3" style="cursor: pointer;"
+                                                title="Editar">
                                                 <i class="fas fa-search"></i>
                                             </a>
-                                            <a id="delete_accounting_financial" class="text-muted" style="cursor: pointer;"
+                                            <a id="delete_banks_accounts" class="text-muted" style="cursor: pointer;"
                                                 title="Excluir">
                                                 <i class="fa-regular fa-trash-can" style="color: red"></i>
                                             </a>
@@ -138,11 +138,67 @@
         $(document).ready(function() { // onloadjs
 
             $('#new_bank_account').on('click', function() {
-                // cleanData();
+                cleanData();
                 $('#banksAccountsModal').modal('show');
             });
 
+            $('#banks_accounts_table').on('click', "#edit_banks_accounts",
+                function() { // onclick bot�o de anexo
 
+                    var row = $(this).parents('tr');
+                    var codBanksAccount = $(row.children('#id'))[0].innerHTML;
+
+                    $.ajax({
+                        url: "{{ url('banks_accounts/get') }}" + "/" + codBanksAccount,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(response) {
+                            cleanData();
+                            defineData(response);
+                            $('#banksAccountsModal').modal('show');
+                        }
+                    });
+                }
+            );
+
+            $('#banks_accounts_table').on('click', "#delete_banks_accounts",
+
+                function() { // onclick bot�o de anexo
+
+                    var row = $(this).parents('tr');
+                    var codBanksAccount = $(row.children('#id'))[0].innerHTML;
+
+                    Swal.fire({
+                        title: "Tem certeza?",
+                        text: "Você não poderá reverter isso!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        reverseButtons: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonText: "Sim, excluir"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            window.location = "{{ url('banks_accounts/delete') }}" + "/" +
+                                codBanksAccount;
+
+                        }
+                    });
+
+
+                }
+            );
+
+            $('#bt_save').on('click', function() {
+
+                let validateFields = validateEmptyFields('description', 'account', 'agency');
+                let validateSelect2 = validateEmptySelect2('bank_id');
+                if (!validateFields || !validateSelect2) {
+                    return false;
+                }
+            });
 
         });
     </script>

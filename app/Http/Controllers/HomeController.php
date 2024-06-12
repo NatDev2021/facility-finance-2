@@ -265,7 +265,7 @@ class HomeController extends Controller
 
     public function banksAccounts()
     {
-        $banksAccounts = CompanyPaymentAccounts::paginate(15);
+        $banksAccounts = CompanyPaymentAccounts::with('bank')->paginate(15);
         $banks = Banks::get();
         return view('banks_accounts.banks_accounts',[
             'banksAccounts' => $banksAccounts,

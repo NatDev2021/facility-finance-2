@@ -27,7 +27,7 @@ class AccountsPayableController extends Controller
         $providers = Provider::with('person')->get();
         $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
             ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
-        $disbursementAccounts = CompanyPaymentAccounts::get();
+        $disbursementAccounts = CompanyPaymentAccounts::with('bank')->get();
         return view('accounts_payable.accounts_payableForm', [
             'providers' =>  $providers,
             'accountFinancial' => $accountFinancial,
@@ -89,6 +89,7 @@ class AccountsPayableController extends Controller
             'customer_provider_id' => $data['provider_id'],
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
+            'disbursement_account_id' => $data['disbursement_account_id'],
             'type' => 'p',
             'observation' => $data['observation'] ?? '',
             "id_user_ins" => $this->request->user()->id,
@@ -130,6 +131,7 @@ class AccountsPayableController extends Controller
             'customer_provider_id' => $data['provider_id'],
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
+            'disbursement_account_id' => $data['disbursement_account_id'],
         ]);
 
         $file = $this->request->file('input_file');

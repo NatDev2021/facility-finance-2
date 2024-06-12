@@ -188,7 +188,8 @@
                     });
 
 
-                });
+                }
+            );
 
 
             $('#bt_save').on('click', function() {

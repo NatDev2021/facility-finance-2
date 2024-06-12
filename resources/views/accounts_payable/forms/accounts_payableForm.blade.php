@@ -40,11 +40,11 @@
     </div>
     <div class="col-md-12 form-group">
         <label for="disbursement_account">Conta de Desembolso</label>
-        <x-adminlte-select2 name="disbursement_account" id="disbursement_account">
+        <x-adminlte-select2 name="disbursement_account_id" id="disbursement_account_id">
             <option value="0">Salecione...</option>
             @foreach ($disbursementAccounts as $item)
-                <option @selected(($financialTransaction->amount ?? '') == $item->id) value="{{ $item->id }}">
-                    {{ $item->account . ' - ' . $item->description }}
+                <option @selected(($financialTransaction->disbursement_account_id ?? '') == $item->id) value="{{ $item->id }}">
+                    {{ $item->description . ' - ' . $item->agency . ' - ' . $item->account . ' - ' . $item->account_dig . ' / ' . $item->bank->name }}
                 </option>
             @endforeach
         </x-adminlte-select2>

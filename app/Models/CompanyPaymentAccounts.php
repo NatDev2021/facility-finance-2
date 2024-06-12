@@ -22,4 +22,14 @@ class CompanyPaymentAccounts extends Model
         'id_user_ins',
     ];
 
+
+    public function bank()
+    {
+        return $this->hasOne(Banks::class, 'id', 'bank_id');
+    }
+
+    public function financialTransaction()
+    {
+        return $this->hasOne(FinancialTransactions::class, 'disbursement_account_id');
+    }
 }

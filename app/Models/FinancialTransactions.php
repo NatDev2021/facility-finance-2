@@ -23,6 +23,7 @@ class FinancialTransactions extends Model
         'customer_provider_id',
         'credit_account_id',
         'debit_account_id',
+        'disbursement_account_id',
         'type',
         'observation',
         'id_user_ins',
