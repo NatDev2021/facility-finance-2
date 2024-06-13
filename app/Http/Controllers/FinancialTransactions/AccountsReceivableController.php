@@ -10,10 +10,11 @@ use App\Helpers\{Helper, DateHelper};
 use App\Models\AccountingFinancial;
 use App\Models\CompanyPaymentAccounts;
 use App\Models\FinancialTransactions;
-use App\Models\Provider;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Storage;
 
-class AccountsPayableController extends Controller
+
+class AccountsReceivableController extends Controller
 {
     public function __construct(Request $request)
     {
@@ -22,53 +23,55 @@ class AccountsPayableController extends Controller
     }
 
 
-    public function formAccountsPayable()
+    public function formAccountsReceivable()
     {
-        $providers = Provider::with('person')->get();
-        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
-            ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
+        $customers = Customer::with('person')->get();
+        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
         $disbursementAccounts = CompanyPaymentAccounts::with('bank')->get();
-        return view('accounts_payable.accounts_payableForm', [
-            'providers' =>  $providers,
+
+        return view('accounts_receivable.accounts_receivableForm', [
+            'customers' =>  $customers,
             'accountFinancial' => $accountFinancial,
             'disbursementAccounts' =>  $disbursementAccounts
         ]);
     }
 
-    public function editAccountsPayable($id)
+    public function editAccountsReceivable($id)
     {
 
         $financialTransaction = FinancialTransactions::find($id);
         $transactionFiles = FinancialTransactionsFiles::where('transaction_id', '=', $id)->paginate(4);
-        $providers = Provider::with('person')->get();
+        $customers = Customer::with('person')->get();
         $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
             ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
         $disbursementAccounts = CompanyPaymentAccounts::get();
 
-        return view('accounts_payable.accounts_payableForm', [
+        return view('accounts_receivable.accounts_receivableForm', [
             'financialTransaction' => $financialTransaction,
             'transactionFiles' =>  $transactionFiles,
-            'providers' =>  $providers,
+            'customers' =>  $customers,
             'accountFinancial' => $accountFinancial,
             'disbursementAccounts' =>  $disbursementAccounts
         ]);
     }
 
-    public function saveAccountsPayable()
+
+
+    public function saveAccountsReceivable()
     {
         $data = $this->request->post();
 
         if (empty($data['id_financial_transactions'])) {
-            $idAccount =  $this->createAccountsPayable($data);
+            $idAccount =  $this->createAccountsReceivable($data);
         } else {
-            $idAccount =  $this->updateAccountsPayable($data);
+            $idAccount =  $this->updateAccountsReceivable($data);
         }
 
-        return redirect('accounts_payable/edit/' . $idAccount);
+        return redirect('accounts_receivable/edit/' . $idAccount);
     }
 
 
-    private function createAccountsPayable(array|string|null $data)
+    private function createAccountsReceivable(array|string|null $data)
     {
 
         $value = Helper::removeMoneyMask($data['value'] ?? 0);
@@ -86,11 +89,11 @@ class AccountsPayableController extends Controller
             'addition' =>  $addition,
             'discount' => $discount,
             'amount' => $amount,
-            'customer_provider_id' => $data['provider_id'],
+            'customer_provider_id' => $data['customer_id'],
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
             'disbursement_account_id' => $data['disbursement_account_id'],
-            'type' => 'p',
+            'type' => 'r',
             'observation' => $data['observation'] ?? '',
             "id_user_ins" => $this->request->user()->id,
 
@@ -102,7 +105,7 @@ class AccountsPayableController extends Controller
             $dateDue = Helper::convertToAmericanDate($data['due_date'] ?? null);
             $dateReference = $dateDue;
             for ($i = 1; $i <= $data['frequency_number']; $i++) {
-                $newDate =   DateHelper::dueDate($dateReference, $data['frequency'], $dateDue, $dateReference);
+                $newDate =  DateHelper::dueDate($dateReference, $data['frequency'], $dateDue, $dateReference);
                 $arrayData['due_date'] = $newDate;
                 FinancialTransactions::create($arrayData);
                 $dateReference = $newDate;
@@ -112,7 +115,8 @@ class AccountsPayableController extends Controller
         return $idAccount;
     }
 
-    private function updateAccountsPayable(array|string|null $data)
+
+    private function updateAccountsReceivable(array|string|null $data)
     {
         $account = FinancialTransactions::find($data['id_financial_transactions']);
         $value = Helper::removeMoneyMask($data['value'] ?? 0);
@@ -128,7 +132,7 @@ class AccountsPayableController extends Controller
             'addition' =>  $addition,
             'discount' => $discount,
             'amount' => $amount,
-            'customer_provider_id' => $data['provider_id'],
+            'customer_provider_id' => $data['customer_id'],
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
             'disbursement_account_id' => $data['disbursement_account_id'],
@@ -143,17 +147,6 @@ class AccountsPayableController extends Controller
 
         toast('Conta atualizada.', 'success');
         return $data['id_financial_transactions'];
-    }
-
-    public function deleteAccountingPayable($id)
-    {
-
-        $account = FinancialTransactions::find($id);
-        $account->delete();
-
-
-        toast('Conta excluida.', 'success');
-        return redirect('/accounts_payable');
     }
 
 
@@ -185,6 +178,7 @@ class AccountsPayableController extends Controller
         $idTransaction = $file['transaction_id'];
         $file->delete();
         toast('Docmento excluido.', 'success');
-        return redirect('accounts_payable/edit/' . $idTransaction);
+        return redirect('accounts_receivable/edit/' . $idTransaction);
     }
+
 }

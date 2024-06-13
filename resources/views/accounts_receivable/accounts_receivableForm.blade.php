@@ -1,8 +1,8 @@
 @extends('layouts.page')
-@section('title', 'Contas a Pagar')
+@section('title', 'Contas a Receber')
 @section('content_header')
     <div class="d-flex justify-content-between">
-        <h1>{{ empty($financialTransaction->id) ? 'Nova' : 'Editar' }} Conta a Pagar</h1>
+        <h1>{{ empty($financialTransaction->id) ? 'Nova' : 'Editar' }} Conta a Receber</h1>
     </div>
 
 @stop
@@ -12,7 +12,7 @@
 
     <div class="content">
         <div class="container-fluid">
-            <form action="{{ url('accounts_payable/save') }}" id="accounts_payable" method="post" enctype="multipart/form-data">
+            <form action="{{ url('accounts_receivable/save') }}" id="accounts_receivable" method="post" enctype="multipart/form-data">
                 @csrf
 
                 <div class="row">
@@ -28,14 +28,14 @@
 
                             <div class="card-body table-responsive">
 
-                                @include('accounts_payable.forms.accounts_payableForm')
+                                @include('accounts_receivable.forms.accounts_receivableForm')
 
 
                             </div>
                             <div class="card-footer">
                                 <div class="row">
                                     <div class="col-12">
-                                        <a href="/accounts_payable" class="btn btn-secondary">Voltar</a>
+                                        <a href="/accounts_receivable" class="btn btn-secondary">Voltar</a>
                                         <button type="submit" id="save"
                                             class="btn btn-success float-right">Salvar</button>
 
@@ -78,7 +78,7 @@
 
                                     <div class="card-body table-responsive">
                                         
-                                        @include('accounts_payable.forms.import_filesForm')
+                                        @include('accounts_receivable.forms.import_filesForm')
 
                                     </div>
 

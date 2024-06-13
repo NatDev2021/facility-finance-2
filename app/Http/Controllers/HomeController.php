@@ -263,11 +263,97 @@ class HomeController extends Controller
         ]);
     }
 
+    public function accountsReceivable()
+    {
+
+
+        $customers = Customer::with('person')->get();
+        $accountFinancial = AccountingFinancial::get();
+
+        $accountsReceivable = FinancialTransactions::select('financial_transactions.id',  'person.name as customer', 'financial_transactions.due_date', 'financial_transactions.pay_date',  DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'), 'financial_transactions.description', 'financial_transactions.amount')
+            ->join('customer', 'financial_transactions.customer_provider_id', '=', 'customer.id')
+            ->join('person', 'customer.person_id', '=', 'person.id');
+
+
+        if (!empty($_GET['description'])) {
+            $accountsReceivable =  $accountsReceivable->where('financial_transactions.description', 'like',  '%' . $_GET['description'] . '%');
+        }
+
+        if (!empty($_GET['customer_id']) && $_GET['customer_id'] != 0) {
+            $accountsReceivable =  $accountsReceivable->where('financial_transactions.customer_provider_id', '=',  $_GET['customer_id']);
+        }
+
+        if (!empty($_GET['due_date'])) {
+            // Use explode para separar as duas datas
+            $dates = explode(' - ', $_GET['due_date']);
+
+            // Armazene as datas em variáveis separadas
+            $startDate = Helper::convertToAmericanDate($dates[0]);
+            $endDate = Helper::convertToAmericanDate($dates[1]);
+            $accountsReceivable =  $accountsReceivable->where('financial_transactions.due_date', '>=',  $startDate);
+            $accountsReceivable =  $accountsReceivable->where('financial_transactions.due_date', '<=',  $endDate);
+        }
+
+        if (!empty($_GET['credit_account']) && $_GET['credit_account'] != 0) {
+            $accountsReceivable =  $accountsReceivable->where('financial_transactions.credit_account_id', '=',  $_GET['credit_account']);
+        }
+
+        if (!empty($_GET['debit_account']) && $_GET['debit_account'] != 0) {
+            $accountsReceivable =  $accountsReceivable->where('financial_transactions.debit_account_id', '=',  $_GET['debit_account']);
+        }
+
+        if (!empty($_GET['amount'])) {
+            $amount = Helper::removeMoneyMask($_GET['amount']);
+
+            $accountsReceivable =  $accountsReceivable->where('financial_transactions.amount', '=', $amount);
+        }
+
+
+        $accountsReceivable =  $accountsReceivable->where('type', '=', 'r')
+            ->orderBy('financial_transactions.id', 'desc')
+            ->paginate(15);
+
+        foreach ($accountsReceivable as &$item) {
+            if (!empty($item['pay_date'])) {
+                $item['status'] = [
+                    'message' => 'Pago',
+                    'color' => '#a8f0cb'
+                ];
+            } else {
+                if ($item['date_diff_payment'] > 0) {
+                    $item['status'] = [
+                        'message' => 'Vence em ' . $item['date_diff_payment'] . ' dias.',
+                        'color' => '#a8f0cb'
+                    ];
+                } else if ($item['date_diff_payment'] < 0) {
+                    $item['status'] = [
+                        'message' => 'Venceu há ' . abs($item['date_diff_payment']) . ' dias.',
+                        'color' => '#f0a8a8'
+                    ];
+                } else {
+                    $item['status'] = [
+                        'message' => 'Vence Hoje.',
+                        'color' => '#eff0a8;
+                        '
+                    ];
+                }
+            }
+        }
+
+
+        return view('accounts_receivable.accounts_receivable', [
+            'accountsReceivable' => $accountsReceivable,
+            'customers' => $customers,
+            'accountFinancial' => $accountFinancial,
+            'search' => $_GET
+        ]);
+    }
+
     public function banksAccounts()
     {
         $banksAccounts = CompanyPaymentAccounts::with('bank')->paginate(15);
         $banks = Banks::get();
-        return view('banks_accounts.banks_accounts',[
+        return view('banks_accounts.banks_accounts', [
             'banksAccounts' => $banksAccounts,
             'banks' => $banks
         ]);

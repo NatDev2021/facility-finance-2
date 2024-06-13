@@ -30,6 +30,7 @@ Route::get('company', [App\Http\Controllers\HomeController::class, 'company'])->
 Route::get('provider', [App\Http\Controllers\HomeController::class, 'provider'])->name('provider');
 Route::get('accounting_financial', [App\Http\Controllers\HomeController::class, 'accountingFinancial'])->name('accounting_financial');
 Route::get('accounts_payable', [App\Http\Controllers\HomeController::class, 'accountsPayable'])->name('accounts_payable');
+Route::get('accounts_receivable', [App\Http\Controllers\HomeController::class, 'accountsReceivable'])->name('accounts_receivable');
 Route::get('banks_accounts', [App\Http\Controllers\HomeController::class, 'banksAccounts'])->name('banks_accounts');
 
 
@@ -90,6 +91,14 @@ Route::prefix('accounts_payable')->group(function () {
     Route::post('save', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'saveAccountsPayable']);
     Route::get('get/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'getAccountsPayable']);
     Route::get('delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteAccountingPayable']);
+    Route::get('files/download/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'downloadFile']);
+    Route::get('files/delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteFile']);
+});
+
+Route::prefix('accounts_receivable')->group(function () {
+    Route::get('form', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'formAccountsReceivable']);
+    Route::get('edit/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'editAccountsReceivable']);
+    Route::post('save', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'saveAccountsReceivable']);
     Route::get('files/download/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'downloadFile']);
     Route::get('files/delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteFile']);
 });

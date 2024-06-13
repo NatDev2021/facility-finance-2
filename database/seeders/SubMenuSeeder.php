@@ -79,7 +79,7 @@ class SubMenuSeeder extends Seeder
                 'menu_id' => 2,
                 'description' => 'Contas a Receber',
                 'icon' => 'nav-icon fa-solid fa-down',
-                'route' => 'accounts_payable',
+                'route' => 'accounts_receivable',
                 'actived' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
