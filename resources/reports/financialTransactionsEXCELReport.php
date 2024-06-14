@@ -13,7 +13,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 $sheet = $objPHPExcel->getActiveSheet();
 $sheet->setCellValue('A1', "Vencimento");
 $sheet->setCellValue('B1', 'Descrição');
-$sheet->setCellValue('C1', 'Cliente');
+$sheet->setCellValue('C1', $type == 'p' ? 'Fornecedor' : 'Cliente');
 $sheet->setCellValue('D1', 'Status');
 $sheet->setCellValue('E1', 'Conta de Débito');
 $sheet->setCellValue('F1', 'Conta de Crédito');
@@ -88,7 +88,7 @@ $objPHPExcel->getActiveSheet()
 
 
 // Define o nome do arquivo
-$filename = 'relatorio_contas_a_' . ($type == 'p' ? 'pagar' : 'teceber') . '.xlsx';
+$filename = 'relatorio_contas_a_' . ($type == 'p' ? 'pagar' : 'receber') . '.xlsx';
 
 // // Configura a saída
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

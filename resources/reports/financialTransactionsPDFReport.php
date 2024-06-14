@@ -68,4 +68,4 @@ $pdf->Cell(35, 5, 'Total', 'LBT', 0, 'L', 1);
 $pdf->Cell(220, 5, '', 'BT', 0, 'C', 1);
 $pdf->Cell(20, 5, Helper::formatBrazilianNumber($totAmount), 'BTR', 1, 'R', 1);
 ob_clean();
-return $pdf->Output('relatorio_contas_a_' . ($type == 'p' ? 'pagar' : 'teceber') . '.pdf', 'D');
+return $pdf->Output('relatorio_contas_a_' . ($type == 'p' ? 'pagar' : 'receber') . '.pdf', 'D');

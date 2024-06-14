@@ -102,8 +102,11 @@ Route::prefix('accounts_receivable')->group(function () {
     Route::get('form', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'formAccountsReceivable']);
     Route::get('edit/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'editAccountsReceivable']);
     Route::post('save', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'saveAccountsReceivable']);
-    Route::get('files/download/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'downloadFile']);
-    Route::get('files/delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteFile']);
+    Route::get('delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'deleteAccountingPayable']);
+    Route::get('files/download/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'downloadFile']);
+    Route::get('files/delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'deleteFile']);
+    Route::get('export/pdf', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'exportAccountsReceivablePDF']);
+    Route::get('export/excel', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'exportAccountsReceivableEXCEL']);
 });
 
 

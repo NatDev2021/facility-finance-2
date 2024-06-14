@@ -24,7 +24,8 @@
                             <i class="fas fa-edit"></i>
                         </h3>
                         &nbsp;
-                        <span> Contas a Receber Cadastradas | <a id="title_filter_span" href="javascript:showFilter()">Ocultar
+                        <span> Contas a Receber Cadastradas | <a id="title_filter_span"
+                                href="javascript:showFilter()">Ocultar
                                 Filtro</a></span>
                     </div>
 
@@ -117,12 +118,10 @@
 
                                 <div class="d-flex justify-content-end">
                                     <div>
-                                        <button type="submit" class="btn btn-dark btn-sm"
-                                            data-target="#accountingFinancialModal">
+                                        <button type="submit" class="btn btn-dark btn-sm">
                                             Pesquisar
                                         </button>
-                                        <button type="button" class="btn btn-dark btn-sm" id="new_accounting_financial"
-                                            data-target="#accountingFinancialModal">
+                                        <button type="button" class="btn btn-dark btn-sm" id="export_accounts">
                                             Exportar
                                         </button>
                                     </div>
@@ -189,6 +188,31 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalTitle">Exportar Registros</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Selecione o formato que deseja exportar.
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" onclick="export_excel()" class="btn btn-success">Excel <i
+                            class="fa-regular fa-file-spreadsheet"></i></button>
+                    <button type="button" onclick="export_pdf()" class="btn btn-danger ">PDF <i
+                            class="fa-solid fa-file-pdf"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
 
 @stop
@@ -268,7 +292,11 @@
                     return false;
                 }
             });
-            f
+
+
+            $('#export_accounts').on('click', function() {
+                $('#exportModal').modal('show');
+            });
 
         });
 
@@ -288,6 +316,21 @@
                 $('#filter').show();
                 $('#title_filter_span').text('Ocultar Filtro');
             }
+        }
+
+        function export_excel() {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = urlParams.toString();
+            window.location.href = 'accounts_receivable/export/excel?' + data;
+        }
+
+
+        function export_pdf() {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = urlParams.toString();
+            window.location.href = 'accounts_receivable/export/pdf?' + data;
         }
     </script>
 @endpush
