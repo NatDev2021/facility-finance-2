@@ -5,13 +5,14 @@ namespace App\Http\Controllers\FinancialTransactions;
 use App\Http\Controllers\Controller;
 use App\Models\FinancialTransactionsFiles;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Helpers\{Helper, DateHelper};
 use App\Models\AccountingFinancial;
+use App\Models\Company;
 use App\Models\CompanyPaymentAccounts;
 use App\Models\FinancialTransactions;
 use App\Models\Provider;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class AccountsPayableController extends Controller
 {
@@ -156,7 +157,6 @@ class AccountsPayableController extends Controller
         return redirect('/accounts_payable');
     }
 
-
     private function saveFiles($idTransaction, $files)
     {
 
@@ -186,5 +186,96 @@ class AccountsPayableController extends Controller
         $file->delete();
         toast('Docmento excluido.', 'success');
         return redirect('accounts_payable/edit/' . $idTransaction);
+    }
+
+    public function exportAccountsPayablePDF()
+    {
+        $data = $this->request->all();
+        $accountsPayable = $this->searchAccountsPayable($data);
+        $company = Company::find(1);
+
+        return reports('financialTransactionsPDFReport', [
+            'transactions' => $accountsPayable,
+            'company' => $company,
+            'type' => 'p'
+        ]);
+    }
+
+    public function exportAccountsPayableEXCEL()
+    {
+
+        $data = $this->request->all();
+        $accountsPayable = $this->searchAccountsPayable($data);
+        $company = Company::find(1);
+
+        return reports('financialTransactionsEXCELReport', [
+            'transactions' => $accountsPayable,
+            'company' => $company,
+            'type' => 'p'
+        ]);
+    }
+
+
+    private function searchAccountsPayable(array $data)
+    {
+        $accountsPayable = FinancialTransactions::select(
+            'financial_transactions.id',
+            'person.name as customer_provider',
+            'financial_transactions.due_date',
+            'financial_transactions.pay_date',
+            DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'),
+            'financial_transactions.description',
+            'financial_transactions.amount',
+            'financial_transactions.register_date',
+            'debit_account.account as debit_account',
+            'debit_account.name as debit_account_name',
+            'credit_account.account as credit_account',
+            'credit_account.name as credit_account_name'
+
+        )
+            ->join('provider', 'financial_transactions.customer_provider_id', '=', 'provider.id')
+            ->join('person', 'provider.person_id', '=', 'person.id')
+            ->join('accounting_financial as debit_account', 'financial_transactions.debit_account_id', '=', 'debit_account.id')
+            ->join('accounting_financial as credit_account', 'financial_transactions.credit_account_id', '=', 'credit_account.id');
+
+
+        if (!empty($data['description'])) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.description', 'like',  '%' . $data['description'] . '%');
+        }
+
+        if (!empty($data['provider_id']) && $data['provider_id'] != 0) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.customer_provider_id', '=',  $data['provider_id']);
+        }
+
+        if (!empty($data['due_date'])) {
+            // Use explode para separar as duas datas
+            $dates = explode(' - ', $data['due_date']);
+
+            // Armazene as datas em variáveis separadas
+            $startDate = Helper::convertToAmericanDate($dates[0]);
+            $endDate = Helper::convertToAmericanDate($dates[1]);
+            $accountsPayable =  $accountsPayable->where('financial_transactions.due_date', '>=',  $startDate);
+            $accountsPayable =  $accountsPayable->where('financial_transactions.due_date', '<=',  $endDate);
+        }
+
+        if (!empty($data['credit_account']) && $data['credit_account'] != 0) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.credit_account_id', '=',  $data['credit_account']);
+        }
+
+        if (!empty($data['debit_account']) && $data['debit_account'] != 0) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.debit_account_id', '=',  $data['debit_account']);
+        }
+
+        if (!empty($data['amount'])) {
+            $amount = Helper::removeMoneyMask($data['amount']);
+
+            $accountsPayable =  $accountsPayable->where('financial_transactions.amount', '=', $amount);
+        }
+
+
+
+        return  $accountsPayable->where('type', '=', 'p')
+            ->orderBy('financial_transactions.id', 'desc')
+            ->get();
     }
 }

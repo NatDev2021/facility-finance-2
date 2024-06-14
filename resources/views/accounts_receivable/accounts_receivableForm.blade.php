@@ -104,7 +104,7 @@
         $('#save').on("click", function() {
 
             let validateFields = validateEmptyFields('description', 'value', 'register_date', 'due_date');
-            let validateSelect2 = validateEmptySelect2('provider_id', 'credit_account', 'debit_account');
+            let validateSelect2 = validateEmptySelect2('customer_id', 'credit_account', 'debit_account');
             if (!validateFields || !validateSelect2) {
                 return false;
             }

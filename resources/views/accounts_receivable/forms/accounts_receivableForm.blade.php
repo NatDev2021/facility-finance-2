@@ -54,7 +54,7 @@
         <label for="inputDescription">Data de Cadastro</label>
 
         <div class="input-group date" data-target-input="nearest">
-            <input type="text" name="register_date" id="register_date" class="form-control"
+            <input type="text" name="register_date" id="register_date" class="form-control" autocomplete="off"
                 value="{{ Helper::convertToBrazilianDate($financialTransaction->register_date ?? '') }}" />
             <div class="input-group-append" data-target="#register_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -65,7 +65,7 @@
         <label for="inputDescription">Vencimento</label>
 
         <div class="input-group date" data-target-input="nearest">
-            <input type="text" name="due_date" id="due_date" class="form-control"
+            <input type="text" name="due_date" id="due_date" class="form-control" autocomplete="off"
                 value="{{ Helper::convertToBrazilianDate($financialTransaction->due_date ?? '') }}" />
             <div class="input-group-append" data-target="#due_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -76,7 +76,7 @@
         <label for="inputDescription">Data do Pagamento</label>
 
         <div class="input-group date" data-target-input="nearest">
-            <input type="text" name="pay_date" id="pay_date" class="form-control"
+            <input type="text" name="pay_date" id="pay_date" class="form-control" autocomplete="off"
                 value="{{ Helper::convertToBrazilianDate($financialTransaction->pay_date ?? '') }}" />
             <div class="input-group-append" data-target="#pay_date" data-toggle=" ">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -89,7 +89,7 @@
             <div class="input-group-append" data-target="#value" data-toggle="datetimepicker">
                 <div class="input-group-text">R$</div>
             </div>
-            <input type="text" name="value" id="value" class="form-control text-right" data-target="#value"
+            <input type="text" name="value" id="value" class="form-control text-right" data-target="#value" 
                 value="{{ $financialTransaction->value ?? '' }}" data-mask="#.##0,00" data-mask-reverse="true"
                 onkeyup="updateAmount()" />
 

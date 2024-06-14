@@ -93,6 +93,9 @@ Route::prefix('accounts_payable')->group(function () {
     Route::get('delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteAccountingPayable']);
     Route::get('files/download/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'downloadFile']);
     Route::get('files/delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteFile']);
+    Route::get('export/pdf', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'exportAccountsPayablePDF']);
+    Route::get('export/excel', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'exportAccountsPayableEXCEL']);
+
 });
 
 Route::prefix('accounts_receivable')->group(function () {

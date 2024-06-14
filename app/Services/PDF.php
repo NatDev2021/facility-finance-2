@@ -54,11 +54,11 @@ class PDF extends TCPDF
          $this->SetFont('dejavusans', 'B', 8);
 
 
-        $this->Image(__DIR__.'/../../public/img/AGILIZACRED.jpg', 18, 2, 20, 18, 'JPG');
-        $this->ln(7);
+         $this->Image(__DIR__.'/../../public/img/FacilityWeb.jpg', 15, 9, 30, '', 'JPG');
+         $this->ln(7);
         $this->Cell(0, 2, ('Pág.: ') . $this->PageNo(), 0, 1, 'R');
-        $this->Cell(0, 2, ('                           ' . $this->titulo), 0, 1, 'L');
-        $this->Cell(0, 2, ('                           Empresa: ' . ($this->nomemp) . ' - ' . ($this->ncidade) . ' - ' . $this->nuf), 'B', 0, 'L',);
+        $this->Cell(0, 2, ('                               ' . $this->titulo), 0, 1, 'L');
+        $this->Cell(0, 2, ('                               Empresa: ' . ($this->nomemp) . ' - ' . ($this->ncidade) . ' - ' . $this->nuf), 'B', 0, 'L',);
         $this->Cell(0, 2, ('Emissão: ') . strftime("%d/%m/%Y - %H:%M"), 0, 1, 'R');
 
         $this->Ln(20);
