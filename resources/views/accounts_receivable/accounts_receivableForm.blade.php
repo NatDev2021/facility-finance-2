@@ -20,7 +20,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    <i class="fa-regular fa-up"></i>
+                                    <i class="fa-regular fa-down"></i>
                                     Dados da Conta
 
                                 </h3>

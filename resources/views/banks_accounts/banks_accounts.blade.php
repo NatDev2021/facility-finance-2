@@ -7,10 +7,15 @@
         <h1>Contas Bancárias</h1>
         <div>
 
-            <button type="button" class="btn btn-outline-primary" id="new_bank_account" data-target="#banksAccountsModal">
+            {{-- <button type="button" class="btn btn-outline-primary" id="new_bank_account" data-target="#banksAccountsModal">
                 <i class="fa-solid fa-plus"></i>
                 Adicionar
-            </button>
+            </button> --}}
+
+            <a href="{{ url('banks_accounts/form') }}" class="btn btn-outline-primary">
+                <i class="fa-solid fa-plus"></i>
+                Adicionar
+            </a>
         </div>
 
     </div>
@@ -104,32 +109,6 @@
 
     </div>
 
-    <form action="{{ url('banks_accounts/save') }}" id="banks_accounts_form" method="post">
-        @csrf
-        <!-- Modal -->
-        <div class="modal fade" id="banksAccountsModal" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="ModalTitle">Nova Conta</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        @include('banks_accounts.forms.banks_accountsForm')
-
-                    </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" id="bt_save" class="btn btn-success float-right">Salvar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-
 
 @stop
 
@@ -137,29 +116,8 @@
     <script>
         $(document).ready(function() { // onloadjs
 
-            $('#new_bank_account').on('click', function() {
-                cleanData();
-                $('#banksAccountsModal').modal('show');
-            });
 
-            $('#banks_accounts_table').on('click', "#edit_banks_accounts",
-                function() { // onclick bot�o de anexo
 
-                    var row = $(this).parents('tr');
-                    var codBanksAccount = $(row.children('#id'))[0].innerHTML;
-
-                    $.ajax({
-                        url: "{{ url('banks_accounts/get') }}" + "/" + codBanksAccount,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(response) {
-                            cleanData();
-                            defineData(response);
-                            $('#banksAccountsModal').modal('show');
-                        }
-                    });
-                }
-            );
 
             $('#banks_accounts_table').on('click', "#delete_banks_accounts",
 
@@ -191,14 +149,7 @@
                 }
             );
 
-            $('#bt_save').on('click', function() {
 
-                let validateFields = validateEmptyFields('description', 'account', 'agency');
-                let validateSelect2 = validateEmptySelect2('bank_id');
-                if (!validateFields || !validateSelect2) {
-                    return false;
-                }
-            });
 
         });
     </script>

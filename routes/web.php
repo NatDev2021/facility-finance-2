@@ -111,7 +111,7 @@ Route::prefix('accounts_receivable')->group(function () {
 
 
 Route::prefix('banks_accounts')->group(function () {
-
+    Route::get('form', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'formBanksAccounts']);
     Route::post('save', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'saveBanksAccounts']);
     Route::get('get/{id}', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'getBanksAccounts']);
     Route::get('delete/{id}', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'deleteBanksAccounts']);

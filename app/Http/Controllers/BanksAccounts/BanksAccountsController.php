@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CompanyPaymentAccounts;
 use Illuminate\Http\Request;
 use Alert;
+use App\Models\Banks;
 use Helper;
 
 class BanksAccountsController extends Controller
@@ -14,6 +15,19 @@ class BanksAccountsController extends Controller
     {
         $this->middleware('auth');
         parent::__construct($request);
+    }
+
+
+
+
+    public function formBanksAccounts()
+    {
+        $banks = Banks::get();
+
+        return view('banks_accounts.banks_accountsForm', [
+            'banks' => $banks
+
+        ]);
     }
 
     public function saveBanksAccounts()
