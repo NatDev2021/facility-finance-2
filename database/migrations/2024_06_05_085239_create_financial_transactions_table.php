@@ -27,7 +27,7 @@ return new class extends Migration
             $table->foreignId('debit_account_id')->unsigned()->index()->nullable();
             $table->foreign('debit_account_id')->references('id')->on('accounting_financial')->onDelete('cascade');
             $table->foreignId('disbursement_account_id')->unsigned()->index()->nullable();
-            $table->foreign('disbursement_account_id')->references('id')->on('company_payment_accounts')->onDelete('cascade');
+            $table->foreign('disbursement_account_id')->references('id')->on('company_banks_accounts')->onDelete('cascade');
             $table->enum('type', ['p', 'r'])->default('p');
             $table->text('observation');
             $table->foreignId('id_user_ins')->unsigned()->index()->nullable();

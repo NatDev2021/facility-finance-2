@@ -83,7 +83,7 @@
                                     <td>
                                         <div class="d-flex justify-content-end">
                                             <a id="edit_banks_accounts" class="text-muted mr-3" style="cursor: pointer;"
-                                                title="Editar">
+                                                href="banks_accounts/edit/{{ $item->id }}" title="Editar">
                                                 <i class="fas fa-search"></i>
                                             </a>
                                             <a id="delete_banks_accounts" class="text-muted" style="cursor: pointer;"

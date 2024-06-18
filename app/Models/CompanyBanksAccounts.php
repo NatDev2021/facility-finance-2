@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CompanyPaymentAccounts extends Model
+class CompanyBanksAccounts extends Model
 {
     use HasFactory;
 
-    public $table = 'company_payment_accounts';
+    public $table = 'company_banks_accounts';
 
     protected $fillable = [
         'company_id',

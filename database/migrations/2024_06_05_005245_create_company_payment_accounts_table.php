@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('company_payment_accounts', function (Blueprint $table) {
+        Schema::create('company_banks_accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->unsigned()->index()->nullable();
             $table->foreign('company_id')->references('id')->on('company')->onDelete('cascade');

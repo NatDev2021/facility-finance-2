@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Helpers\{Helper, DateHelper};
 use App\Models\AccountingFinancial;
 use App\Models\Company;
-use App\Models\CompanyPaymentAccounts;
+use App\Models\CompanyBanksAccounts;
 use App\Models\FinancialTransactions;
 use App\Models\Provider;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +28,7 @@ class AccountsPayableController extends Controller
         $providers = Provider::with('person')->get();
         $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
             ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
-        $disbursementAccounts = CompanyPaymentAccounts::with('bank')->get();
+        $disbursementAccounts = CompanyBanksAccounts::with('bank')->get();
         return view('accounts_payable.accounts_payableForm', [
             'providers' =>  $providers,
             'accountFinancial' => $accountFinancial,
@@ -44,7 +44,7 @@ class AccountsPayableController extends Controller
         $providers = Provider::with('person')->get();
         $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
             ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
-        $disbursementAccounts = CompanyPaymentAccounts::get();
+        $disbursementAccounts = CompanyBanksAccounts::get();
 
         return view('accounts_payable.accounts_payableForm', [
             'financialTransaction' => $financialTransaction,

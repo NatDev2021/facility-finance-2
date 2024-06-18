@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bank_accounts_statement', function (Blueprint $table) {
+        Schema::create('banks_accounts_statement', function (Blueprint $table) {
             $table->id();
             $table->foreignId('disbursement_account_id')->unsigned()->index()->nullable();
-            $table->foreign('disbursement_account_id')->references('id')->on('company_payment_accounts')->onDelete('cascade');
+            $table->foreign('disbursement_account_id')->references('id')->on('company_banks_accounts')->onDelete('cascade');
             $table->string('description');
             $table->date('register_date');
             $table->enum('type', ['c', 'd']);

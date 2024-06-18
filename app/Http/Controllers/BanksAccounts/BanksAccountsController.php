@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\BanksAccounts;
 
 use App\Http\Controllers\Controller;
-use App\Models\CompanyPaymentAccounts;
+use App\Models\CompanyBanksAccounts;
 use Illuminate\Http\Request;
 use Alert;
 use App\Models\Banks;
@@ -30,6 +30,20 @@ class BanksAccountsController extends Controller
         ]);
     }
 
+    public function editBanksAccounts($id)
+    {
+
+
+        $banks = Banks::get();
+        $account = CompanyBanksAccounts::find($id);
+
+
+        return view('banks_accounts.banks_accountsForm', [
+            'banks' => $banks,
+            'account' => $account
+        ]);
+    }
+
     public function saveBanksAccounts()
     {
         $data = $this->request->post();
@@ -43,10 +57,11 @@ class BanksAccountsController extends Controller
         return redirect('/banks_accounts');
     }
 
-    private function createBanksAccounts(array|string|null $data)
+    private function createBanksAccounts(array $data)
     {
 
-        $idAccount = CompanyPaymentAccounts::create([
+
+        $idAccount = CompanyBanksAccounts::create([
             'description' => $data['description'] ?? '',
             'company_id' => 1,
             'bank_id' => $data['bank_id'] ?? '',
@@ -62,9 +77,9 @@ class BanksAccountsController extends Controller
         return $idAccount;
     }
 
-    private function updateBanksAccounts(array|string|null $data)
+    private function updateBanksAccounts(array $data)
     {
-        $account = CompanyPaymentAccounts::find($data['id_banks_accounts']);
+        $account = CompanyBanksAccounts::find($data['id_banks_accounts']);
         $account->update([
             'description' => $data['description'] ?? '',
             'bank_id' => $data['bank_id'] ?? '',
@@ -81,7 +96,7 @@ class BanksAccountsController extends Controller
     public function deleteBanksAccounts($id)
     {
 
-        $account = CompanyPaymentAccounts::with(['financialTransaction'])->find($id);
+        $account = CompanyBanksAccounts::with(['financialTransaction'])->find($id);
 
 
         if (!empty($account->financialTransaction)) {
@@ -98,6 +113,6 @@ class BanksAccountsController extends Controller
 
     protected function getBanksAccounts($id)
     {
-        return CompanyPaymentAccounts::find($id);
+        return CompanyBanksAccounts::find($id);
     }
 }
