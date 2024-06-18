@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('account');
             $table->string('account_dig');
             $table->string('pix_key');
+            $table->decimal('account_balance');            
             $table->foreignId('id_user_ins')->unsigned()->index()->nullable();
             $table->foreign('id_user_ins')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

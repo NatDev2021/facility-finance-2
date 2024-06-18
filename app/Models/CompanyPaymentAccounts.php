@@ -18,6 +18,7 @@ class CompanyPaymentAccounts extends Model
         'agency',
         'account',
         'account_dig',
+        'account_balance',
         'pix_key',
         'id_user_ins',
     ];

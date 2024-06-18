@@ -9,7 +9,7 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <form action="{{ url('banks_accounts/save') }}" id="banks_accounts_form" method="post">
+            <form action="{{ url('banks_accounts/save') }}" id="banks_accounts_form" method="post" enctype="multipart/form-data">
                 @csrf
 
                 <div class="card card-primary card-outline">

@@ -22,13 +22,13 @@
         </x-adminlte-select2>
     </div>
     <div class="col-md-2  form-group">
-        <label for="amount">Saldo </label>
+        <label for="account_balance">Saldo </label>
         <div class="input-group  date" data-target-input="nearest">
-            <div class="input-group-append" data-target="#amount" data-toggle="datetimepicker">
+            <div class="input-group-append" data-target="#account_balance" data-toggle="datetimepicker">
                 <div class="input-group-text">R$</div>
             </div>
-            <input type="text" name="amount" id="amount" class="form-control text-right"
-                data-target="#amount" value="{{ $financialTransaction->amount ?? '' }}" data-mask="#.##0,00"
+            <input type="text" name="account_balance" id="account_balance" class="form-control text-right"
+                data-target="#account_balance" value="{{ $financialTransaction->account_balance ?? '0,00' }}" data-mask="#.##0,00"
                 data-mask-reverse="true"  />
 
         </div>
@@ -51,36 +51,3 @@
     </div>
 
 </div>
-@push('js')
-    <script>
-        $(document).ready(function() { // onloadjs
-
-
-        });
-
-        function defineData(data) {
-            $('#ModalTitle').html('Editar Conta');
-            $('#id_banks_accounts').val(data.id);
-            $('#description').val(data.description);
-            $('#account').val(data.account);
-            $('#account_dig').val(data.account_dig);
-            $('#agency').val(data.agency);
-            $('#pix_key').val(data.pix_key);
-            $('#bank_id').val(data.bank_id).trigger('change');
-
-
-        }
-
-        function cleanData() {
-            $('#ModalTitle').html('Nova Conta');
-            $('#id_banks_accounts').val('');
-            $('#description').val('').css('border', '');
-            $('#account').val('').css('border', '');
-            $('#agency').val('').css('border', '');
-            $('#account_dig').val('').css('border', '');
-            $('#pix_key').val('').css('border', '');
-            $('#bank_id').val(0).trigger('change');
-
-        }
-    </script>
-@endpush

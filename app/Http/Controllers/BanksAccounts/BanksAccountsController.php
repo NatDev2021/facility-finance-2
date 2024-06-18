@@ -7,7 +7,7 @@ use App\Models\CompanyPaymentAccounts;
 use Illuminate\Http\Request;
 use Alert;
 use App\Models\Banks;
-use Helper;
+use App\Helpers\{Helper};
 
 class BanksAccountsController extends Controller
 {
@@ -45,6 +45,7 @@ class BanksAccountsController extends Controller
 
     private function createBanksAccounts(array|string|null $data)
     {
+
         $idAccount = CompanyPaymentAccounts::create([
             'description' => $data['description'] ?? '',
             'company_id' => 1,
@@ -53,6 +54,7 @@ class BanksAccountsController extends Controller
             'account' => $data['account'] ?? '',
             'account_dig' => $data['account_dig'] ?? '',
             'pix_key' => $data['pix_key'] ?? '',
+            'account_balance' => Helper::removeMoneyMask($data['account_balance'] ?? ''),
             "id_user_ins" => $this->request->user()->id,
 
         ])->id;
@@ -69,6 +71,7 @@ class BanksAccountsController extends Controller
             'agency' => $data['agency'] ?? '',
             'account' => $data['account'] ?? '',
             'account_dig' => $data['account_dig'] ?? '',
+            'account_balance' => Helper::removeMoneyMask($data['account_balance'] ?? ''),
             'pix_key' => $data['pix_key'] ?? '',
         ]);
         toast('Conta atualizada.', 'success');
