@@ -11,6 +11,7 @@ use App\Models\Company;
 use App\Models\CompanyBanksAccounts;
 use App\Models\FinancialTransactions;
 use App\Models\Provider;
+use App\Services\BanksAccountsStatementService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
@@ -109,6 +110,16 @@ class AccountsPayableController extends Controller
                 $dateReference = $newDate;
             }
         }
+
+
+        if (!empty($data['pay_date'])) {
+            $idAccountDisbursement = $data['disbursement_account_id'];
+            $description = $data['description'];
+            $registerDate = Helper::convertToAmericanDate($data['register_date'] ?? null);
+            $idUserIns =  $this->request->user()->id;
+            (new BanksAccountsStatementService())->insertStatement($idAccountDisbursement, $description, -$amount, $registerDate, 'c', $idUserIns, $idAccount);
+        }
+
         toast('Conta criada.', 'success');
         return $idAccount;
     }
@@ -140,6 +151,14 @@ class AccountsPayableController extends Controller
 
         if (!empty($file)) {
             $this->saveFiles($data['id_financial_transactions'], $file);
+        }
+
+        if (!empty($data['pay_date'])) {
+            $idAccountDisbursement = $data['disbursement_account_id'];
+            $description = $data['description'];
+            $registerDate = Helper::convertToAmericanDate($data['register_date'] ?? null);
+            $idUserIns =  $this->request->user()->id;
+            (new BanksAccountsStatementService())->insertStatement($idAccountDisbursement, $description, -$amount, $registerDate, 'c', $idUserIns, $data['id_financial_transactions']);
         }
 
         toast('Conta atualizada.', 'success');
