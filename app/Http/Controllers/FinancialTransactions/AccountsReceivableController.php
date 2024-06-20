@@ -13,6 +13,7 @@ use App\Models\Customer;
 use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Services\BanksAccountsStatementService;
 
 
 class AccountsReceivableController extends Controller
@@ -112,6 +113,16 @@ class AccountsReceivableController extends Controller
                 $dateReference = $newDate;
             }
         }
+
+
+        if (!empty($data['pay_date'])) {
+            $idAccountDisbursement = $data['disbursement_account_id'];
+            $description = $data['description'];
+            $registerDate = Helper::convertToAmericanDate($data['register_date'] ?? null);
+            $idUserIns =  $this->request->user()->id;
+            (new BanksAccountsStatementService())->insertStatement($idAccountDisbursement, $description, $amount, $registerDate, 'd', $idUserIns, $idAccount);
+        }
+
         toast('Conta criada.', 'success');
         return $idAccount;
     }
@@ -120,6 +131,12 @@ class AccountsReceivableController extends Controller
     private function updateAccountsReceivable(array|string|null $data)
     {
         $account = FinancialTransactions::find($data['id_financial_transactions']);
+
+        if (!empty($account['pay_date'])) {
+            toast('Contas pagas não podem ser alteradas.', 'error');
+            return $data['id_financial_transactions'];
+        }
+
         $value = Helper::removeMoneyMask($data['value'] ?? 0);
         $addition = Helper::removeMoneyMask($data['addition'] ?? 0);
         $discount = Helper::removeMoneyMask($data['discount'] ?? 0);
@@ -144,6 +161,14 @@ class AccountsReceivableController extends Controller
 
         if (!empty($file)) {
             $this->saveFiles($data['id_financial_transactions'], $file);
+        }
+
+        if (!empty($data['pay_date'])) {
+            $idAccountDisbursement = $data['disbursement_account_id'];
+            $description = $data['description'];
+            $registerDate = Helper::convertToAmericanDate($data['register_date'] ?? null);
+            $idUserIns =  $this->request->user()->id;
+            (new BanksAccountsStatementService())->insertStatement($idAccountDisbursement, $description, $amount, $registerDate, 'd', $idUserIns, $data['id_financial_transactions']);
         }
 
         toast('Conta atualizada.', 'success');

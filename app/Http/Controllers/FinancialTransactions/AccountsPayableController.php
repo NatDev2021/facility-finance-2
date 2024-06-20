@@ -127,6 +127,11 @@ class AccountsPayableController extends Controller
     private function updateAccountsPayable(array|string|null $data)
     {
         $account = FinancialTransactions::find($data['id_financial_transactions']);
+
+        if (!empty($account['pay_date'])) {
+            toast('Contas pagas não podem ser alteradas.', 'error');
+            return $data['id_financial_transactions'];
+        }
         $value = Helper::removeMoneyMask($data['value'] ?? 0);
         $addition = Helper::removeMoneyMask($data['addition'] ?? 0);
         $discount = Helper::removeMoneyMask($data['discount'] ?? 0);

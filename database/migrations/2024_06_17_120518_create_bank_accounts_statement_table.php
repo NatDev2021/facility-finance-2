@@ -19,11 +19,12 @@ return new class extends Migration
             $table->date('register_date');
             $table->enum('type', ['c', 'd']);
             $table->decimal('amount');
+            $table->string('origin');
             $table->foreignId('transaction_id')->unsigned()->index()->nullable();
             $table->foreign('transaction_id')->references('id')->on('financial_transactions')->onDelete('cascade');
             $table->timestamps();
             $table->foreignId('id_user_ins')->unsigned()->index()->nullable();
-            $table->foreign('id_user_ins')->references('id')->on('users')->onDelete('cascade'); 
+            $table->foreign('id_user_ins')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

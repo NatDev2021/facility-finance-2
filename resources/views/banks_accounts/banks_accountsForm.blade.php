@@ -9,7 +9,7 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <form action="{{ url('banks_accounts/save') }}" id="banks_accounts_form" method="post" >
+            <form action="{{ url('banks_accounts/save') }}" id="banks_accounts_form" method="post">
                 @csrf
 
                 <div class="card card-primary card-outline">
@@ -44,34 +44,48 @@
 
                                 </div>
                             </div>
-
-                            <div>
-                                <i class="fas fa-clock-rotate-left bg-blue"></i>
-                                <div class="timeline-item">
-                                    <x-adminlte-card title="Extrato" theme="dark">
-                                        @if (!empty($loans))
+                            @if (!empty($statement))
+                                <div>
+                                    <i class="fas fa-clock-rotate-left bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <x-adminlte-card title="Extrato" theme="dark">
                                             <table id="loans_table" class="table table-striped table-valign-middle ">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th class="text-center">Cliente</th>
+                                                        <th>Data</th>
+                                                        <th class="text-center">Descrição</th>
                                                         <th class="text-center">Valor</th>
-                                                        <th class="text-center">Parcelas</th>
-                                                        <th class="text-center">Status</th>
-                                                        <th></th>
+                                                        <th class="text-center">Tipo</th>
+                                                        <th class="text-center">Origem</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @foreach ($statement as $item)
+                                                        <tr>
+                                                            <td>{{ date('d/m/Y', strtotime($item->register_date ?? '')) }}
+                                                            </td>
+                                                            <td class="text-center">{{ $item->description ?? '' }}</td>
+                                                            <td class="text-right">
+                                                                {{ Helper::formatBrazilianNumber($item->amount ?? '') }}
+                                                            </td>
+                                                            <td class="text-center"><span class="badge"
+                                                                    style="background-color: {{ $item->type == 'c' ? '#f0a8a8' : '#a8f0cb' }};">{{ $item->type == 'c' ? 'Crédito' : 'Débito' }}</span>
+                                                            </td>
+                                                            <td class="text-center">Pagamento de Conta</td>
 
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                             <div class="d-felx justify-content-end mt-3">
-                                            </div>
-                                        @endif
-                                    </x-adminlte-card>
+                                                {{ $statement->links() }}
 
+                                            </div>
+                                        </x-adminlte-card>
+
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
 
                         </div>
 

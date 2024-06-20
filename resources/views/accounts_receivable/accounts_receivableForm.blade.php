@@ -12,7 +12,8 @@
 
     <div class="content">
         <div class="container-fluid">
-            <form action="{{ url('accounts_receivable/save') }}" id="accounts_receivable" method="post" enctype="multipart/form-data">
+            <form action="{{ url('accounts_receivable/save') }}" id="accounts_receivable" method="post"
+                enctype="multipart/form-data">
                 @csrf
 
                 <div class="row">
@@ -77,7 +78,7 @@
                                     </div>
 
                                     <div class="card-body table-responsive">
-                                        
+
                                         @include('accounts_receivable.forms.import_filesForm')
 
                                     </div>
@@ -101,6 +102,17 @@
 
 @push('js')
     <script>
+        $(document).ready(function() {
+
+            var paymentDate = '{{ $financialTransaction->pay_date ?? '' }}';
+            if (paymentDate) {
+                $('.card-body :button').addClass("disabled");
+                $('.card-body .btn').prop("disabled", true);
+                $(".card-body :input").prop("disabled", true);
+                $("#save").prop("disabled", true);
+            }
+
+        });
         $('#save').on("click", function() {
 
             let validateFields = validateEmptyFields('description', 'value', 'register_date', 'due_date');

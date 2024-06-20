@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Alert;
 use App\Models\Banks;
 use App\Helpers\{Helper};
+use App\Models\BanksAccountsStatement;
 
 class BanksAccountsController extends Controller
 {
@@ -36,11 +37,13 @@ class BanksAccountsController extends Controller
 
         $banks = Banks::get();
         $account = CompanyBanksAccounts::find($id);
+        $statement = BanksAccountsStatement::where('banks_account_id', '=', $id)->paginate(10);
 
 
         return view('banks_accounts.banks_accountsForm', [
             'banks' => $banks,
-            'account' => $account
+            'account' => $account,
+            'statement' => $statement
         ]);
     }
 

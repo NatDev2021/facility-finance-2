@@ -29,23 +29,23 @@
             </div>
             <input type="text" name="account_balance" id="account_balance" class="form-control text-right"
                 data-target="#account_balance" value="{{ $account->account_balance ?? '0,00' }}"
-                data-mask="#.##0,00" data-mask-reverse="true" />
+                data-mask="-#.##0,00" data-mask-reverse="true" />
 
         </div>
     </div>
     <div class="col-md-2 form-group">
         <label for="inputDescription">Agência</label>
-        <input type="text" autocomplete="off" data-mask="0000" data-mask-reverse="true" id="agency" name="agency"
+        <input type="text" autocomplete="off" data-mask="0000"  id="agency" name="agency"
             class="form-control" value="{{ $account->agency ?? '' }}">
     </div>
     <div class="col-md-2 form-group">
         <label for="inputDescription">Conta</label>
-        <input type="text" autocomplete="off" data-mask="00000000" data-mask-reverse="true" id="account"
+        <input type="text" autocomplete="off" data-mask="00000000"  id="account"
             name="account" class="form-control" value="{{ $account->account ?? '' }}">
     </div>
     <div class="col-md-2 form-group">
         <label for="inputDescription">Dig.Conta</label>
-        <input type="text" autocomplete="off" data-mask="0" data-mask-reverse="true" id="account_dig"
+        <input type="text" autocomplete="off" data-mask="0"  id="account_dig"
             name="account_dig" class="form-control" value="{{ $account->account_dig ?? '' }}">
     </div>
     <div class="col-md-6 form-group">
@@ -54,3 +54,6 @@
     </div>
 
 </div>
+
+
+
