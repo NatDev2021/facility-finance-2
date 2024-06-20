@@ -18,7 +18,7 @@ class BanksAccountsStatementService
     }
 
 
-    public function insertStatement($idAccount, $description, $amount, $registerDate, $type, $idUserInsert, $transactionID = null)
+    public function insertStatement($idAccount, $description, $amount, $registerDate, $type, $idUserInsert, $transactionID = null, $origin = null)
     {
         $this->banksAccountStatementModel::create([
             'description' => $description,
@@ -27,7 +27,8 @@ class BanksAccountsStatementService
             'type' => $type,
             'amount' =>  $amount,
             'id_user_ins' => $idUserInsert,
-            'transaction_id' => $transactionID
+            'transaction_id' => $transactionID,
+            'origin' => $origin
         ]);
 
 

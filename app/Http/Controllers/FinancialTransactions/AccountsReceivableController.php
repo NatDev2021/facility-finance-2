@@ -120,7 +120,16 @@ class AccountsReceivableController extends Controller
             $description = $data['description'];
             $registerDate = Helper::convertToAmericanDate($data['register_date'] ?? null);
             $idUserIns =  $this->request->user()->id;
-            (new BanksAccountsStatementService())->insertStatement($idAccountDisbursement, $description, $amount, $registerDate, 'd', $idUserIns, $idAccount);
+            (new BanksAccountsStatementService())->insertStatement(
+                $idAccountDisbursement,
+                $description,
+                $amount,
+                $registerDate,
+                'd',
+                $idUserIns,
+                $idAccount,
+                'Recebimento'
+            );
         }
 
         toast('Conta criada.', 'success');
@@ -168,7 +177,16 @@ class AccountsReceivableController extends Controller
             $description = $data['description'];
             $registerDate = Helper::convertToAmericanDate($data['register_date'] ?? null);
             $idUserIns =  $this->request->user()->id;
-            (new BanksAccountsStatementService())->insertStatement($idAccountDisbursement, $description, $amount, $registerDate, 'd', $idUserIns, $data['id_financial_transactions']);
+            (new BanksAccountsStatementService())->insertStatement(
+                $idAccountDisbursement,
+                $description,
+                $amount,
+                $registerDate,
+                'd',
+                $idUserIns,
+                $data['id_financial_transactions'],
+                'Recebimento'
+            );
         }
 
         toast('Conta atualizada.', 'success');

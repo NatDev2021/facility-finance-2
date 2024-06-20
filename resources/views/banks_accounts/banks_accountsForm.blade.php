@@ -71,7 +71,7 @@
                                                             <td class="text-center"><span class="badge"
                                                                     style="background-color: {{ $item->type == 'c' ? '#f0a8a8' : '#a8f0cb' }};">{{ $item->type == 'c' ? 'Crédito' : 'Débito' }}</span>
                                                             </td>
-                                                            <td class="text-center">Pagamento de Conta</td>
+                                                            <td class="text-center">{{ $item->origin ?? '' }}</td>
 
                                                         </tr>
                                                     @endforeach

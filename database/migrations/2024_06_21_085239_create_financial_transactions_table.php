@@ -29,7 +29,9 @@ return new class extends Migration
             $table->foreignId('disbursement_account_id')->unsigned()->index()->nullable();
             $table->foreign('disbursement_account_id')->references('id')->on('company_banks_accounts')->onDelete('cascade');
             $table->enum('type', ['p', 'r'])->default('p');
-            $table->text('observation');
+            $table->string('document_number');
+            $table->string('document_key');
+            $table->foreignId('reference_transaction_id')->unsigned()->index()->nullable();
             $table->foreignId('id_user_ins')->unsigned()->index()->nullable();
             $table->foreign('id_user_ins')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

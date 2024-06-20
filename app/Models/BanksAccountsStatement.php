@@ -18,7 +18,8 @@ class BanksAccountsStatement extends Model
         'type',
         'amount',
         'id_user_ins',
-        'transaction_id'
+        'transaction_id',
+        'origin'
     ];
 
 
