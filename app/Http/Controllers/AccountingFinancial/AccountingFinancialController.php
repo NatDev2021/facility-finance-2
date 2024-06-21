@@ -37,8 +37,8 @@ class AccountingFinancialController extends Controller
             'description' => $data['description'] ?? '',
             'name' => $data['name'] ?? '',
             'account' => $data['account'] ?? '',
-            'end_duration_date' => Helper::convertToAmericanDate($data['end_duration_date'] ?? ''),
-            'start_duration_date' => Helper::convertToAmericanDate($data['start_duration_date'] ?? ''),
+            'end_duration_date' => $data['end_duration_date'] ?? '',
+            'start_duration_date' => $data['start_duration_date'] ?? '',
             "id_user_ins" => $this->request->user()->id,
 
         ])->id;
@@ -53,8 +53,8 @@ class AccountingFinancialController extends Controller
             'description' => $data['description'] ?? '',
             'name' => $data['name'] ?? '',
             'account' => $data['account'] ?? '',
-            'end_duration_date' => Helper::convertToAmericanDate($data['end_duration_date'] ?? ''),
-            'start_duration_date' => Helper::convertToAmericanDate($data['start_duration_date'] ?? ''),
+            'end_duration_date' => $data['end_duration_date'] ?? '',
+            'start_duration_date' => $data['start_duration_date'] ?? '',
         ]);
         toast('Conta atualizada.', 'success');
         return $data['id_accounting_financial'];
@@ -89,5 +89,4 @@ class AccountingFinancialController extends Controller
     {
         return AccountingFinancial::find($id);
     }
-
 }

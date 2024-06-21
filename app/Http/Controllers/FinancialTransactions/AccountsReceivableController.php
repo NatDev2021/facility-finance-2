@@ -11,6 +11,7 @@ use App\Models\CompanyBanksAccounts;
 use App\Models\FinancialTransactions;
 use App\Models\Customer;
 use App\Models\Company;
+use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Services\BanksAccountsStatementService;
@@ -30,11 +31,14 @@ class AccountsReceivableController extends Controller
         $customers = Customer::with('person')->get();
         $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
         $disbursementAccounts = CompanyBanksAccounts::with('bank')->get();
+        $paymentMethod = PaymentMethod::get();
 
         return view('accounts_receivable.accounts_receivableForm', [
             'customers' =>  $customers,
             'accountFinancial' => $accountFinancial,
-            'disbursementAccounts' =>  $disbursementAccounts
+            'disbursementAccounts' =>  $disbursementAccounts,
+            'paymentMethod' => $paymentMethod
+
         ]);
     }
 
@@ -44,16 +48,18 @@ class AccountsReceivableController extends Controller
         $financialTransaction = FinancialTransactions::find($id);
         $transactionFiles = FinancialTransactionsFiles::where('transaction_id', '=', $id)->paginate(4);
         $customers = Customer::with('person')->get();
-        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
-            ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
+        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
         $disbursementAccounts = CompanyBanksAccounts::get();
+        $paymentMethod = PaymentMethod::get();
 
         return view('accounts_receivable.accounts_receivableForm', [
             'financialTransaction' => $financialTransaction,
             'transactionFiles' =>  $transactionFiles,
             'customers' =>  $customers,
             'accountFinancial' => $accountFinancial,
-            'disbursementAccounts' =>  $disbursementAccounts
+            'disbursementAccounts' =>  $disbursementAccounts,
+            'paymentMethod' => $paymentMethod
+
         ]);
     }
 
@@ -84,9 +90,9 @@ class AccountsReceivableController extends Controller
 
         $arrayData = [
             'description' => $data['description'] ?? '',
-            'register_date' => Helper::convertToAmericanDate($data['register_date'] ?? null),
-            'due_date' => Helper::convertToAmericanDate($data['due_date'] ?? null),
-            'pay_date' => Helper::convertToAmericanDate($data['pay_date'] ?? null),
+            'register_date' => $data['register_date'] ?? null,
+            'due_date' => $data['due_date'] ?? null,
+            'pay_date' => $data['pay_date'] ?? null,
             'value' => $value,
             'addition' =>  $addition,
             'discount' => $discount,
@@ -95,8 +101,8 @@ class AccountsReceivableController extends Controller
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
             'disbursement_account_id' => $data['disbursement_account_id'],
+            'payment_method_id' => $data['payment_method_id'],
             'type' => 'r',
-            'observation' => $data['observation'] ?? '',
             "id_user_ins" => $this->request->user()->id,
 
         ];
@@ -142,7 +148,7 @@ class AccountsReceivableController extends Controller
         $account = FinancialTransactions::find($data['id_financial_transactions']);
 
         if (!empty($account['pay_date'])) {
-            toast('Contas pagas não podem ser alteradas.', 'error');
+            alert()->error('Ops!', 'Contas pagas não podem ser alteradas. Realize o estorno desta conta antes de alterá-la.');
             return $data['id_financial_transactions'];
         }
 
@@ -152,9 +158,9 @@ class AccountsReceivableController extends Controller
         $amount = ($value + $addition - $discount);
         $account->update([
             'description' => $data['description'] ?? '',
-            'register_date' => Helper::convertToAmericanDate($data['register_date'] ?? null),
-            'due_date' => Helper::convertToAmericanDate($data['due_date'] ?? null),
-            'pay_date' => Helper::convertToAmericanDate($data['pay_date'] ?? null),
+            'register_date' => $data['register_date'] ?? null,
+            'due_date' => $data['due_date'] ?? null,
+            'pay_date' => $data['pay_date'] ?? null,
             'value' => $value,
             'addition' =>  $addition,
             'discount' => $discount,
@@ -162,6 +168,7 @@ class AccountsReceivableController extends Controller
             'customer_provider_id' => $data['customer_id'],
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
+            'payment_method_id' => $data['payment_method_id'],
             'disbursement_account_id' => $data['disbursement_account_id'],
         ]);
 
@@ -191,6 +198,25 @@ class AccountsReceivableController extends Controller
 
         toast('Conta atualizada.', 'success');
         return $data['id_financial_transactions'];
+    }
+
+    public function deleteAccountingReceivable($id)
+    {
+
+        $account = FinancialTransactions::find($id);
+
+        if (!empty($account->pay_date)) {
+
+            alert()->error('Ops!', 'Contas pagas não podem ser excluídas. Realize o estorno desta conta antes da exclusão.');
+            return redirect('/accounts_receivable');
+        }
+
+
+        $account->delete();
+
+
+        toast('Conta excluida.', 'success');
+        return redirect('/accounts_receivable');
     }
 
 

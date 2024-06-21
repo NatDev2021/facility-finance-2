@@ -27,6 +27,9 @@ class FinancialTransactions extends Model
         'type',
         'observation',
         'id_user_ins',
+        'payment_method_id',
+        'document_number',
+        'document_key'
     ];
 
 

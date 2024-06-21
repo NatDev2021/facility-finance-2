@@ -10,6 +10,7 @@ use App\Models\AccountingFinancial;
 use App\Models\Company;
 use App\Models\CompanyBanksAccounts;
 use App\Models\FinancialTransactions;
+use App\Models\PaymentMethod;
 use App\Models\Provider;
 use App\Services\BanksAccountsStatementService;
 use Illuminate\Support\Facades\Storage;
@@ -27,13 +28,14 @@ class AccountsPayableController extends Controller
     public function formAccountsPayable()
     {
         $providers = Provider::with('person')->get();
-        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
-            ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
+        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
         $disbursementAccounts = CompanyBanksAccounts::with('bank')->get();
+        $paymentMethod = PaymentMethod::get();
         return view('accounts_payable.accounts_payableForm', [
             'providers' =>  $providers,
             'accountFinancial' => $accountFinancial,
-            'disbursementAccounts' =>  $disbursementAccounts
+            'disbursementAccounts' =>  $disbursementAccounts,
+            'paymentMethod' => $paymentMethod
         ]);
     }
 
@@ -43,16 +45,17 @@ class AccountsPayableController extends Controller
         $financialTransaction = FinancialTransactions::find($id);
         $transactionFiles = FinancialTransactionsFiles::where('transaction_id', '=', $id)->paginate(4);
         $providers = Provider::with('person')->get();
-        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')
-            ->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
+        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
         $disbursementAccounts = CompanyBanksAccounts::get();
+        $paymentMethod = PaymentMethod::get();
 
         return view('accounts_payable.accounts_payableForm', [
             'financialTransaction' => $financialTransaction,
             'transactionFiles' =>  $transactionFiles,
             'providers' =>  $providers,
             'accountFinancial' => $accountFinancial,
-            'disbursementAccounts' =>  $disbursementAccounts
+            'disbursementAccounts' =>  $disbursementAccounts,
+            'paymentMethod' => $paymentMethod
         ]);
     }
 
@@ -81,9 +84,9 @@ class AccountsPayableController extends Controller
 
         $arrayData = [
             'description' => $data['description'] ?? '',
-            'register_date' => Helper::convertToAmericanDate($data['register_date'] ?? null),
-            'due_date' => Helper::convertToAmericanDate($data['due_date'] ?? null),
-            'pay_date' => Helper::convertToAmericanDate($data['pay_date'] ?? null),
+            'register_date' => $data['register_date'] ?? null,
+            'due_date' => $data['due_date'] ?? null,
+            'pay_date' => $data['pay_date'] ?? null,
             'value' => $value,
             'addition' =>  $addition,
             'discount' => $discount,
@@ -92,26 +95,14 @@ class AccountsPayableController extends Controller
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
             'disbursement_account_id' => $data['disbursement_account_id'],
+            'payment_method_id' => $data['payment_method_id'],
+            'document_key' => $data['document_key'],
+            'document_number' => 1,
             'type' => 'p',
-            'observation' => $data['observation'] ?? '',
             "id_user_ins" => $this->request->user()->id,
 
         ];
         $idAccount =   FinancialTransactions::create($arrayData)->id;
-        if (!empty($data['enable_frequency']) && $data['frequency_number'] > 0) {
-
-            $data['pay_date'] = null;
-            $dateDue = Helper::convertToAmericanDate($data['due_date'] ?? null);
-            $dateReference = $dateDue;
-            for ($i = 1; $i <= $data['frequency_number']; $i++) {
-                $newDate =   DateHelper::dueDate($dateReference, $data['frequency'], $dateDue, $dateReference);
-                $arrayData['due_date'] = $newDate;
-                FinancialTransactions::create($arrayData);
-                $dateReference = $newDate;
-            }
-        }
-
-
         if (!empty($data['pay_date'])) {
             $idAccountDisbursement = $data['disbursement_account_id'];
             $description = $data['description'];
@@ -128,6 +119,23 @@ class AccountsPayableController extends Controller
                 'Pagamento'
             );
         }
+        if (!empty($data['enable_frequency']) && $data['frequency_number'] > 0) {
+
+            $arrayData['pay_date'] = null;
+            $dateDue = Helper::convertToAmericanDate($data['due_date'] ?? null);
+            $dateReference = $dateDue;
+            for ($i = 1; $i <= $data['frequency_number']; $i++) {
+                $newDate =   DateHelper::dueDate($dateReference, $data['frequency'], $dateDue, $dateReference);
+                $arrayData['due_date'] = $newDate;
+                $arrayData['reference_transaction_id'] = $idAccount;
+                $arrayData['document_number'] = $i + 1;
+                FinancialTransactions::create($arrayData);
+                $dateReference = $newDate;
+            }
+        }
+
+
+
 
         toast('Conta criada.', 'success');
         return $idAccount;
@@ -138,7 +146,7 @@ class AccountsPayableController extends Controller
         $account = FinancialTransactions::find($data['id_financial_transactions']);
 
         if (!empty($account['pay_date'])) {
-            toast('Contas pagas não podem ser alteradas.', 'error');
+            alert()->error('Ops!', 'Contas pagas não podem ser alteradas. Realize o estorno desta conta antes de alterá-la.');
             return $data['id_financial_transactions'];
         }
         $value = Helper::removeMoneyMask($data['value'] ?? 0);
@@ -147,13 +155,14 @@ class AccountsPayableController extends Controller
         $amount = ($value + $addition - $discount);
         $account->update([
             'description' => $data['description'] ?? '',
-            'register_date' => Helper::convertToAmericanDate($data['register_date'] ?? null),
-            'due_date' => Helper::convertToAmericanDate($data['due_date'] ?? null),
-            'pay_date' => Helper::convertToAmericanDate($data['pay_date'] ?? null),
+            'register_date' => $data['register_date'] ?? null,
+            'due_date' => $data['due_date'] ?? null,
+            'pay_date' => $data['pay_date'] ?? null,
             'value' => $value,
             'addition' =>  $addition,
             'discount' => $discount,
             'amount' => $amount,
+            'payment_method_id' => $data['payment_method_id'],
             'customer_provider_id' => $data['provider_id'],
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
@@ -192,6 +201,14 @@ class AccountsPayableController extends Controller
     {
 
         $account = FinancialTransactions::find($id);
+
+        if (!empty($account->pay_date)) {
+
+            alert()->error('Ops!', 'Contas pagas não podem ser excluídas. Realize o estorno desta conta antes da exclusão.');
+            return redirect('/accounts_payable');
+        }
+
+
         $account->delete();
 
 

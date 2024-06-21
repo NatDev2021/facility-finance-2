@@ -6,13 +6,13 @@
     </div>
     <div class="col-md-4 form-group">
         <label for="inputDescription">Conta</label>
-        <input type="text" id="account" name="account" class="form-control" value="{{ '' }}">
+        <input type="text" id="account" name="account" autocomplete="off" data-mask="00000000" class="form-control" value="{{ '' }}">
     </div>
     <div class="col-md-4 form-group">
         <label for="inputDescription">Inicio de Vigência</label>
 
         <div class="input-group date" id="start_date" data-target-input="nearest">
-            <input type="text" name="start_duration_date" id="start_duration_date" class="form-control"
+            <input type="date" name="start_duration_date" id="start_duration_date" class="form-control"
                 data-target="#start_duration_date" />
             <div class="input-group-append" data-target="#start_duration_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -23,7 +23,7 @@
         <label for="inputDescription">Fim de Vigência</label>
 
         <div class="input-group date" id="end_date" data-target-input="nearest">
-            <input type="text" name="end_duration_date" id="end_duration_date" class="form-control"
+            <input type="date" name="end_duration_date" id="end_duration_date" class="form-control"
                 data-target="#end_duration_date" />
             <div class="input-group-append" data-target="#end_duration_date" data-toggle=" ">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -39,73 +39,7 @@
 @push('js')
     <script>
         $(document).ready(function() { // onloadjs
-            $('#start_duration_date').daterangepicker({
-                singleDatePicker: true,
 
-                locale: {
-                    "format": "DD/MM/YYYY",
-                    "applyLabel": "Aplicar",
-                    "cancelLabel": "Cancelar",
-                    "daysOfWeek": [
-                        "D",
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S"
-                    ],
-                    "monthNames": [
-                        "Janeiro",
-                        "Fevereiro",
-                        "Março",
-                        "Abril",
-                        "Maio",
-                        "Junho",
-                        "Julho",
-                        "Agosto",
-                        "Setembro",
-                        "Outubro",
-                        "Novembro",
-                        "Dezembro"
-                    ]
-
-                },
-            });
-
-            $('#end_duration_date').daterangepicker({
-                singleDatePicker: true,
-                autoUpdateInput: true,
-                locale: {
-                    "format": "DD/MM/YYYY",
-                    "applyLabel": "Aplicar",
-                    "cancelLabel": "Cancelar",
-                    "daysOfWeek": [
-                        "D",
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S"
-                    ],
-                    "monthNames": [
-                        "Janeiro",
-                        "Fevereiro",
-                        "Março",
-                        "Abril",
-                        "Maio",
-                        "Junho",
-                        "Julho",
-                        "Agosto",
-                        "Setembro",
-                        "Outubro",
-                        "Novembro",
-                        "Dezembro"
-                    ]
-
-                },
-            });
         });
 
         function defineData(data) {
@@ -114,9 +48,9 @@
             $('#description').val(data.description);
             $('#account').val(data.account);
             $('#name').val(data.name);
-            $('#start_duration_date').val(moment(data.start_duration_date).format('DD/MM/YYYY'));
+            $('#start_duration_date').val(data.start_duration_date);
             if (data.end_duration_date !== "0000-00-00") {
-                $('#end_duration_date').val(moment(data.end_duration_date).format('DD/MM/YYYY'));
+                $('#end_duration_date').val(data.end_duration_date);
             }
 
 
@@ -127,7 +61,7 @@
             $('#description').val('').css('border', '');
             $('#account').val('').css('border', '');
             $('#name').val('').css('border', '');
-            $('#start_duration_date').val(moment(new Date).format('DD/MM/YYYY')).css('border', '');
+            $('#start_duration_date').val(moment(new Date).format('YYYY-MM-DD')).css('border', '');
             $('#end_duration_date').val('');
             $('#id_accounting_financial').val('');
 

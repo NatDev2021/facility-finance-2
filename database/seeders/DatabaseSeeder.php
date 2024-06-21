@@ -16,7 +16,9 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             SubMenuSeeder::class,
             UserSeeder::class,
-            BanksSeeder::class
+            BanksSeeder::class,
+            CompanySeeder::class,
+            PaymentMethodSeeder::class
         ]);
     }
 }

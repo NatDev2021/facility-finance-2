@@ -38,7 +38,7 @@
             @endforeach
         </x-adminlte-select2>
     </div>
-    <div class="col-md-12 form-group">
+    <div class="col-md-6 form-group">
         <label for="disbursement_account">Conta de Desembolso</label>
         <x-adminlte-select2 name="disbursement_account_id" id="disbursement_account_id">
             <option value="0">Salecione...</option>
@@ -49,13 +49,23 @@
             @endforeach
         </x-adminlte-select2>
     </div>
-
+    <div class="col-md-6 form-group">
+        <label for="disbursement_account">Forma de Pagamento</label>
+        <x-adminlte-select2 name="payment_method_id" id="payment_method_id">
+            <option value="0">Salecione...</option>
+            @foreach ($paymentMethod as $item)
+                <option @selected(($financialTransaction->payment_method_id ?? '') == $item->id) value="{{ $item->id }}">
+                    {{ $item->description }}
+                </option>
+            @endforeach
+        </x-adminlte-select2>
+    </div>
     <div class="col-md-4 form-group">
         <label for="inputDescription">Data de Cadastro</label>
 
         <div class="input-group date" data-target-input="nearest">
-            <input type="text" name="register_date" id="register_date" class="form-control" autocomplete="off"
-                value="{{ Helper::convertToBrazilianDate($financialTransaction->register_date ?? '') }}" />
+            <input type="date" name="register_date" id="register_date" class="form-control" autocomplete="off"
+                value="{{ $financialTransaction->register_date ?? '' }}" />
             <div class="input-group-append" data-target="#register_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
@@ -65,8 +75,8 @@
         <label for="inputDescription">Vencimento</label>
 
         <div class="input-group date" data-target-input="nearest">
-            <input type="text" name="due_date" id="due_date" class="form-control" autocomplete="off"
-                value="{{ Helper::convertToBrazilianDate($financialTransaction->due_date ?? '') }}" />
+            <input type="date" name="due_date" id="due_date" class="form-control" autocomplete="off"
+                value="{{ $financialTransaction->due_date ?? '' }}" />
             <div class="input-group-append" data-target="#due_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
@@ -76,8 +86,8 @@
         <label for="inputDescription">Data do Pagamento</label>
 
         <div class="input-group date" data-target-input="nearest">
-            <input type="text" name="pay_date" id="pay_date" class="form-control" autocomplete="off"
-                value="{{ Helper::convertToBrazilianDate($financialTransaction->pay_date ?? '') }}" />
+            <input type="date" name="pay_date" id="pay_date" class="form-control" autocomplete="off"
+                value="{{ $financialTransaction->pay_date ?? '' }}" />
             <div class="input-group-append" data-target="#pay_date" data-toggle=" ">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
@@ -89,7 +99,7 @@
             <div class="input-group-append" data-target="#value" data-toggle="datetimepicker">
                 <div class="input-group-text">R$</div>
             </div>
-            <input type="text" name="value" id="value" class="form-control text-right" data-target="#value" 
+            <input type="text" name="value" id="value" class="form-control text-right" data-target="#value"
                 value="{{ $financialTransaction->value ?? '' }}" data-mask="#.##0,00" data-mask-reverse="true"
                 onkeyup="updateAmount()" />
 
@@ -162,122 +172,6 @@
 @push('js')
     <script>
         $(document).ready(function() { // onloadjs
-            $('#register_date').daterangepicker({
-                singleDatePicker: true,
-                locale: {
-                    "format": "DD/MM/YYYY",
-                    "applyLabel": "Aplicar",
-                    "cancelLabel": "Cancelar",
-                    "daysOfWeek": [
-                        "D",
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S"
-                    ],
-                    "monthNames": [
-                        "Janeiro",
-                        "Fevereiro",
-                        "Março",
-                        "Abril",
-                        "Maio",
-                        "Junho",
-                        "Julho",
-                        "Agosto",
-                        "Setembro",
-                        "Outubro",
-                        "Novembro",
-                        "Dezembro"
-                    ]
-
-                },
-            });
-
-            $('#due_date').daterangepicker({
-                singleDatePicker: true,
-                autoUpdateInput: false,
-                locale: {
-                    "format": "DD/MM/YYYY",
-                    "applyLabel": "Aplicar",
-                    "cancelLabel": "Cancelar",
-                    "daysOfWeek": [
-                        "D",
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S"
-                    ],
-                    "monthNames": [
-                        "Janeiro",
-                        "Fevereiro",
-                        "Março",
-                        "Abril",
-                        "Maio",
-                        "Junho",
-                        "Julho",
-                        "Agosto",
-                        "Setembro",
-                        "Outubro",
-                        "Novembro",
-                        "Dezembro"
-                    ]
-
-                },
-            });
-
-            $('#pay_date').daterangepicker({
-                singleDatePicker: true,
-                autoUpdateInput: false,
-                locale: {
-                    "format": "DD/MM/YYYY",
-                    "applyLabel": "Aplicar",
-                    "cancelLabel": "Cancelar",
-                    "daysOfWeek": [
-                        "D",
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S"
-                    ],
-                    "monthNames": [
-                        "Janeiro",
-                        "Fevereiro",
-                        "Março",
-                        "Abril",
-                        "Maio",
-                        "Junho",
-                        "Julho",
-                        "Agosto",
-                        "Setembro",
-                        "Outubro",
-                        "Novembro",
-                        "Dezembro"
-                    ]
-
-                },
-            });
-
-            $('#due_date').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('DD/MM/YYYY'));
-            });
-
-            $('#due_date').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            });
-
-            $('#pay_date').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('DD/MM/YYYY'));
-            });
-
-            $('#pay_date').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            });
 
             $('#enable_frequency').change(function() {
                 if ($(this).is(':checked')) {
