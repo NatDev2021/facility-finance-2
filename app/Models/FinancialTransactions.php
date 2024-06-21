@@ -29,7 +29,8 @@ class FinancialTransactions extends Model
         'id_user_ins',
         'payment_method_id',
         'document_number',
-        'document_key'
+        'document_key',
+        'reference_transaction_id'
     ];
 
 

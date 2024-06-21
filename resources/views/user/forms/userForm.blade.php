@@ -22,7 +22,7 @@
             <label>Perfil</label>
             <select class="form-control" name="profile">
                 <option @selected(($user->profile ?? '') == 'admin') value="admin">Administrador</option>
-                <option @selected(($user->profile ?? '') == 'user') value="user">Usuario</option>
+                <option @selected(($user->profile ?? '') == 'user') value="user">Usuário</option>
             </select>
         </div>
     </div>

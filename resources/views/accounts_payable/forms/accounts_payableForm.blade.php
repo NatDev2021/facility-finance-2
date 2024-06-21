@@ -1,12 +1,12 @@
 <div class="row ">
     <input type="hidden" name="id_financial_transactions" id="id_financial_transactions"
         value="{{ $financialTransaction->id ?? '' }}">
-    <div class="col-md-12 form-group">
+    <div class="col-md-6 form-group">
         <label for="inputDescription">Descrição</label>
         <input type="text" id="description" name="description" class="form-control"
             value="{{ $financialTransaction->description ?? '' }}">
     </div>
-    <div class="col-md-12 form-group">
+    <div class="col-md-6 form-group">
         <label for="provider_id">Fornecedor</label>
         <x-adminlte-select2 name="provider_id" id="provider_id">
             <option value="0">Salecione...</option>
@@ -51,27 +51,29 @@
     </div>
     <div class="col-md-6 form-group">
         <label for="disbursement_account">Forma de Pagamento</label>
-        <x-adminlte-select2 name="payment_method_id" id="payment_method_id">
+        <x-adminlte-select name="payment_method_id" id="payment_method_id">
             <option value="0">Salecione...</option>
             @foreach ($paymentMethod as $item)
                 <option @selected(($financialTransaction->payment_method_id ?? '') == $item->id) value="{{ $item->id }}">
                     {{ $item->description }}
                 </option>
             @endforeach
-        </x-adminlte-select2>
+        </x-adminlte-select>
     </div>
 
-    <div class="col-md-12 form-group" id="document_key_group" style="display: none">
-        <label for="document_key">Linha Digitável</label>
+    <div class="col-md-12 form-group" id="document_key_group"
+        style="display: {{ ($financialTransaction->payment_method_id ?? '') == 2 ? 'block' : 'none' }}">
+        <label for="document_key">Código de barras / Linha Digitável</label>
         <input type="text" id="document_key" name="document_key" class="form-control"
             value="{{ $financialTransaction->document_key ?? '' }}">
     </div>
+
     <div class="col-md-4 form-group">
         <label for="inputDescription">Data de Cadastro</label>
 
         <div class="input-group date" data-target-input="nearest">
             <input type="date" name="register_date" id="register_date" class="form-control"
-                value="{{ $financialTransaction->register_date ?? '' }}" />
+                value="{{ $financialTransaction->register_date ?? date('Y-m-d') }}" />
             <div class="input-group-append" data-target="#register_date" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
@@ -194,6 +196,10 @@
                 } else {
                     $('#document_key_group').hide();
                 }
+            });
+
+            $("#document_key").inputmask({
+                mask: '99999.99999 99999.999999 99999.999999 9 99999999999999'
             });
 
 

@@ -43,6 +43,12 @@ class MenuSeeder extends Seeder
                 'description' => 'Relatórios',
                 'icon' => 'nav-icon fa-solid fa-book',
                 'actived' => true
+            ],
+            [
+                'id' => 6,
+                'description' => 'Integração',
+                'icon' => 'nav-icon fa-regular fa-circle-nodes',
+                'actived' => true
             ]
         ]);
     }

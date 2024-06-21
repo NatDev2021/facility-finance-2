@@ -19,13 +19,22 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
 
-                    <div class="d-flex align-items-center gap-3">
-                        <h3 class="card-title">
-                            <i class="fas fa-edit"></i>
-                        </h3>
-                        &nbsp;
-                        <span> Contas a Pagar Cadastradas | <a id="title_filter_span" href="javascript:showFilter()">Ocultar
-                                Filtro</a></span>
+
+
+                    <div class="row">
+                        <div class="col-md-6 d-flex align-items-center">
+                            <h3 class="card-title">
+                                <i class="fas fa-edit"></i>
+                            </h3>
+                            &nbsp;
+                            <span> Contas a Pagar Cadastradas | <a id="title_filter_span"
+                                    href="javascript:showFilter()">Ocultar
+                                    Filtro</a></span>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end ">
+
+                            <a id="title_filter_span" href="javascript:cleanFilter()" title="Limpar Filtro"><i class="fa-solid fa-broom-wide"></i></a>
+                        </div>
                     </div>
 
                 </div>
@@ -41,12 +50,12 @@
                             <div class="card-body">
                                 <div class="row justify-content-between ">
 
-                                    <div class="col-md-5  input-group-sm">
+                                    <div class="col-md-4  input-group-sm">
                                         <label for="description">Descrição</label>
                                         <input type="text" id="description" name="description" class="form-control"
                                             value="{{ $search['description'] ?? '' }}">
                                     </div>
-                                    <div class="col-md-5 input-group-sm">
+                                    <div class="col-md-4 input-group-sm">
                                         <label for="privder">Fornecedor</label>
                                         <x-adminlte-select2 name="provider_id" id="provider_id">
                                             <option value="0">Salecione...</option>
@@ -57,7 +66,16 @@
                                         </x-adminlte-select2>
                                     </div>
 
-
+                                    <div class="col-md-2  input-group-sm">
+                                        <label for="amount">Status</label>
+                                        <x-adminlte-select igroup-size="sm" name="status" id="status">
+                                            <option value="0">Salecione...</option>
+                                            <option @selected(($search['status'] ?? '') == 'p') value="p">Pago</option>
+                                            <option @selected(($search['status'] ?? '') == 'o') value="o">Pendente</option>
+                                            <option @selected(($search['status'] ?? '') == 'd') value="d">Em Atraso</option>
+                                            <option @selected(($search['status'] ?? '') == 't') value="t">Vence Hoje</option>
+                                        </x-adminlte-select>
+                                    </div>
                                     <div class="col-md-2  input-group-sm">
                                         <label for="due_date">Vencimento</label>
 
@@ -74,7 +92,7 @@
                                     </div>
 
 
-                                    <div class="col-md-5 input-group-sm">
+                                    <div class="col-md-4 input-group-sm">
                                         <label for="credit_account">Conta Crédito</label>
                                         <x-adminlte-select2 name="credit_account" id="credit_account">
                                             <option value="0">Salecione...</option>
@@ -86,7 +104,7 @@
                                         </x-adminlte-select2>
                                     </div>
 
-                                    <div class="col-md-5 input-group-sm">
+                                    <div class="col-md-4 input-group-sm">
                                         <label for="debit_account">Conta Débito</label>
                                         <x-adminlte-select2 name="debit_account" id="debit_account">
                                             <option value="0">Salecione...</option>
@@ -96,6 +114,17 @@
                                                 </option>
                                             @endforeach
                                         </x-adminlte-select2>
+                                    </div>
+                                    <div class="col-md-2  input-group-sm">
+                                        <label for="amount">Forma de Pagamento</label>
+                                        <x-adminlte-select igroup-size="sm" name="payment_method_id" id="payment_method_id">
+                                            <option value="0">Salecione...</option>
+                                            @foreach ($paymentMethod as $item)
+                                                <option @selected(($search['payment_method_id'] ?? '') == $item->id) value="{{ $item->id }}">
+                                                    {{ $item->description }}
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select>
                                     </div>
 
                                     <div class="col-md-2  input-group-sm">
@@ -207,7 +236,7 @@
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" onclick="export_excel()" class="btn btn-success">Excel <i
                             class="fa-regular fa-file-spreadsheet"></i></button>
-                    <button type="button" onclick="export_pdf()"  class="btn btn-danger ">PDF <i
+                    <button type="button" onclick="export_pdf()" class="btn btn-danger ">PDF <i
                             class="fa-solid fa-file-pdf"></i></button>
                 </div>
             </div>
@@ -313,6 +342,10 @@
                 $('#filter').show();
                 $('#title_filter_span').text('Ocultar Filtro');
             }
+        }
+
+        function cleanFilter(){
+            window.location.href = 'accounts_payable';
         }
 
         function export_excel() {

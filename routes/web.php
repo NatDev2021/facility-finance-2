@@ -102,7 +102,7 @@ Route::prefix('accounts_receivable')->group(function () {
     Route::get('form', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'formAccountsReceivable']);
     Route::get('edit/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'editAccountsReceivable']);
     Route::post('save', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'saveAccountsReceivable']);
-    Route::get('delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'deleteAccountingPayable']);
+    Route::get('delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'deleteAccountingReceivable']);
     Route::get('files/download/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'downloadFile']);
     Route::get('files/delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'deleteFile']);
     Route::get('export/pdf', [App\Http\Controllers\FinancialTransactions\AccountsReceivableController::class, 'exportAccountsReceivablePDF']);

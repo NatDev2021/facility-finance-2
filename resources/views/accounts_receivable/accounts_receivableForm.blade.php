@@ -20,11 +20,31 @@
                     <div class="col-9">
                         <div class="card card-primary card-outline">
                             <div class="card-header">
-                                <h3 class="card-title">
-                                    <i class="fa-regular fa-down"></i>
-                                    Dados da Conta
 
-                                </h3>
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#nav-cliente-fornecedor"
+                                            role="tab" aria-controls="nav-cliente-fornecedor" aria-selected="true">
+                                            <h3 class="card-title">
+                                                <i class="fa-regular fa-down"></i>
+                                                Dados da Conta
+                                                {{ !empty($financialTransaction->id) ? 'Nº' . $financialTransaction->id : '' }}
+
+                                            </h3>
+                                        </a>
+
+                                        <a class="nav-link" data-bs-toggle="tab" href="#nav-cliente-fornecedor"
+                                            role="tab" aria-controls="nav-cliente-fornecedor" aria-selected="true">
+                                            <h3 class="card-title">
+                                                <i class="fa-solid fa-list-ol"></i>
+                                                Títulos
+                                            </h3>
+                                        </a>
+
+
+                                    </div>
+                                </nav>
+
                             </div>
 
                             <div class="card-body table-responsive">
@@ -116,8 +136,10 @@
         $('#save').on("click", function() {
 
             let validateFields = validateEmptyFields('description', 'value', 'register_date', 'due_date');
-            let validateSelect2 = validateEmptySelect2('customer_id', 'credit_account', 'debit_account');
-            if (!validateFields || !validateSelect2) {
+            let validateSelect = validateEmptySelect('payment_method_id');
+            let validateSelect2 = validateEmptySelect2('customer_id', 'credit_account', 'debit_account',
+                'disbursement_account_id');
+            if (!validateFields || !validateSelect2 || !validateSelect) {
                 return false;
             }
 

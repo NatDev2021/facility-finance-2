@@ -36,6 +36,10 @@ class PaymentMethodSeeder extends Seeder
             [
                 'id' => 5,
                 'description' => 'Cheque',
+            ],
+            [
+                'id' => 6,
+                'description' => 'Transferencia Bancária',
             ]
         ]);
     }

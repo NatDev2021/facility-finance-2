@@ -3,7 +3,7 @@
 @section('title', 'Contas Bancária')
 
 @section('content_header')
-    <h1>Nova Contas Bancária</h1>
+    <h1>{{ empty($account->id) ? 'Nova' : 'Editar' }} Conta Bancária</h1>
 @stop
 
 @section('content')

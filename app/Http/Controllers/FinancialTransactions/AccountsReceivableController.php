@@ -102,29 +102,17 @@ class AccountsReceivableController extends Controller
             'debit_account_id' => $data['debit_account'],
             'disbursement_account_id' => $data['disbursement_account_id'],
             'payment_method_id' => $data['payment_method_id'],
+            'document_key' => $data['document_key'] ?? '',
+            'document_number' => 1,
             'type' => 'r',
             "id_user_ins" => $this->request->user()->id,
 
         ];
         $idAccount =   FinancialTransactions::create($arrayData)->id;
-        if (!empty($data['enable_frequency']) && $data['frequency_number'] > 0) {
-
-            $data['pay_date'] = null;
-            $dateDue = Helper::convertToAmericanDate($data['due_date'] ?? null);
-            $dateReference = $dateDue;
-            for ($i = 1; $i <= $data['frequency_number']; $i++) {
-                $newDate =  DateHelper::dueDate($dateReference, $data['frequency'], $dateDue, $dateReference);
-                $arrayData['due_date'] = $newDate;
-                FinancialTransactions::create($arrayData);
-                $dateReference = $newDate;
-            }
-        }
-
-
         if (!empty($data['pay_date'])) {
             $idAccountDisbursement = $data['disbursement_account_id'];
             $description = $data['description'];
-            $registerDate = Helper::convertToAmericanDate($data['register_date'] ?? null);
+            $registerDate = $data['register_date'];
             $idUserIns =  $this->request->user()->id;
             (new BanksAccountsStatementService())->insertStatement(
                 $idAccountDisbursement,
@@ -137,6 +125,24 @@ class AccountsReceivableController extends Controller
                 'Recebimento'
             );
         }
+
+
+        if (!empty($data['enable_frequency']) && $data['frequency_number'] > 0) {
+
+            $arrayData['pay_date'] = null;
+            $arrayData['document_key'] = null;
+            $dateDue = $data['due_date'];
+            $dateReference = $dateDue;
+            for ($i = 1; $i <= $data['frequency_number']; $i++) {
+                $newDate =  DateHelper::dueDate($dateReference, $data['frequency'], $dateDue, $dateReference);
+                $arrayData['due_date'] = $newDate;
+                $arrayData['reference_transaction_id'] = $idAccount;
+                $arrayData['document_number'] = $i + 1;
+                FinancialTransactions::create($arrayData);
+                $dateReference = $newDate;
+            }
+        }
+
 
         toast('Conta criada.', 'success');
         return $idAccount;
@@ -169,6 +175,7 @@ class AccountsReceivableController extends Controller
             'credit_account_id' => $data['credit_account'],
             'debit_account_id' => $data['debit_account'],
             'payment_method_id' => $data['payment_method_id'],
+            'document_key' => $data['document_key'] ?? '',
             'disbursement_account_id' => $data['disbursement_account_id'],
         ]);
 
@@ -182,7 +189,7 @@ class AccountsReceivableController extends Controller
         if (!empty($data['pay_date'])) {
             $idAccountDisbursement = $data['disbursement_account_id'];
             $description = $data['description'];
-            $registerDate = Helper::convertToAmericanDate($data['register_date'] ?? null);
+            $registerDate = $data['register_date'];
             $idUserIns =  $this->request->user()->id;
             (new BanksAccountsStatementService())->insertStatement(
                 $idAccountDisbursement,

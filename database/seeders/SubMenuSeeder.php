@@ -86,6 +86,16 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'id' => 8,
+                'menu_id' => 2,
+                'description' => 'Estorno',
+                'icon' => 'nav-icon fa-solid fa-rotate-left',
+                'route' => 'accounts_receivable',
+                'actived' => true,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 9,
                 'menu_id' => 4,
                 'description' => 'Usuários',
                 'icon' => 'nav-icon fa-solid fa-users',
@@ -95,10 +105,50 @@ class SubMenuSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
-                'id' => 9,
+                'id' => 10,
                 'menu_id' => 4,
                 'description' => 'Empresa',
                 'icon' => 'nav-icon fa-solid fa-building-memo',
+                'route' => 'company',
+                'actived' => true,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 11,
+                'menu_id' => 5,
+                'description' => 'Clientes',
+                'icon' => 'nav-icon fa-solid fa-file-lines',
+                'route' => 'company',
+                'actived' => true,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 12,
+                'menu_id' => 5,
+                'description' => 'Fornecedores',
+                'icon' => 'nav-icon fa-solid fa-file-lines',
+                'route' => 'company',
+                'actived' => true,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ], 
+            [
+                'id' => 13,
+                'menu_id' => 5,
+                'description' => 'Fluxo de Caixa',
+                'icon' => 'nav-icon fa-solid fa-file-lines',
+                'route' => 'company',
+                'actived' => true,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 14,
+                'menu_id' => 6,
+                'description' => 'Finne',
+                'icon' => 'nav-icon fa-brands fa-hive',
                 'route' => 'company',
                 'actived' => true,
                 'created_at' => date('Y-m-d H:i:s'),

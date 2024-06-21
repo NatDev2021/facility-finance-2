@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{AccountingFinancial, Banks, Customer, Person,   Status, User,   Company, CompanyBanksAccounts, FinancialTransactions, Loans, Provider};
+use App\Models\{AccountingFinancial, Banks, Customer, Person,   Status, User,   Company, CompanyBanksAccounts, FinancialTransactions, Loans, Provider, PaymentMethod};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use stdClass;
@@ -182,6 +182,7 @@ class HomeController extends Controller
 
         $providers = Provider::with('person')->get();
         $accountFinancial = AccountingFinancial::get();
+        $paymentMethod = PaymentMethod::get();
 
         $accountsPayable = FinancialTransactions::select('financial_transactions.id',  'person.name as provider', 'financial_transactions.due_date', 'financial_transactions.pay_date',  DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'), 'financial_transactions.description', 'financial_transactions.amount')
             ->join('provider', 'financial_transactions.customer_provider_id', '=', 'provider.id')
@@ -194,6 +195,10 @@ class HomeController extends Controller
 
         if (!empty($_GET['provider_id']) && $_GET['provider_id'] != 0) {
             $accountsPayable =  $accountsPayable->where('financial_transactions.customer_provider_id', '=',  $_GET['provider_id']);
+        }
+
+        if (!empty($_GET['payment_method_id']) && $_GET['payment_method_id'] != 0) {
+            $accountsPayable =  $accountsPayable->where('financial_transactions.payment_method_id', '=',  $_GET['payment_method_id']);
         }
 
         if (!empty($_GET['due_date'])) {
@@ -221,6 +226,28 @@ class HomeController extends Controller
             $accountsPayable =  $accountsPayable->where('financial_transactions.amount', '=', $amount);
         }
 
+
+        if (!empty($_GET['status']) && $_GET['status'] != 0) {
+
+            if ($_GET['status'] == 'p') {
+                $accountsPayable =  $accountsPayable->where('financial_transactions.pay_date', '!=',  null);
+            }
+
+            if ($_GET['status'] == 'o') {
+                $accountsPayable =  $accountsPayable->where('financial_transactions.pay_date', '=',  null);
+                $accountsPayable =  $accountsPayable->where('financial_transactions.due_date', '>=',  date('Y-m-d'));
+            }
+
+            if ($_GET['status'] == 'd') {
+                $accountsPayable =  $accountsPayable->where('financial_transactions.pay_date', '=',  null);
+                $accountsPayable =  $accountsPayable->where('financial_transactions.due_date', '<',  date('Y-m-d'));
+            }
+
+            if ($_GET['status'] == 't') {
+                $accountsPayable =  $accountsPayable->where('financial_transactions.pay_date', '=',  null);
+                $accountsPayable =  $accountsPayable->where('financial_transactions.due_date', '=',  date('Y-m-d'));
+            }
+        }
 
 
         $accountsPayable =  $accountsPayable->where('type', '=', 'p')
@@ -259,6 +286,7 @@ class HomeController extends Controller
             'accountsPayable' => $accountsPayable,
             'providers' => $providers,
             'accountFinancial' => $accountFinancial,
+            'paymentMethod' => $paymentMethod,
             'search' => $_GET
         ]);
     }
@@ -269,6 +297,7 @@ class HomeController extends Controller
 
         $customers = Customer::with('person')->get();
         $accountFinancial = AccountingFinancial::get();
+        $paymentMethod = PaymentMethod::get();
 
         $accountsReceivable = FinancialTransactions::select('financial_transactions.id',  'person.name as customer', 'financial_transactions.due_date', 'financial_transactions.pay_date',  DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'), 'financial_transactions.description', 'financial_transactions.amount')
             ->join('customer', 'financial_transactions.customer_provider_id', '=', 'customer.id')
@@ -297,6 +326,10 @@ class HomeController extends Controller
         if (!empty($_GET['credit_account']) && $_GET['credit_account'] != 0) {
             $accountsReceivable =  $accountsReceivable->where('financial_transactions.credit_account_id', '=',  $_GET['credit_account']);
         }
+        
+        if (!empty($_GET['payment_method_id']) && $_GET['payment_method_id'] != 0) {
+            $accountsReceivable =  $accountsReceivable->where('financial_transactions.payment_method_id', '=',  $_GET['payment_method_id']);
+        }
 
         if (!empty($_GET['debit_account']) && $_GET['debit_account'] != 0) {
             $accountsReceivable =  $accountsReceivable->where('financial_transactions.debit_account_id', '=',  $_GET['debit_account']);
@@ -306,6 +339,30 @@ class HomeController extends Controller
             $amount = Helper::removeMoneyMask($_GET['amount']);
 
             $accountsReceivable =  $accountsReceivable->where('financial_transactions.amount', '=', $amount);
+        }
+
+
+        if (!empty($_GET['status']) && $_GET['status'] != 0) {
+
+            if ($_GET['status'] == 'p') {
+                $accountsReceivable =  $accountsReceivable->where('financial_transactions.pay_date', '!=',  null);
+            }
+
+            if ($_GET['status'] == 'o') {
+                $accountsReceivable =  $accountsReceivable->where('financial_transactions.pay_date', '=',  null);
+                $accountsReceivable =  $accountsReceivable->where('financial_transactions.due_date', '>=',  date('Y-m-d'));
+            }
+
+            if ($_GET['status'] == 'd') {
+                $accountsReceivable =  $accountsReceivable->where('financial_transactions.pay_date', '=',  null);
+                $accountsReceivable =  $accountsReceivable->where('financial_transactions.due_date', '<',  date('Y-m-d'));
+            }
+
+            
+            if ($_GET['status'] == 't') {
+                $accountsReceivable =  $accountsReceivable->where('financial_transactions.pay_date', '=',  null);
+                $accountsReceivable =  $accountsReceivable->where('financial_transactions.due_date', '=',  date('Y-m-d'));
+            }
         }
 
 
@@ -323,7 +380,7 @@ class HomeController extends Controller
                 if ($item['date_diff_payment'] > 0) {
                     $item['status'] = [
                         'message' => 'Vence em ' . $item['date_diff_payment'] . ' dias.',
-                        'color' => '#a8f0cb'
+                        'color' => '#eff0a8'
                     ];
                 } else if ($item['date_diff_payment'] < 0) {
                     $item['status'] = [
@@ -333,7 +390,7 @@ class HomeController extends Controller
                 } else {
                     $item['status'] = [
                         'message' => 'Vence Hoje.',
-                        'color' => '#eff0a8;
+                        'color' => '#f3a15e;
                         '
                     ];
                 }
@@ -345,6 +402,7 @@ class HomeController extends Controller
             'accountsReceivable' => $accountsReceivable,
             'customers' => $customers,
             'accountFinancial' => $accountFinancial,
+            'paymentMethod' => $paymentMethod,
             'search' => $_GET
         ]);
     }
