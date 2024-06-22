@@ -326,7 +326,7 @@ class HomeController extends Controller
         if (!empty($_GET['credit_account']) && $_GET['credit_account'] != 0) {
             $accountsReceivable =  $accountsReceivable->where('financial_transactions.credit_account_id', '=',  $_GET['credit_account']);
         }
-        
+
         if (!empty($_GET['payment_method_id']) && $_GET['payment_method_id'] != 0) {
             $accountsReceivable =  $accountsReceivable->where('financial_transactions.payment_method_id', '=',  $_GET['payment_method_id']);
         }
@@ -358,7 +358,7 @@ class HomeController extends Controller
                 $accountsReceivable =  $accountsReceivable->where('financial_transactions.due_date', '<',  date('Y-m-d'));
             }
 
-            
+
             if ($_GET['status'] == 't') {
                 $accountsReceivable =  $accountsReceivable->where('financial_transactions.pay_date', '=',  null);
                 $accountsReceivable =  $accountsReceivable->where('financial_transactions.due_date', '=',  date('Y-m-d'));
@@ -436,5 +436,11 @@ class HomeController extends Controller
             'countCustomer' => $countCustomer,
             'customers' => $customers
         ]);
+    }
+
+    public function finneIntegration()
+    {
+
+        return view('integration.finne.finne');
     }
 }

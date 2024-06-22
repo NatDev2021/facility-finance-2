@@ -149,7 +149,7 @@ class SubMenuSeeder extends Seeder
                 'menu_id' => 6,
                 'description' => 'Finne',
                 'icon' => 'nav-icon fa-brands fa-hive',
-                'route' => 'company',
+                'route' => 'finne_intergation',
                 'actived' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')

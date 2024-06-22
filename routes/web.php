@@ -32,6 +32,7 @@ Route::get('accounting_financial', [App\Http\Controllers\HomeController::class, 
 Route::get('accounts_payable', [App\Http\Controllers\HomeController::class, 'accountsPayable'])->name('accounts_payable');
 Route::get('accounts_receivable', [App\Http\Controllers\HomeController::class, 'accountsReceivable'])->name('accounts_receivable');
 Route::get('banks_accounts', [App\Http\Controllers\HomeController::class, 'banksAccounts'])->name('banks_accounts');
+Route::get('integration/finne', [App\Http\Controllers\HomeController::class, 'finneIntegration'])->name('finne_intergation');
 
 
 
@@ -95,7 +96,6 @@ Route::prefix('accounts_payable')->group(function () {
     Route::get('files/delete/{id}', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'deleteFile']);
     Route::get('export/pdf', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'exportAccountsPayablePDF']);
     Route::get('export/excel', [App\Http\Controllers\FinancialTransactions\AccountsPayableController::class, 'exportAccountsPayableEXCEL']);
-
 });
 
 Route::prefix('accounts_receivable')->group(function () {
@@ -116,11 +116,18 @@ Route::prefix('banks_accounts')->group(function () {
     Route::post('save', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'saveBanksAccounts']);
     Route::get('get/{id}', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'getBanksAccounts']);
     Route::get('delete/{id}', [App\Http\Controllers\BanksAccounts\BanksAccountsController::class, 'deleteBanksAccounts']);
-
 });
 
 
 Route::prefix('company')->group(function () {
     Route::post('save', [App\Http\Controllers\Company\CompanyController::class, 'saveCompany']);
     Route::get('get/{id}', [App\Http\Controllers\Company\CompanyController::class, 'getCompany']);
+});
+
+
+
+Route::prefix('integration')->group(function () {
+
+    Route::prefix('finne')->group(function () {
+    });
 });
