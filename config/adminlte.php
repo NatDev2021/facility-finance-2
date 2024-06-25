@@ -556,6 +556,27 @@ return [
                     'location' => 'vendor/bs-custom-file-input/bs-custom-file-input.min.js',
                 ],
             ],
+        ],
+
+        'JsGrid' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css',
+                ],
+            ],
         ]
     ],
 

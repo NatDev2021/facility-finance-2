@@ -23,29 +23,31 @@
                 <div class="card-body">
                     <div class="card card-body">
 
-                        <form id="report_form" method="post">
+                        <form id="finne_form" method="post">
                             @csrf
                             <div class="row justify-content-md-center">
-                                @php
-                                    $config = [
-                                        'placeholder' => 'Selecione...',
-                                        'allowClear' => true,
-                                    ];
-                                @endphp
-                                <div class="col-md-3">
-                                    <x-adminlte-select2 id="customer" name="customer[]" label="Cliente/Fornecedor"
-                                        :config="$config" multiple>
+                                <div class="col-md-2">
+                                    <label for="amount">Tipo</label>
+                                    <x-adminlte-select name="type" id="type">
+                                        <option value="0">Salecione...</option>
+                                        <option @selected(($search['status'] ?? '') == 'p') value="p">Pagamento</option>
+                                        <option @selected(($search['status'] ?? '') == 'r') value="r">Recebimento</option>
+                                    </x-adminlte-select>
+                                </div>
+                                <div class="col-md-4">
+                                    <x-adminlte-select2 id="customer" name="person" label="Cliente/Fornecedor" >
                                         <x-slot name="prependSlot">
                                             <div class="input-group-text">
                                                 <i class="fa-solid fa-address-card"></i>
                                             </div>
                                         </x-slot>
-                                        {{-- @foreach ($customers as $item)
-                                        <option value="{{ $item->id }}"> {{ $item->person->name }}</option>
-                                    @endforeach --}}
+                                        <option value="0">Salecione...</option>
+                                        @foreach ($person as $item)
+                                            <option value="{{ $item->id }}"> {{ $item->name }}</option>
+                                        @endforeach
                                     </x-adminlte-select2>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label for="amount">Status</label>
                                     <x-adminlte-select name="status" id="status">
                                         <option value="0">Salecione...</option>
@@ -55,20 +57,20 @@
                                         <option @selected(($search['status'] ?? '') == 't') value="t">Vence Hoje</option>
                                     </x-adminlte-select>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label for="inputDescription">Vencimento</label>
                                     <div class="input-group date" id="date" data-target-input="nearest">
-                                        <div class="input-group-append" data-target="#date">
+                                        <div class="input-group-append" data-target="#due_date">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
-                                        <input type="text" name="date" id="input_date" class="form-control "
-                                            data-target="#date" />
+                                        <input type="text" name="due_date" id="due_date" class="form-control "
+                                            data-target="#due_date" />
 
                                     </div>
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label for="inputDescription">&nbsp;</label>
-                                    <button type="button" id="bt_generate" class="form-control btn btn-success ">Buscar
+                                    <button type="button" id="bt_search" class="form-control btn btn-success ">Buscar
                                     </button>
                                 </div>
 
@@ -76,20 +78,21 @@
                         </form>
                     </div>
                     <div style="padding-top: 15px" class="table-responsive">
-                        <table class="table" id="import_table">
+                        <div id="jsGrid"></div>
+                        {{-- <table class="table" id="import_table">
                             <thead>
                                 <tr>
                                     <th style='text-align: center; '>Tipo</th>
-                                    <th class="text-left">Vencimento</th>
-                                    <th class="text-center">Descrição</th>
-                                    <th class="text-center">Fornecedor</th>
+                                    <th class="text-center">Vencimento</th>
+                                    <th class="text-left">Descrição</th>
+                                    <th class="text-center">Cliente\Fornecedor</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Valor</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
-                        </table>
+                        </table> --}}
                     </div>
                 </div>
 
@@ -136,6 +139,21 @@
 
                 },
             });
+
+            $('#bt_search').on('click', function(){
+
+                var frm = $('#finne_form');
+                $.ajax({
+                        url: "{{ url('integration/finne/get_transaction') }}",
+                        type: "GET",
+                        data: frm.serialize(),
+                        success: function(response) {
+                           console.log(response);
+                        }
+                    });
+            })
+
+
         });
     </script>
 @endpush

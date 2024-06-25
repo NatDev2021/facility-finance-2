@@ -440,7 +440,15 @@ class HomeController extends Controller
 
     public function finneIntegration()
     {
-
-        return view('integration.finne.finne');
+        $person = Person::select('person.*')->join('customer', 'person.id', '=', 'customer.person_id', 'left')
+            ->join('provider', 'person.id', '=', 'provider.person_id', 'left')
+            ->where('customer.id', '!=', null)
+            ->orWhere('provider.id', '!=', null)
+            ->groupBy('person.id')
+            ->get();
+ 
+        return view('integration.finne.finne', [
+            'person' => $person
+        ]);
     }
 }
