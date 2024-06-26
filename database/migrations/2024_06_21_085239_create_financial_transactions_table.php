@@ -31,8 +31,8 @@ return new class extends Migration
             $table->enum('type', ['p', 'r'])->default('p');
             $table->foreignId('payment_method_id')->unsigned()->index()->nullable();
             $table->foreign('payment_method_id')->references('id')->on('payment_method')->onDelete('cascade');
-            $table->string('document_number');
-            $table->string('document_key');
+            $table->string('document_number')->nullable();
+            $table->string('document_key')->nullable();
             $table->foreignId('reference_transaction_id')->unsigned()->index()->nullable();
             $table->foreignId('id_user_ins')->unsigned()->index()->nullable();
             $table->foreign('id_user_ins')->references('id')->on('users')->onDelete('cascade');
