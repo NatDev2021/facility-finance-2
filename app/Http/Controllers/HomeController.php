@@ -264,7 +264,7 @@ class HomeController extends Controller
                 if ($item['date_diff_payment'] > 0) {
                     $item['status'] = [
                         'message' => 'Vence em ' . $item['date_diff_payment'] . ' dias.',
-                        'color' => '#a8f0cb'
+                        'color' => '#a8c0f0'
                     ];
                 } else if ($item['date_diff_payment'] < 0) {
                     $item['status'] = [
@@ -380,7 +380,7 @@ class HomeController extends Controller
                 if ($item['date_diff_payment'] > 0) {
                     $item['status'] = [
                         'message' => 'Vence em ' . $item['date_diff_payment'] . ' dias.',
-                        'color' => '#eff0a8'
+                        'color' => '#a8c0f0'
                     ];
                 } else if ($item['date_diff_payment'] < 0) {
                     $item['status'] = [
@@ -390,7 +390,7 @@ class HomeController extends Controller
                 } else {
                     $item['status'] = [
                         'message' => 'Vence Hoje.',
-                        'color' => '#f3a15e;
+                        'color' => '#eff0a8;
                         '
                     ];
                 }

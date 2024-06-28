@@ -37,7 +37,7 @@ class BanksAccountsController extends Controller
 
         $banks = Banks::get();
         $account = CompanyBanksAccounts::find($id);
-        $statement = BanksAccountsStatement::where('banks_account_id', '=', $id)->paginate(10);
+        $statement = BanksAccountsStatement::where('banks_account_id', '=', $id)->orderByDesc('id')->paginate(10);
 
 
         return view('banks_accounts.banks_accountsForm', [

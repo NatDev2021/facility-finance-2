@@ -130,5 +130,7 @@ Route::prefix('integration')->group(function () {
 
     Route::prefix('finne')->group(function () {
         Route::get('get_transaction', [App\Http\Controllers\Integration\FinneController::class, 'getTransaction']);
+        Route::post('export', [App\Http\Controllers\Integration\FinneController::class, 'exportTransactions']);
+
     });
 });

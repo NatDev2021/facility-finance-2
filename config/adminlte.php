@@ -537,14 +537,14 @@ return [
             ],
         ],
 
-        'Pusher' => [
+        'iCheck' => [
             'active' => true,
             'files' => [
                 [
-                    'type' => 'js',
+                    'type' => 'css',
                     'asset' => false,
-                    'location' => '//js.pusher.com/8.2.0/pusher.min.js',
-                ],
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css',
+                ]
             ],
         ],
         'BsCustomFileInput' => [
@@ -558,26 +558,6 @@ return [
             ],
         ],
 
-        'JsGrid' => [
-            'active' => true,
-            'files' => [
-                [
-                    'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js',
-                ],
-                [
-                    'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css',
-                ],
-                [
-                    'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css',
-                ],
-            ],
-        ]
     ],
 
     /*
