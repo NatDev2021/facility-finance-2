@@ -34,9 +34,11 @@ class FinneController extends Controller
 
         $transaction = $finneService->getTransaction(['id_transaction' => $data['id_transaction']]);
         $payload = [];
+        $startDate = date('Y-m-d');
+        $endDate = date('Y-m-d');
 
         foreach ($transaction as $row) {
-            $payload[] = [
+            $payload['entries'][] = [
                 "transaction_date" => $row['pay_date'],
                 "debit_account" => $row['debit_account'],
                 "credit_account" => $row['credit_account'],
@@ -44,11 +46,24 @@ class FinneController extends Controller
                 "detailing" => $row['description'] . ' - ' . $row['customer_provider'] . ' - ' . ($row['type'] == 'r' ? 'Liquidação' : 'Provisão'),
                 "id_source" => 3
             ];
+
+            if ($row['pay_date'] < $startDate) {
+                $startDate = $row['pay_date'];
+            }
+
+            if ($row['pay_date'] > $endDate) {
+                $endDate = $row['pay_date'];
+            }
         }
+
+        $payload['id_source'] = 3;
+        $payload['start_date'] = $startDate;
+        $payload['end_date'] = $endDate;
+
+
 
         $response = $finneService->sendTransactions($payload);
         $dataResponse = $response->json();
-        print_r($dataResponse);
-        die;
+        return $dataResponse;
     }
 }
