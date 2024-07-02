@@ -32,14 +32,15 @@
 
                                             </h3>
                                         </a>
-
-                                        <a class="nav-link" data-bs-toggle="tab" href="#nav-cliente-fornecedor"
-                                            role="tab" aria-controls="nav-cliente-fornecedor" aria-selected="true">
-                                            <h3 class="card-title">
-                                                <i class="fa-solid fa-list-ol"></i>
-                                                Títulos
-                                            </h3>
-                                        </a>
+                                        @if (!empty($financialTransaction->id))
+                                            <a class="nav-link" data-bs-toggle="tab" href="#nav-cliente-fornecedor"
+                                                role="tab" aria-controls="nav-cliente-fornecedor" aria-selected="true">
+                                                <h3 class="card-title">
+                                                    <i class="fa-solid fa-list-ol"></i>
+                                                    Títulos
+                                                </h3>
+                                            </a>
+                                        @endif
 
 
                                     </div>

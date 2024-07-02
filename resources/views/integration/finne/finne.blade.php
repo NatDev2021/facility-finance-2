@@ -15,9 +15,10 @@
 
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h2 class="card-title">
+                    <h3 class="card-title">
+                        <i class="fa-brands fa-hive"></i>
 
-                    </h2>
+                    </h3>
                 </div>
 
                 <div class="card-body">
@@ -114,18 +115,13 @@
                     </div>
                     <hr>
                     <div class=" d-flex justify-content-between">
-                        <button type="button" class="btn btn-success" data-dismiss="modal">Excel &nbsp;<i
-                                class="fa-regular fa-file-spreadsheet"></i></button>
-                        <button type="button" id="bt_export" class="btn btn-success float-right">Exportar</button>
+                        <button type="button" id="bt_export_excel" class="btn btn-success" data-dismiss="modal">Excel&nbsp;
+                            <span id="spinner"></span>
+                            &nbsp;<i class="fa-regular fa-file-spreadsheet"></i></button>
+                        <button type="button" id="bt_export" class="btn btn-success float-right">Exportar&nbsp;
+                            <span id="spinner_api_export"></span></button>
                     </div>
 
-                    <hr>
-                    <div class="progress" id="progressBarContainer">
-                        <div class="progress-bar  bg-success" id="progressBar" role="progressbar" style="width: 0%"
-                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                        </div>
-                    </div>
-                    <div id="status"></div>
 
                 </div>
 
@@ -230,7 +226,24 @@
                     return false;
                 }
 
-                exportTransaction(selectedItems)
+                exportApiTransaction(selectedItems)
+
+            })
+
+            $('#bt_export_excel').on('click', function() {
+
+
+                if (selectedItems.length === 0) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Nenhum registro selecionado para exportação!",
+                    });
+
+                    return false;
+                }
+
+                exportExcelTransaction(selectedItems)
 
             })
 
@@ -267,7 +280,7 @@
             const list = {
                 create(item) {
                     var table = "";
-                    let  = new Date(item.due_date).toLocaleDateString('pt-BR');
+                    let = new Date(item.due_date).toLocaleDateString('pt-BR');
                     let pay_ddue_dateate = new Date(item.pay_date).toLocaleDateString('pt-BR');
                     let classType = item.type == 'p' ? 'up text-danger' : 'down text-success';
                     let titleType = item.type == 'p' ? 'Pagamento' : 'Recebimento';
@@ -454,30 +467,54 @@
         }
 
 
-        function exportTransaction(idTransaction) {
+        function exportApiTransaction(idTransaction) {
 
 
             var form = document.getElementById("finne_form");
-
-            xhr = new XMLHttpRequest();
-            xhr.open("POST", "{{ url('integration/finne/export') }}", true);
-
-
-            // definir uma função de retorno de chamada para atualizar a barra de progresso
-            xhr.upload.addEventListener("progress", function(e) {
-                var percent = Math.round((e.loaded / e.total) * 100);
-                document.getElementById("progressBar").style.width = percent + "%";
-                document.getElementById("status").innerHTML = percent + "% importado...";
-            }, false);
-
-            // enviar o arquivo
             var formData = new FormData(form);
             idTransaction.forEach(element => {
                 formData.append("id_transaction[]", element);
             });
 
-            xhr.send(formData);
+            $.ajax({
+                url: "{{ url('integration/finne/export') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $('#spinner_api_export').addClass("spinner-border spinner-border-sm"); // Liga spiner
+                    $('.btn').addClass("disabled");
 
+                },
+                complete: function() {
+                    $('#spinner_api_export').removeClass("spinner-border spinner-border-sm"); //Desliga spiner
+                    $('.btn').removeClass("disabled");
+
+                },
+                success: function(response) {
+                    if (!response.success) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: response.message,
+                        });
+
+                        return false;
+
+                    }
+
+
+                }
+            });
+
+        }
+
+        function exportExcelTransaction(idTransaction) {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = urlParams.toString();
+            window.location.href = 'accounts_payable/export/excel?' + data;
         }
     </script>
 @endpush

@@ -7,11 +7,6 @@
         <h1>Contas Bancárias</h1>
         <div>
 
-            {{-- <button type="button" class="btn btn-outline-primary" id="new_bank_account" data-target="#banksAccountsModal">
-                <i class="fa-solid fa-plus"></i>
-                Adicionar
-            </button> --}}
-
             <a href="{{ url('banks_accounts/form') }}" class="btn btn-outline-primary">
                 <i class="fa-solid fa-plus"></i>
                 Adicionar
