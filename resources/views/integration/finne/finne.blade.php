@@ -116,7 +116,7 @@
                     <hr>
                     <div class=" d-flex justify-content-between">
                         <button type="button" id="bt_export_excel" class="btn btn-success" data-dismiss="modal">Excel&nbsp;
-                            <span id="spinner"></span>
+                            <span id="spinner_api_export_excel"></span>
                             &nbsp;<i class="fa-regular fa-file-spreadsheet"></i></button>
                         <button type="button" id="bt_export" class="btn btn-success float-right">Exportar&nbsp;
                             <span id="spinner_api_export"></span></button>
@@ -512,9 +512,45 @@
 
         function exportExcelTransaction(idTransaction) {
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const data = urlParams.toString();
-            window.location.href = 'accounts_payable/export/excel?' + data;
-        }
+            var form = document.getElementById("finne_form");
+            var formData = new FormData(form);
+            idTransaction.forEach(element => {
+                formData.append("id_transaction[]", element);
+            });
+
+            $.ajax({
+                    url: "{{ url('integration/finne/export_excel') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        $('#spinner_api_export_excel').addClass("spinner-border spinner-border-sm"); // Liga spiner
+                        $('.btn').addClass("disabled");
+
+                    },
+                    complete: function() {
+                        $('#spinner_api_export_excel').removeClass(
+                            "spinner-border spinner-border-sm"); //Desliga spiner
+                        $('.btn').removeClass("disabled");
+
+                    },
+                    success: function(response) {
+
+
+                        let blob = new Blob([response], {
+                            type: "application/octetstream"
+                        });
+
+                        let a = document.createElement('a');
+                        a.href = window.URL.createObjectURL(blob);
+                        a.download = "test.xlsx";;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(a.href);
+                        }
+                    });
+            }
     </script>
 @endpush

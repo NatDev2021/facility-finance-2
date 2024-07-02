@@ -66,4 +66,16 @@ class FinneController extends Controller
         $dataResponse = $response->json();
         return $dataResponse;
     }
+
+
+    public function exportExcelTransactions()
+    {
+        $data = $this->request->post();
+        $finneService = new FinneIntegrationService();
+        $transactions = $finneService->getTransaction(['id_transaction' => $data['id_transaction']]);
+
+        return reports('finneTransactionsEXCELReport', [
+            'transactions' => $transactions,
+        ]);
+    }
 }

@@ -277,11 +277,9 @@ class AccountsReceivableController extends Controller
 
         $data = $this->request->all();
         $accountsPayable = $this->searchAccountsReceivable($data);
-        $company = Company::find(1);
 
         return reports('financialTransactionsEXCELReport', [
             'transactions' => $accountsPayable,
-            'company' => $company,
             'type' => 'r'
         ]);
     }
