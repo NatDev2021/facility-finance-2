@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Person;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banks;
 use App\Models\Customer;
 use App\Models\Person;
 use App\Models\PersonAddress;
+use App\Models\PersonBanksAccounts;
 use App\Models\PersonPhone;
 use App\Models\Provider;
 use Illuminate\Http\Request;
@@ -24,9 +26,13 @@ class PersonController extends Controller
     {
 
         $formView = $type == 'pj' ? 'person.forms.personPjForm' : 'person.forms.personPfForm';
+        $banks = Banks::get();
+
         return view('person.personForm', [
             'form_view' => $formView,
-            'person' => $person
+            'person' => $person,
+            'banks' => $banks,
+
 
         ]);
     }
@@ -93,7 +99,6 @@ class PersonController extends Controller
 
         $address = PersonAddress::find($data['id_address']);
         $address->update([
-            "person_id" => $data['id_person'],
             "zip_code" =>  Helper::removeMask($data['zip_code'] ?? ''),
             "state" => $data['state'] ?? '',
             "city" => $data['city'] ?? '',
@@ -105,9 +110,21 @@ class PersonController extends Controller
 
         $phone = PersonPhone::find($data['id_phone']);
         $phone->update([
-            "person_id" => $data['id_person'],
             "phone" => Helper::removeMask($data['phone'] ?? ''),
         ]);
+
+
+        $banksAccount = PersonBanksAccounts::find($data['id_banks_accounts']);
+        $banksAccount->update([
+            'description' => $data['description'] ?? '',
+            'bank_id' => $data['bank_id'] ?? '',
+            'agency' => $data['agency'] ?? '',
+            'account' => $data['account'] ?? '',
+            'account_dig' => $data['account_dig'] ?? '',
+            'pix_key' => $data['pix_key'] ?? '',
+        ]);
+
+
 
         toast('Pessoa atualizada.', 'success');
         return $data['id_person'];
@@ -149,6 +166,17 @@ class PersonController extends Controller
 
         ]);
 
+        PersonBanksAccounts::create([
+            "person_id" => $idPerson,
+            'description' => $data['description'] ?? '',
+            'bank_id' => $data['bank_id'] ?? '',
+            'agency' => $data['agency'] ?? '',
+            'account' => $data['account'] ?? '',
+            'account_dig' => $data['account_dig'] ?? '',
+            'pix_key' => $data['pix_key'] ?? '',
+            "id_user_ins" => $this->request->user()->id,
+        ]);
+
         toast('Pessoa criada.', 'success');
         return $idPerson;
     }
@@ -163,7 +191,8 @@ class PersonController extends Controller
                 },
                 'address' => function ($query) {
                     $query->where('primary', '=', true);
-                }
+                },
+                'banksAccount'
             ]
         )->find($id);
 

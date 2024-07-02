@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Provider;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccountingFinancial;
 use App\Models\Customer;
 use App\Models\Person;
 use App\Models\Provider;
@@ -24,8 +25,13 @@ class ProviderController extends Controller
             ->leftJoin('provider', 'provider.person_id', '=', 'person.id')
             ->where('provider.person_id', null)
             ->get();
+        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
 
-        return view('provider.providerForm', ['person' => $person]);
+        return view('provider.providerForm', [
+            'person' => $person,
+            'accountFinancial' => $accountFinancial,
+
+        ]);
     }
 
     public function saveProvider()
@@ -47,6 +53,8 @@ class ProviderController extends Controller
 
         $idProvider = Provider::create([
             'person_id' => $data['select_person'],
+            'credit_account_id' => $data['credit_account'] == 0 ? null : $data['credit_account'],
+            'debit_account_id' => $data['debit_account'] == 0 ? null : $data['debit_account'],
             "id_user_ins" => $this->request->user()->id,
 
         ]);
@@ -59,7 +67,10 @@ class ProviderController extends Controller
     private function updateProvider(array|string|null $data)
     {
         $provider = Provider::find($data['id_provider']);
-
+        $provider->update([
+            'credit_account_id' => $data['credit_account'] == 0 ? null : $data['credit_account'],
+            'debit_account_id' => $data['debit_account'] == 0 ? null : $data['debit_account'],
+        ]);
         toast('Fornecedor atualizado.', 'success');
         return $data['id_provider'];
     }
@@ -68,9 +79,11 @@ class ProviderController extends Controller
     {
 
         $provider = Provider::with('person')->find($id);
+        $accountFinancial = AccountingFinancial::where('end_duration_date', '=', '0000-00-00')->orWhere('end_duration_date', '>', date('Y-m-d'))->get();
 
         return view('provider.providerForm', [
             'provider' => $provider,
+            'accountFinancial' => $accountFinancial,
             'person' => [$provider->person]
         ]);
     }

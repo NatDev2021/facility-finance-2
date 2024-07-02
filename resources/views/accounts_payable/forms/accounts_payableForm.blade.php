@@ -198,10 +198,20 @@
                 }
             });
 
-            $("#document_key").inputmask({
-                mask: '99999.99999 99999.999999 99999.999999 9 99999999999999'
-            });
+            $('#provider_id').on('change', function() {
 
+                let id_provider = $('#provider_id').val();
+                $.ajax({
+                    url: "{{ url('provider/get') }}" + "/" + id_provider,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        defineData(response)
+                    }
+                });
+
+
+            });
 
         });
 
@@ -231,6 +241,20 @@
             $('#amount').val(amount.toLocaleString('pt-br', {
                 minimumFractionDigits: 2
             }));
+        }
+
+        function defineData(data) {
+
+            if (data.debit_account_id) {
+                $('#debit_account').val(data.debit_account_id).trigger('change');
+
+            }
+            if (data.credit_account_id) {
+                $('#credit_account').val(data.credit_account_id).trigger('change');
+
+            }
+
+
         }
     </script>
 @endpush

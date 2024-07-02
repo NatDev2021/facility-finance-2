@@ -35,6 +35,16 @@
 
                                 </div>
                             </div>
+                            <div>
+                                <i class="fas fa-money-check-dollar bg-blue"></i>
+                                <div class="timeline-item">
+                                    <x-adminlte-card title="Provisão" theme="dark">
+                                        @include('provider.forms.provisionForm')
+
+                                    </x-adminlte-card>
+
+                                </div>
+                            </div>
 
 
                         </div>

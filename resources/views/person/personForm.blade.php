@@ -47,26 +47,16 @@
                             </div>
                         </div>
 
-                        {{-- <div>
-                                <i class="fas fa-phone-square bg-blue"></i>
-                                <div class="timeline-item">
-                                    <div class="card card-secondary">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Contato</h3>
-                                            <div class="card-tools">
-                                                <button type="button" class="btn btn-tool" data-card-widget="collapse"
-                                                    title="Collapse">
-                                                    <i class="fas fa-minus"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            @include('person.forms.phoneForm')
-                                        </div>
+                        <div>
+                            <i class="fas fa-building-columns bg-blue"></i>
+                            <div class="timeline-item">
+                                <x-adminlte-card title="Conta Bancária" theme="dark">
+                                    @include('person.forms.banks_accountsForm')
 
-                                    </div>
-                                </div>
-                            </div> --}}
+                                </x-adminlte-card>
+
+                            </div>
+                        </div>
 
 
                     </div>

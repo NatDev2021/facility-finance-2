@@ -12,7 +12,9 @@ class Provider extends Model
 
     protected $fillable = [
         'person_id',
-        'id_user_ins'
+        'id_user_ins',
+        'credit_account_id',
+        'debit_account_id'
     ];
 
     public function personAddress()

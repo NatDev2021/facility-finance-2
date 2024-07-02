@@ -131,37 +131,42 @@
                 $("#save").prop("disabled", true);
             }
 
-        });
-        $('#save').on("click", function() {
+            $('#save').on("click", function() {
 
-            let validateFields = validateEmptyFields('description', 'value', 'register_date', 'due_date');
-            let validateSelect = validateEmptySelect('payment_method_id');
-            let validateSelect2 = validateEmptySelect2('provider_id', 'credit_account', 'debit_account',
-                'disbursement_account_id');
-            if (!validateFields || !validateSelect2 || !validateSelect) {
-                return false;
-            }
-
-            if ($('#enable_frequency').is(':checked')) {
-
-                if (!validateEmptyFields('frequency_number')) {
+                let validateFields = validateEmptyFields('description', 'value', 'register_date',
+                    'due_date');
+                let validateSelect = validateEmptySelect('payment_method_id');
+                let validateSelect2 = validateEmptySelect2('provider_id', 'credit_account', 'debit_account',
+                    'disbursement_account_id');
+                if (!validateFields || !validateSelect2 || !validateSelect) {
                     return false;
                 }
 
+                if ($('#enable_frequency').is(':checked')) {
 
-                if (parseFloat($('#frequency_number').val()) < 1) {
+                    if (!validateEmptyFields('frequency_number')) {
+                        return false;
+                    }
 
-                    $('#frequency_number').css({
-                        "border": "1px solid red"
-                    });
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'O número de parcelas a reptir deve ser maior do que 0.',
-                    });
-                    return false;
+
+                    if (parseFloat($('#frequency_number').val()) < 1) {
+
+                        $('#frequency_number').css({
+                            "border": "1px solid red"
+                        });
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'O número de parcelas a reptir deve ser maior do que 0.',
+                        });
+                        return false;
+                    }
+
                 }
 
-            }
+
+            });
+
+
 
 
         });
