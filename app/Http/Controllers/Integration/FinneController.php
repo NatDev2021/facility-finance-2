@@ -73,7 +73,6 @@ class FinneController extends Controller
         $data = $this->request->post();
         $finneService = new FinneIntegrationService();
         $transactions = $finneService->getTransaction(['id_transaction' => $data['id_transaction']]);
-
         return reports('finneTransactionsEXCELReport', [
             'transactions' => $transactions,
         ]);

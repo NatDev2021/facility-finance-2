@@ -115,9 +115,10 @@
                     </div>
                     <hr>
                     <div class=" d-flex justify-content-between">
-                        <button type="button" id="bt_export_excel" class="btn btn-success" data-dismiss="modal">Excel&nbsp;
-                            <span id="spinner_api_export_excel"></span>
-                            &nbsp;<i class="fa-regular fa-file-spreadsheet"></i></button>
+                        <button type="button" id="bt_export_excel" class="btn btn-success" data-dismiss="modal">Excel
+                            &nbsp;<i class="fa-regular fa-file-spreadsheet"></i>
+                            &nbsp;<span id="spinner_api_export_excel"></span>
+                        </button>
                         <button type="button" id="bt_export" class="btn btn-success float-right">Exportar&nbsp;
                             <span id="spinner_api_export"></span></button>
                     </div>
@@ -519,38 +520,37 @@
             });
 
             $.ajax({
-                    url: "{{ url('integration/finne/export_excel') }}",
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    beforeSend: function() {
-                        $('#spinner_api_export_excel').addClass("spinner-border spinner-border-sm"); // Liga spiner
-                        $('.btn').addClass("disabled");
+                url: "{{ url('integration/finne/export_excel') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $('#spinner_api_export_excel').addClass("spinner-border spinner-border-sm"); // Liga spiner
+                    $('.btn').addClass("disabled");
 
-                    },
-                    complete: function() {
-                        $('#spinner_api_export_excel').removeClass(
-                            "spinner-border spinner-border-sm"); //Desliga spiner
-                        $('.btn').removeClass("disabled");
+                },
+                complete: function() {
+                    $('#spinner_api_export_excel').removeClass(
+                        "spinner-border spinner-border-sm"); //Desliga spiner
+                    $('.btn').removeClass("disabled");
 
-                    },
-                    success: function(response) {
+                },
+                success: function(response) {
 
-
-                        let blob = new Blob([response], {
-                            type: "application/octetstream"
-                        });
-
-                        let a = document.createElement('a');
-                        a.href = window.URL.createObjectURL(blob);
-                        a.download = "test.xlsx";;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        window.URL.revokeObjectURL(a.href);
-                        }
-                    });
-            }
+                    const url = window.URL.createObjectURL(new Blob([response]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'finne.csv');
+                    document.body.appendChild(link);
+                    link.click();
+                    link.parentNode.removeChild(link); // Limpa o link da DOM depois do download
+                },
+                error: function(xhr, status, error) {
+                    // Trata os erros de requisição, se necessário
+                    console.error('Erro ao baixar o arquivo:', status, error);
+                }
+            });
+        }
     </script>
 @endpush
