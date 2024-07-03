@@ -24,7 +24,7 @@ $pdf->Cell(30, 7, 'CPF / CNPJ', 'LTB', 0, 'C', 1);
 $pdf->Cell(53, 7, 'Nome', 'LTB', 0, 'C', 1);
 $pdf->Cell(23, 7, 'A Receber', 1, 0, 'C', 1);
 $pdf->Cell(23, 7, 'Total', 1, 0, 'C', 1);
-$pdf->Cell(23, 7, 'Liquidadas', 1, 0, 'C', 1);
+$pdf->Cell(23, 7, 'Liquidados', 1, 0, 'C', 1);
 $pdf->Cell(23, 7, 'Total', 1, 1, 'C', 1);
 $pdf->SetFillColor(224, 235, 255);
 $pdf->SetTextColor(0);
