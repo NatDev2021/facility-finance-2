@@ -3,7 +3,7 @@
 @section('title', 'Relatório de Clientes')
 
 @section('content_header')
-    <h1>Relatório de Clientes</h1>
+    <h1>Relatório de Fornecedores</h1>
 
 @stop
 
@@ -16,7 +16,7 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h2 class="card-title">
-                        Total de clientes: {{ $countCustomer }}
+                        Total de fornecedores: {{ $countProvider }}
 
                     </h2>
                 </div>
@@ -40,15 +40,15 @@
                                         'allowClear' => true,
                                     ];
                                 @endphp
-                                <x-adminlte-select2 id="customer" name="customer[]" label="Clientes" :config="$config"
+                                <x-adminlte-select2 id="provider" name="provider[]" label="Fornecedores" :config="$config"
                                     multiple>
                                     <x-slot name="prependSlot">
                                         <div class="input-group-text">
                                             <i class="fa-solid fa-address-card"></i>
                                         </div>
                                     </x-slot>
-                                    @foreach ($customers as $item)
-                                        <option  value="{{ $item->id }}">{{ $item->person->name }}</option>
+                                    @foreach ($providers as $item)
+                                        <option  value="{{ $item->id }}"> {{ $item->person->name }}</option>
                                     @endforeach
                                 </x-adminlte-select2>
                             </div>
@@ -95,21 +95,21 @@
         function generateReport() {
 
             let reportType = $('#report_type').val();
-            let customers = $('#customer').val();
+            let providers = $('#provider').val();
 
-            if (reportType == 'a' && customers.length === 0) {
+            if (reportType == 'a' && providers.length === 0) {
 
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "O relatório analítico deve conter ao menos um cliente selecionado!",
+                    text: "O relatório analítico deve conter ao menos um fornecedor selecionado!",
                 });
                 return false;
             }
 
             var frm = $('#report_form');
             $.ajax({
-                url: "{{ url('reports/customer') }}",
+                url: "{{ url('reports/provider') }}",
                 type: "POST",
                 dataType: "json",
                 data: frm.serialize(),

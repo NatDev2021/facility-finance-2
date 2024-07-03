@@ -126,7 +126,8 @@ Route::prefix('company')->group(function () {
 });
 
 Route::prefix('reports')->group(function () {
-    Route::post('customer', [App\Http\Controllers\Reports\CustomerReportsController::class, 'customerReport']);
+    Route::post('customer', [App\Http\Controllers\Reports\CustomerReportController::class, 'customerReport']);
+    Route::post('provider', [App\Http\Controllers\Reports\ProviderReportController::class, 'providerReport']);
     Route::post('loan', [App\Http\Controllers\Reports\ReportsController::class, 'loanReport']);
     Route::post('financial', [App\Http\Controllers\Reports\ReportsController::class, 'financialReport']);
 });

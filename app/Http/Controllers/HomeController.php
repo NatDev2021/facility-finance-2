@@ -438,6 +438,18 @@ class HomeController extends Controller
         ]);
     }
 
+    public function providerReport()
+    {
+
+        $countProvider = Provider::all()->count();
+        $providers = Provider::with('person')->get();
+
+        return view('reports.providerReport', [
+            'countProvider' => $countProvider,
+            'providers' => $providers
+        ]);
+    }
+
     public function finneIntegration()
     {
         $person = Person::select('person.*')->join('customer', 'person.id', '=', 'customer.person_id', 'left')
