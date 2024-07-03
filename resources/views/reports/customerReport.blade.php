@@ -25,7 +25,14 @@
                     <form id="report_form" method="post">
                         @csrf
                         <div class="row justify-content-md-center">
-                            <div class="col-md-6">
+                            <div class="col-md-2 ">
+                                <label for="amount">Tipo</label>
+                                <x-adminlte-select name="report_type" id="report_type">
+                                    <option value="a">Analítico</option>
+                                    <option value="s">Sintético</option>
+                                </x-adminlte-select>
+                            </div>
+                            <div class="col-md-8">
                                 {{-- With multiple slots, and plugin config parameter --}}
                                 @php
                                     $config = [
@@ -88,8 +95,20 @@
     <script>
         function generateReport() {
 
-            var frm = $('#report_form');
+            let reportType = $('#report_type').val();
+            let customers = $('#customer').val();
 
+            if (reportType == 'a' && customers.length === 0) {
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "O relatório analítico deve conter ao menos um cliente selecionado!",
+                });
+                return false;
+            }
+
+            var frm = $('#report_form');
             $.ajax({
                 url: "{{ url('reports/customer') }}",
                 type: "POST",

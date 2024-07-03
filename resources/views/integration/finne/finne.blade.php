@@ -115,9 +115,9 @@
                     </div>
                     <hr>
                     <div class=" d-flex justify-content-between">
-                        <button type="button" id="bt_export_excel" class="btn btn-success" data-dismiss="modal">Excel
+                        <button type="button" id="bt_export_csv" class="btn btn-success" data-dismiss="modal">CSV
                             &nbsp;<i class="fa-regular fa-file-spreadsheet"></i>
-                            &nbsp;<span id="spinner_api_export_excel"></span>
+                            &nbsp;<span id="spinner_api_export_csv"></span>
                         </button>
                         <button type="button" id="bt_export" class="btn btn-success float-right">Exportar&nbsp;
                             <span id="spinner_api_export"></span></button>
@@ -231,7 +231,7 @@
 
             })
 
-            $('#bt_export_excel').on('click', function() {
+            $('#bt_export_csv').on('click', function() {
 
 
                 if (selectedItems.length === 0) {
@@ -244,7 +244,7 @@
                     return false;
                 }
 
-                exportExcelTransaction(selectedItems)
+                exportCSVTransaction(selectedItems)
 
             })
 
@@ -511,7 +511,7 @@
 
         }
 
-        function exportExcelTransaction(idTransaction) {
+        function exportCSVTransaction(idTransaction) {
 
             var form = document.getElementById("finne_form");
             var formData = new FormData(form);
@@ -520,18 +520,18 @@
             });
 
             $.ajax({
-                url: "{{ url('integration/finne/export_excel') }}",
+                url: "{{ url('integration/finne/export_csv') }}",
                 type: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
                 beforeSend: function() {
-                    $('#spinner_api_export_excel').addClass("spinner-border spinner-border-sm"); // Liga spiner
+                    $('#spinner_api_export_csv').addClass("spinner-border spinner-border-sm"); // Liga spiner
                     $('.btn').addClass("disabled");
 
                 },
                 complete: function() {
-                    $('#spinner_api_export_excel').removeClass(
+                    $('#spinner_api_export_csv').removeClass(
                         "spinner-border spinner-border-sm"); //Desliga spiner
                     $('.btn').removeClass("disabled");
 

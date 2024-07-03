@@ -68,13 +68,27 @@ class FinneController extends Controller
     }
 
 
-    public function exportExcelTransactions()
+    public function exportCSVTransactions()
     {
         $data = $this->request->post();
         $finneService = new FinneIntegrationService();
         $transactions = $finneService->getTransaction(['id_transaction' => $data['id_transaction']]);
-        return reports('finneTransactionsEXCELReport', [
-            'transactions' => $transactions,
-        ]);
+        $out = fopen('php://output', 'w');
+        fputcsv($out, ["CONTA_DEBITO", "CONTA_CREDITO", "DATA", "VALOR", "COMPLEMENTO"], ';');
+        foreach ($transactions as $item) {
+
+            fputcsv($out, [
+                $item['debit_account'],
+                $item['credit_account'],
+                date('d/m/Y', strtotime($item['pay_date'] ?? '')),
+                Helper::formatBrazilianNumber($item['amount']),
+                $item['description'] . ' - ' . $item['customer_provider'] . ' - ' . ($item['type'] == 'r' ? 'Liquidação' : 'Provisão')
+            ], ';');
+        }
+
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename="finne.csv"');
+
+        fclose($out);
     }
 }

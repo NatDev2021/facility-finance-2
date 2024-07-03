@@ -33,7 +33,8 @@ Route::get('accounts_payable', [App\Http\Controllers\HomeController::class, 'acc
 Route::get('accounts_receivable', [App\Http\Controllers\HomeController::class, 'accountsReceivable'])->name('accounts_receivable');
 Route::get('banks_accounts', [App\Http\Controllers\HomeController::class, 'banksAccounts'])->name('banks_accounts');
 Route::get('integration/finne', [App\Http\Controllers\HomeController::class, 'finneIntegration'])->name('finne_intergation');
-
+Route::get('customer_report', [App\Http\Controllers\HomeController::class, 'customerReport'])->name('customer_report');
+Route::get('provider_report', [App\Http\Controllers\HomeController::class, 'providerReport'])->name('provider_report');
 
 
 
@@ -124,14 +125,17 @@ Route::prefix('company')->group(function () {
     Route::get('get/{id}', [App\Http\Controllers\Company\CompanyController::class, 'getCompany']);
 });
 
-
+Route::prefix('reports')->group(function () {
+    Route::post('customer', [App\Http\Controllers\Reports\CustomerReportsController::class, 'customerReport']);
+    Route::post('loan', [App\Http\Controllers\Reports\ReportsController::class, 'loanReport']);
+    Route::post('financial', [App\Http\Controllers\Reports\ReportsController::class, 'financialReport']);
+});
 
 Route::prefix('integration')->group(function () {
 
     Route::prefix('finne')->group(function () {
         Route::get('get_transaction', [App\Http\Controllers\Integration\FinneController::class, 'getTransaction']);
         Route::post('export', [App\Http\Controllers\Integration\FinneController::class, 'exportTransactions']);
-        Route::post('export_excel', [App\Http\Controllers\Integration\FinneController::class, 'exportExcelTransactions']);
-
+        Route::post('export_csv', [App\Http\Controllers\Integration\FinneController::class, 'exportCSVTransactions']);
     });
 });

@@ -119,7 +119,7 @@ class SubMenuSeeder extends Seeder
                 'menu_id' => 5,
                 'description' => 'Clientes',
                 'icon' => 'nav-icon fa-solid fa-file-lines',
-                'route' => 'company',
+                'route' => 'customer_report',
                 'actived' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
@@ -129,7 +129,7 @@ class SubMenuSeeder extends Seeder
                 'menu_id' => 5,
                 'description' => 'Fornecedores',
                 'icon' => 'nav-icon fa-solid fa-file-lines',
-                'route' => 'company',
+                'route' => 'provider_report',
                 'actived' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')

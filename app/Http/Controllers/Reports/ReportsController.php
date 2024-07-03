@@ -29,12 +29,9 @@ class ReportsController extends Controller
             ->join('loans', 'customer.id', '=', 'loans.customer_id')
             ->groupBy('customer.id')
             ->with('person');
-        if (empty($data['customer'])) {
+            
+        $customers =   empty($data['customer']) ? $customerModel->get() : $customerModel->find($data['customer']);
 
-            $customers = $customerModel->get();
-        } else {
-            $customers = $customerModel->find($data['customer']);
-        }
         $company = Company::find(1);
         $report = reports('customerReport', [
             'customres' => $customers,
