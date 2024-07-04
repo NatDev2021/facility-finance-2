@@ -1,3 +1,9 @@
+@extends('adminlte::master')
+
+@section('adminlte_css_pre')
+    <link rel="stylesheet" href="{{ asset('vendor/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+@stop
+
 @php($login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login'))
 @php($register_url = View::getSection('register_url') ?? config('adminlte.register_url', 'register'))
 @php($password_reset_url = View::getSection('password_reset_url') ?? config('adminlte.password_reset_url', 'password/reset'))
@@ -11,6 +17,8 @@
     @php($register_url = $register_url ? url($register_url) : '')
     @php($password_reset_url = $password_reset_url ? url($password_reset_url) : '')
 @endif
+
+
 <html>
 
 <head>
@@ -18,7 +26,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>Login do Usuário</title>
     <link rel="shortcut icon" href="img/favicons/favicon.ico" />
-    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' rel='stylesheet'>
+    {{-- <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' rel='stylesheet'> --}}
 
     <link href="css/login.css?<?= date('Y-m-d_H:i:s') ?>" rel="stylesheet" />
 
@@ -174,19 +182,22 @@
                         <form action="{{ $login_url }}" method="POST">
                             @csrf
                             <div class="form-group py-2">
-                                <div class="input-field"> <span class="far fa-user p-2"></span>
-                                    <input type="text" id="email" name="email"
+                                <div class="input-field @error('email') is-invalid @enderror"> <span class="far fa-user p-2"></span>
+                                    <input type="text" class="form-control @error('email') is-invalid @enderror" id="email"
+                                        name="email" value="{{ old('email') }}"
                                         placeholder="{{ __('adminlte::adminlte.email') }}" autofocus required>
+                                    
                                 </div>
                                 @error('email')
-                                    <div class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </div>
-                                @enderror
+                                <div class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            @enderror
                             </div>
                             <div class="form-group py-1 pb-2">
-                                <div class="input-field"> <span class="fas fa-lock px-2"></span>
-                                    <input type="password" id="password" name="password"
+                                <div class="input-field @error('password') is-invalid @enderror"> <span class="fas fa-lock px-2"></span>
+                                    <input type="password" id="password" name="password" value="{{ old('password') }}"
+                                        class="form-control @error('password') is-invalid @enderror"
                                         placeholder="{{ __('adminlte::adminlte.password') }}" required>
                                     <button onclick="showPassword()" type="button" class="btn bg-white text-muted">
                                         <span id="eye" class="far fa-eye-slash"></span>
