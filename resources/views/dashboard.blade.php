@@ -12,8 +12,8 @@
                     <div class="col-lg col-6">
                         <div class="small-box  bg-info">
                             <div class="inner">
-                                <h3>R$ 2.00,00</h3>
-                                <p>Total a Receber: <strong>5</strong></p>
+                                <h3>R$ {{ Helper::formatBrazilianNumber($sumOpneAccountsReceivable ?? '') }}</h3>
+                                <p>Total a Receber: <strong>{{ $countOpneAccountsReceivable }}</strong></p>
                             </div>
                             <div class="icon">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
@@ -25,8 +25,8 @@
                     <div class="col-lg col-6">
                         <div class="small-box  bg-success">
                             <div class="inner">
-                                <h3>R$ 5.000,22</h3>
-                                <p>Liquidados: <strong>3</strong></p>
+                                <h3>R$ {{ Helper::formatBrazilianNumber($sumCloseAccountsReceivable ?? '') }}</h3>
+                                <p>Liquidados: <strong>{{ $countCloseAccountsReceivable }}</strong></p>
                             </div>
                             <div class="icon">
                                 <i class="fa-solid fa-arrow-down-to-line"></i>
@@ -38,7 +38,7 @@
                     <div class="col-lg col-6">
                         <div class="small-box  bg-info">
                             <div class="inner">
-                                <h3>R$ {{ $sumOpneAccountsPayable }}</h3>
+                                <h3>R$ {{ Helper::formatBrazilianNumber($sumOpneAccountsPayable ?? '') }}</h3>
                                 <p>Total a Pagar: <strong>{{ $countOpneAccountsPayable }}</strong></p>
                             </div>
                             <div class="icon">
@@ -51,7 +51,7 @@
                     <div class="col-lg col-6">
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3>R$ {{ $sumCloseAccountsPayable }}</h3>
+                                <h3>R$ {{  Helper::formatBrazilianNumber($sumCloseAccountsPayable?? '') }}</h3>
                                 <p>Pagos: <strong>{{ $countCloseAccountsPayable }}</strong></p>
                             </div>
                             <div class="icon">
@@ -64,7 +64,7 @@
                     <div class="col-lg col-6">
                         <div class="small-box bg-warning">
                             <div class="inner">
-                                <h3>R$ 6.000,36</h3>
+                                <h3>R$ {{  Helper::formatBrazilianNumber($balance?? '') }}</h3>
                                 <p>Balanço</p>
                             </div>
                             <div class="icon">

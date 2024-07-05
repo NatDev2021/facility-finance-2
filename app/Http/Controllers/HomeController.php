@@ -35,24 +35,44 @@ class HomeController extends Controller
     {
 
         $accountsPayable = FinancialTransactions::where('type', '=', 'p')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'));
-
-        $opneAccountsPayable = $closeAccountsPayable = $accountsPayable;
-        $opneAccountsPayable->whereNull('pay_date');
+        $opneAccountsPayable = clone $accountsPayable; // Clonando para evitar modificar $accountsPayable
+        $opneAccountsPayable->whereNull('pay_date'); // Filtrar onde pay_date é nulo
         $countOpneAccountsPayable = $opneAccountsPayable->count();
         $sumOpneAccountsPayable = $opneAccountsPayable->sum('value');
 
-        $closeAccountsPayable->whereNotNull('pay_date');
+        $closeAccountsPayable = clone $accountsPayable; // Clonando para evitar modificar $accountsPayable
+        $closeAccountsPayable->whereNotNull('pay_date'); // Filtrar onde pay_date não é nulo
         $countCloseAccountsPayable = $closeAccountsPayable->count();
         $sumCloseAccountsPayable = $closeAccountsPayable->sum('amount');
 
-        echo $closeAccountsPayable->toSql();
-        die;
+
+
+        $accountsReceivable = FinancialTransactions::where('type', '=', 'r')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'));
+        $opneAccountsReceivable = clone $accountsReceivable; // Clonando para evitar modificar $accountsReceivable
+        $opneAccountsReceivable->whereNull('pay_date'); // Filtrar onde pay_date é nulo
+        $countOpneAccountsReceivable = $opneAccountsReceivable->count();
+        $sumOpneAccountsReceivable = $opneAccountsReceivable->sum('value');
+
+        $closeAccountsReceivable = clone $accountsReceivable; // Clonando para evitar modificar $accountsReceivable
+        $closeAccountsReceivable->whereNotNull('pay_date'); // Filtrar onde pay_date não é nulo
+        $countCloseAccountsReceivable = $closeAccountsReceivable->count();
+        $sumCloseAccountsReceivable = $closeAccountsReceivable->sum('amount');
+
+        $balance = ($sumCloseAccountsReceivable - $sumCloseAccountsPayable);
+
+
+
 
         return view('dashboard', [
             'countOpneAccountsPayable' => $countOpneAccountsPayable,
             'sumOpneAccountsPayable' => $sumOpneAccountsPayable,
             'countCloseAccountsPayable' => $countCloseAccountsPayable,
-            'sumCloseAccountsPayable' => $sumCloseAccountsPayable
+            'sumCloseAccountsPayable' => $sumCloseAccountsPayable,
+            'countOpneAccountsReceivable' => $countOpneAccountsReceivable,
+            'sumOpneAccountsReceivable' => $sumOpneAccountsReceivable,
+            'countCloseAccountsReceivable' => $countCloseAccountsReceivable,
+            'sumCloseAccountsReceivable' => $sumCloseAccountsReceivable,
+            'balance' => $balance
         ]);
     }
 
