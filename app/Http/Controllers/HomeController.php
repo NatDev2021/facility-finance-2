@@ -34,9 +34,26 @@ class HomeController extends Controller
     public function dashboard()
     {
 
-       
+        $accountsPayable = FinancialTransactions::where('type', '=', 'p')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'));
 
-        return view('dashboard');
+        $opneAccountsPayable = $closeAccountsPayable = $accountsPayable;
+        $opneAccountsPayable->whereNull('pay_date');
+        $countOpneAccountsPayable = $opneAccountsPayable->count();
+        $sumOpneAccountsPayable = $opneAccountsPayable->sum('value');
+
+        $closeAccountsPayable->whereNotNull('pay_date');
+        $countCloseAccountsPayable = $closeAccountsPayable->count();
+        $sumCloseAccountsPayable = $closeAccountsPayable->sum('amount');
+
+        echo $closeAccountsPayable->toSql();
+        die;
+
+        return view('dashboard', [
+            'countOpneAccountsPayable' => $countOpneAccountsPayable,
+            'sumOpneAccountsPayable' => $sumOpneAccountsPayable,
+            'countCloseAccountsPayable' => $countCloseAccountsPayable,
+            'sumCloseAccountsPayable' => $sumCloseAccountsPayable
+        ]);
     }
 
     public function person()
@@ -403,7 +420,7 @@ class HomeController extends Controller
             ->orWhere('provider.id', '!=', null)
             ->groupBy('person.id')
             ->get();
- 
+
         return view('integration.finne.finne', [
             'person' => $person
         ]);
