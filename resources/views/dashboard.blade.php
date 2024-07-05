@@ -18,7 +18,7 @@
                             <div class="icon">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
                             </div>
-                            <a href="/loans" class="small-box-footer">Mais detalhes <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="/accounts_receivable?status=o" class="small-box-footer">Mais detalhes <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -31,7 +31,7 @@
                             <div class="icon">
                                 <i class="fa-solid fa-arrow-down-to-line"></i>
                             </div>
-                            <a href="/financial_movement" class="small-box-footer">Mais detalhes <i
+                            <a href="/accounts_receivable?status=p" class="small-box-footer">Mais detalhes <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                             <div class="icon">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
                             </div>
-                            <a href="/loans" class="small-box-footer">Mais detalhes <i
+                            <a href="/accounts_payable?status=o" class="small-box-footer">Mais detalhes <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                             <div class="icon">
                                 <i class="fa-solid fa-arrow-up-to-line"></i>
                             </div>
-                            <a href="/financial_movement" class="small-box-footer">Mais detalhes <i
+                            <a href="/accounts_payable?status=p" class="small-box-footer">Mais detalhes <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>

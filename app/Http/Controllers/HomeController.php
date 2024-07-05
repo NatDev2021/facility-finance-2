@@ -34,7 +34,10 @@ class HomeController extends Controller
     public function dashboard()
     {
 
-        $accountsPayable = FinancialTransactions::where('type', '=', 'p')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'));
+        $accountsPayable = FinancialTransactions::select('financial_transactions.*')->where('type', '=', 'p')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'))
+        ->join('provider', 'financial_transactions.customer_provider_id', '=', 'provider.id')
+        ->join('person', 'provider.person_id', '=', 'person.id');
+
         $opneAccountsPayable = clone $accountsPayable; // Clonando para evitar modificar $accountsPayable
         $opneAccountsPayable->whereNull('pay_date'); // Filtrar onde pay_date é nulo
         $countOpneAccountsPayable = $opneAccountsPayable->count();
@@ -47,7 +50,9 @@ class HomeController extends Controller
 
 
 
-        $accountsReceivable = FinancialTransactions::where('type', '=', 'r')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'));
+        $accountsReceivable = FinancialTransactions::select('financial_transactions.*')->where('type', '=', 'r')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'))
+        ->join('customer', 'financial_transactions.customer_provider_id', '=', 'customer.id')
+        ->join('person', 'customer.person_id', '=', 'person.id');
         $opneAccountsReceivable = clone $accountsReceivable; // Clonando para evitar modificar $accountsReceivable
         $opneAccountsReceivable->whereNull('pay_date'); // Filtrar onde pay_date é nulo
         $countOpneAccountsReceivable = $opneAccountsReceivable->count();
