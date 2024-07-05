@@ -34,12 +34,12 @@ class HomeController extends Controller
     public function dashboard()
     {
 
-        $accountsPayable = FinancialTransactions::select('financial_transactions.*')->where('type', '=', 'p')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'))
-        ->join('provider', 'financial_transactions.customer_provider_id', '=', 'provider.id')
-        ->join('person', 'provider.person_id', '=', 'person.id');
+        $accountsPayable = FinancialTransactions::select('financial_transactions.*', DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'),)->where('type', '=', 'p')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'))
+            ->join('provider', 'financial_transactions.customer_provider_id', '=', 'provider.id')
+            ->join('person', 'provider.person_id', '=', 'person.id');
 
         $opneAccountsPayable = clone $accountsPayable; // Clonando para evitar modificar $accountsPayable
-        $opneAccountsPayable->whereNull('pay_date'); // Filtrar onde pay_date é nulo
+        $teste = $opneAccountsPayable->whereNull('pay_date'); // Filtrar onde pay_date é nulo
         $countOpneAccountsPayable = $opneAccountsPayable->count();
         $sumOpneAccountsPayable = $opneAccountsPayable->sum('value');
 
@@ -51,8 +51,8 @@ class HomeController extends Controller
 
 
         $accountsReceivable = FinancialTransactions::select('financial_transactions.*')->where('type', '=', 'r')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'))
-        ->join('customer', 'financial_transactions.customer_provider_id', '=', 'customer.id')
-        ->join('person', 'customer.person_id', '=', 'person.id');
+            ->join('customer', 'financial_transactions.customer_provider_id', '=', 'customer.id')
+            ->join('person', 'customer.person_id', '=', 'person.id');
         $opneAccountsReceivable = clone $accountsReceivable; // Clonando para evitar modificar $accountsReceivable
         $opneAccountsReceivable->whereNull('pay_date'); // Filtrar onde pay_date é nulo
         $countOpneAccountsReceivable = $opneAccountsReceivable->count();
@@ -65,8 +65,37 @@ class HomeController extends Controller
 
         $balance = ($sumCloseAccountsReceivable - $sumCloseAccountsPayable);
 
+        $opneAccountsReceivable = $opneAccountsReceivable->get();
+
+        foreach ($opneAccountsReceivable as &$item) {
+            if (!empty($item['pay_date'])) {
+                $item['status'] = [
+                    'message' => 'Pago',
+                    'color' => '#a8f0cb'
+                ];
+            } else {
+                if ($item['date_diff_payment'] > 0) {
+                    $item['status'] = [
+                        'message' => 'Vence em ' . $item['date_diff_payment'] . ' dias.',
+                        'color' => '#a8c0f0'
+                    ];
+                } else if ($item['date_diff_payment'] < 0) {
+                    $item['status'] = [
+                        'message' => 'Venceu há ' . abs($item['date_diff_payment']) . ' dias.',
+                        'color' => '#f0a8a8'
+                    ];
+                } else {
+                    $item['status'] = [
+                        'message' => 'Vence Hoje.',
+                        'color' => '#eff0a8;
+                        '
+                    ];
+                }
+            }
+        }
 
 
+        dd($opneAccountsReceivable);die;
 
         return view('dashboard', [
             'countOpneAccountsPayable' => $countOpneAccountsPayable,
