@@ -234,7 +234,31 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($overDuePayables as $item)
+                                        <tr>
+                                            <td id="id">{{ $item->id }}</td>
+                                            <td class="text-center text-danger">{{ $item->provider ?? '' }}</td>
+                                            <td class="text-center"><span class="badge"
+                                                    style="background-color: {{ $item->status['color'] }};">{{ $item->status['message'] }}</span>
+                                            </td>
+                                            <td class="text-center text-danger">
+                                                {{ Helper::formatBrazilianNumber($item->amount ?? '') }}
+                                            </td>
 
+                                            <td>
+                                                <div class="d-flex justify-content-end">
+                                                    <a id="edit_accounting_financial" class="text-muted mr-3"
+                                                        style="cursor: pointer;" title="Editar"
+                                                        href="accounts_receivable/edit/{{ $item->id }}">
+                                                        <i class="fas fa-search"></i>
+                                                    </a>
+
+                                                </div>
+
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
