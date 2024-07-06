@@ -268,31 +268,10 @@
                 </div>
 
                 <div class="col-md-12">
-                    <x-adminlte-card title="Análise de Desempenho:" theme="dark"
-                        icon="fa-solid  fa-chart-pie-simple-circle-dollar"></i>">
-                        <div class="d-flex justify-content-center">
-                            <div class="chartjs-size-monitor">
-                                <div class="chartjs-size-monitor-expand">
-                                    <div class=""></div>
-                                </div>
-                                <div class="chartjs-size-monitor-shrink">
-                                    <div class=""></div>
-                                </div>
-                            </div>
-                            <canvas id="donutChart"
-                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; width: 321px;"
-                                width="321" height="250" class="chartjs-render-monitor"></canvas>
-                        </div>
-
-
-                    </x-adminlte-card>
-
-                </div>
-                @can('is_admin')
-                    <div class="col-md-12">
-                        <x-adminlte-card title="Balanço anual" theme="dark"
-                            icon="fa-solid fa-chart-mixed-up-circle-dollar">
-                            <div class="chart">
+                    <x-adminlte-card title="Análise de Desempenho" theme="dark"
+                        icon="fa-solid fa-chart-pie-simple-circle-dollar">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-center">
                                 <div class="chartjs-size-monitor">
                                     <div class="chartjs-size-monitor-expand">
                                         <div class=""></div>
@@ -301,14 +280,78 @@
                                         <div class=""></div>
                                     </div>
                                 </div>
-                                <canvas id="barChart"
-                                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 321px;"
+                                <canvas id="donutChart1"
+                                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; width: 321px;"
                                     width="321" height="250" class="chartjs-render-monitor"></canvas>
                             </div>
-                        </x-adminlte-card>
+                            <div class="d-flex justify-content-center">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <canvas id="donutChart2"
+                                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; width: 321px;"
+                                    width="321" height="250" class="chartjs-render-monitor"></canvas>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <canvas id="donutChart3"
+                                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; width: 321px;"
+                                    width="321" height="250" class="chartjs-render-monitor"></canvas>
+                            </div>
+                        </div>
 
-                    </div>
-                @endcan
+                    </x-adminlte-card>
+
+                </div>
+                <div class="col-md-12">
+                    <x-adminlte-card title="Balanço anual" theme="dark" icon="fa-solid fa-chart-simple">
+                        <div class="chart">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas id="barChart"
+                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 321px;"
+                                width="321" height="250" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </x-adminlte-card>
+
+                </div>
+
+                <div class="col-md-12">
+                    <x-adminlte-card title="Previsão Futura" theme="dark" icon="fa-solid fa-chart-mixed-up-circle-dollar">
+                        <div class="chart">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas id="barChart"
+                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 321px;"
+                                width="321" height="250" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </x-adminlte-card>
+
+                </div>
 
 
             </div>
@@ -319,5 +362,52 @@
 @stop
 
 @push('js')
-    <script></script>
+    <script>
+        $(document).ready(function() {
+
+
+
+            //-------------
+            //- DONUT CHART -
+            //-------------
+            // Get context with jQuery - using jQuery's .get() method.
+            var donutChartCanvas1 = $('#donutChart1').get(0).getContext('2d')
+            var donutChartCanvas2 = $('#donutChart2').get(0).getContext('2d')
+            var donutChartCanvas3 = $('#donutChart3').get(0).getContext('2d')
+
+            var teste = {!! json_encode($teste, JSON_HEX_TAG) !!};
+            var donutData = {
+                labels: arrayColumn(teste, 'description'),
+                datasets: [{
+                    data: arrayColumn(teste, 'count'),
+                    backgroundColor: arrayColumn(teste, 'color'),
+                }]
+            }
+            var donutOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+            }
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            new Chart(donutChartCanvas1, {
+                type: 'doughnut',
+                data: donutData,
+                options: donutOptions
+            })
+
+            new Chart(donutChartCanvas2, {
+                type: 'doughnut',
+                data: donutData,
+                options: donutOptions
+            })
+            new Chart(donutChartCanvas3, {
+                type: 'doughnut',
+                data: donutData,
+                options: donutOptions
+            })
+
+
+
+        });
+    </script>
 @endpush

@@ -90,10 +90,6 @@ class HomeController extends Controller
         }
 
 
-
-
-
-
         $accountsReceivable = FinancialTransactions::select('financial_transactions.*', DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'), 'person.name as customer')->where('type', '=', 'r')
             ->join('customer', 'financial_transactions.customer_provider_id', '=', 'customer.id')
             ->join('person', 'customer.person_id', '=', 'person.id');
@@ -147,6 +143,18 @@ class HomeController extends Controller
             }
         }
 
+        $teste = [
+            [
+                'count' => $countOpneAccountsReceivable,
+                'description' => 'Contas a Receber',
+                'color' => ' #28A745'
+            ],
+            [
+                'count' => $countOpneAccountsPayable,
+                'description' => 'Contas a Pagar',
+                'color' => ' #DC3545'
+            ]
+        ];
 
 
 
@@ -165,7 +173,8 @@ class HomeController extends Controller
             'payables' => $payables,
             'overDuePayables' => $overDuePayables,
             'receivables' => $receivables,
-            'overDueReceivables' => $overDueReceivables
+            'overDueReceivables' => $overDueReceivables,
+            'teste' => $teste
         ]);
     }
 
