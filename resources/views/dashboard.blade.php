@@ -367,7 +367,14 @@
         $(document).ready(function() {
 
 
+            donutChartCanvas();
+            areaChartCanvas();
 
+        });
+
+
+
+        function donutChartCanvas() {
             //-------------
             //- DONUT CHART -
             //-------------
@@ -421,8 +428,77 @@
                 options: donutOptions
             })
 
+        }
+
+        function areaChartCanvas() {
+
+            var areaChartData = {
+                labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto',
+                    'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                ],
+                datasets: [{
+                        label: 'Saída',
+                        backgroundColor: 'rgba(220, 53, 69, 1)',
+                        borderColor: 'rgba(220, 53, 69, 1)',
+                        pointRadius: false,
+                        pointColor: '#dc3545',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                        data: {!! json_encode($monthlyPayable, JSON_HEX_TAG) !!}
+                    },
+                    {
+                        label: 'Entrada',
+                        backgroundColor: 'rgba(40, 167, 69, 1)',
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        pointRadius: false,
+                        pointColor: 'rgba(210, 214, 222, 1)',
+                        pointStrokeColor: '#28a745',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(220,220,220,1)',
+                        data: {!! json_encode($monthlyReceivable, JSON_HEX_TAG) !!}
+                    },
+                ]
+            }
 
 
-        });
+            //-------------
+            //- BAR CHART -
+            //-------------
+            var barChartCanvas = $('#barChart').get(0).getContext('2d')
+            var barChartData = $.extend(true, {}, areaChartData)
+            var temp0 = areaChartData.datasets[0]
+            var temp1 = areaChartData.datasets[1]
+            barChartData.datasets[0] = temp1
+            barChartData.datasets[1] = temp0
+
+            var barChartOptions = {
+                locale: 'br-BR',
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return new Intl.NumberFormat('br-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                    maximumSignificantDigits: 3
+                                }).format(value);
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                datasetFill: false,
+            }
+
+            new Chart(barChartCanvas, {
+                type: 'bar',
+                data: barChartData,
+                options: barChartOptions
+            })
+
+        }
     </script>
 @endpush

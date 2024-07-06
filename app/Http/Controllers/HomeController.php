@@ -51,7 +51,7 @@ class HomeController extends Controller
 
 
 
-        $opneAccountsPayable = $opneAccountsPayable->paginate(5);
+        $opneAccountsPayable = $opneAccountsPayable->orderBy('due_date', 'asc')->paginate(5);
         $payables = [];
         $overDuePayables = [];
 
@@ -105,7 +105,7 @@ class HomeController extends Controller
 
         $balance = ($sumCloseAccountsReceivable - $sumCloseAccountsPayable);
 
-        $opneAccountsReceivable = $opneAccountsReceivable->paginate(5);
+        $opneAccountsReceivable = $opneAccountsReceivable->orderBy('due_date', 'asc')->paginate(5);
         $receivables = [];
         $overDueReceivables = [];
 
@@ -184,7 +184,27 @@ class HomeController extends Controller
             ]
         ];
 
+        $monthlyPayable = array_fill(0, 12, 0);
+        $monthlyReceivable = array_fill(0, 12, 0);
 
+        $anualBalance = FinancialTransactions::select(
+            DB::raw('YEAR(pay_date) as year'),
+            DB::raw('MONTH(pay_date) as month'),
+            DB::raw('SUM(CASE WHEN type = "p" THEN amount ELSE 0 END) as total_payable'),
+            DB::raw('SUM(CASE WHEN type = "r" THEN amount ELSE 0 END) as total_receivable')
+
+        )
+            ->whereNotNull('pay_date')
+            ->whereYear('pay_date', date('Y'))
+            ->groupBy(DB::raw('YEAR(pay_date), MONTH(pay_date)'))
+            ->get();
+
+
+        foreach ($anualBalance as $item) {
+            $month = $item->month - 1; // Ajuste do índice do mês (1 a 12 para 0 a 11)
+            $monthlyPayable[$month] = $item->total_payable;
+            $monthlyReceivable[$month] = $item->total_receivable;
+        }
 
         return view('dashboard', [
             'countOpneAccountsPayable' => $countOpneAccountsPayable,
@@ -202,7 +222,9 @@ class HomeController extends Controller
             'overDueReceivables' => $overDueReceivables,
             'donutChartCanvas1' => $donutChartCanvas1,
             'donutChartCanvas2' => $donutChartCanvas2,
-            'donutChartCanvas3' => $donutChartCanvas3
+            'donutChartCanvas3' => $donutChartCanvas3,
+            'monthlyPayable' => $monthlyPayable,
+            'monthlyReceivable' => $monthlyReceivable
         ]);
     }
 
