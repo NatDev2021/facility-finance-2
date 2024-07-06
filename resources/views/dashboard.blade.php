@@ -346,9 +346,9 @@
                                     <div class=""></div>
                                 </div>
                             </div>
-                            <canvas id="barChart"
-                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 321px;"
-                                width="321" height="250" class="chartjs-render-monitor"></canvas>
+                            <canvas id="lineChart"
+                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 384px;"
+                                width="384" height="250" class="chartjs-render-monitor"></canvas>
                         </div>
                     </x-adminlte-card>
 
@@ -369,6 +369,7 @@
 
             donutChartCanvas();
             areaChartCanvas();
+            lineChartCanvas();
 
         });
 
@@ -499,6 +500,23 @@
                 options: barChartOptions
             })
 
+        }
+
+        function lineChartCanvas() {
+
+            var data = [{
+                x: 10,
+                y: 20
+            }, {
+                x: 15,
+                y: 10
+            }];
+            var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+            var myLineChart = new Chart(lineChartCanvas, {
+                type: 'line',
+                data: data,
+                // options: options
+            });
         }
     </script>
 @endpush
