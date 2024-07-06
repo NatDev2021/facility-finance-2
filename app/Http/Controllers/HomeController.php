@@ -143,20 +143,46 @@ class HomeController extends Controller
             }
         }
 
-        $teste = [
+        $donutChartCanvas1 = [
             [
-                'count' => $countOpneAccountsReceivable,
+                'sum' => $sumOpneAccountsReceivable,
                 'description' => 'Contas a Receber',
-                'color' => ' #28A745'
+                'color' => ' #17a2b8'
             ],
             [
-                'count' => $countOpneAccountsPayable,
+                'sum' => $sumCloseAccountsReceivable,
+                'description' => 'Contas Liquidadas',
+                'color' => ' #28A745'
+            ]
+        ];
+
+
+        $donutChartCanvas2 = [
+            [
+                'sum' => $sumOpneAccountsPayable,
                 'description' => 'Contas a Pagar',
+                'color' => ' #17a2b8'
+            ],
+            [
+                'sum' => $sumCloseAccountsPayable,
+                'description' => 'Contas Pagas',
                 'color' => ' #DC3545'
             ]
         ];
 
 
+        $donutChartCanvas3 = [
+            [
+                'sum' => $sumCloseAccountsPayable,
+                'description' => 'Contas Pagas',
+                'color' => ' #DC3545'
+            ],
+            [
+                'sum' => $sumCloseAccountsReceivable,
+                'description' => 'Contas Recebidas',
+                'color' => ' #28A745'
+            ]
+        ];
 
 
 
@@ -174,7 +200,9 @@ class HomeController extends Controller
             'overDuePayables' => $overDuePayables,
             'receivables' => $receivables,
             'overDueReceivables' => $overDueReceivables,
-            'teste' => $teste
+            'donutChartCanvas1' => $donutChartCanvas1,
+            'donutChartCanvas2' => $donutChartCanvas2,
+            'donutChartCanvas3' => $donutChartCanvas3
         ]);
     }
 

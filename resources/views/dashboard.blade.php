@@ -335,7 +335,8 @@
                 </div>
 
                 <div class="col-md-12">
-                    <x-adminlte-card title="Previsão Futura" theme="dark" icon="fa-solid fa-chart-mixed-up-circle-dollar">
+                    <x-adminlte-card title="Previsão Futura" theme="dark"
+                        icon="fa-solid fa-chart-mixed-up-circle-dollar">
                         <div class="chart">
                             <div class="chartjs-size-monitor">
                                 <div class="chartjs-size-monitor-expand">
@@ -375,14 +376,10 @@
             var donutChartCanvas2 = $('#donutChart2').get(0).getContext('2d')
             var donutChartCanvas3 = $('#donutChart3').get(0).getContext('2d')
 
-            var teste = {!! json_encode($teste, JSON_HEX_TAG) !!};
-            var donutData = {
-                labels: arrayColumn(teste, 'description'),
-                datasets: [{
-                    data: arrayColumn(teste, 'count'),
-                    backgroundColor: arrayColumn(teste, 'color'),
-                }]
-            }
+            var data1 = {!! json_encode($donutChartCanvas1, JSON_HEX_TAG) !!};
+            var data2 = {!! json_encode($donutChartCanvas2, JSON_HEX_TAG) !!};
+            var data3 = {!! json_encode($donutChartCanvas3, JSON_HEX_TAG) !!};
+
             var donutOptions = {
                 maintainAspectRatio: false,
                 responsive: true,
@@ -391,18 +388,36 @@
             // You can switch between pie and douhnut using the method below.
             new Chart(donutChartCanvas1, {
                 type: 'doughnut',
-                data: donutData,
+                data: {
+                    labels: arrayColumn(data1, 'description'),
+                    datasets: [{
+                        data: arrayColumn(data1, 'sum'),
+                        backgroundColor: arrayColumn(data1, 'color'),
+                    }]
+                },
                 options: donutOptions
             })
 
             new Chart(donutChartCanvas2, {
                 type: 'doughnut',
-                data: donutData,
+                data: {
+                    labels: arrayColumn(data2, 'description'),
+                    datasets: [{
+                        data: arrayColumn(data2, 'sum'),
+                        backgroundColor: arrayColumn(data2, 'color'),
+                    }]
+                },
                 options: donutOptions
             })
             new Chart(donutChartCanvas3, {
                 type: 'doughnut',
-                data: donutData,
+                data: {
+                    labels: arrayColumn(data3, 'description'),
+                    datasets: [{
+                        data: arrayColumn(data3, 'sum'),
+                        backgroundColor: arrayColumn(data3, 'color'),
+                    }]
+                },
                 options: donutOptions
             })
 
