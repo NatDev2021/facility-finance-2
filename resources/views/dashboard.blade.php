@@ -18,7 +18,8 @@
                             <div class="icon">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
                             </div>
-                            <a href="/accounts_receivable?status=o" class="small-box-footer">Mais detalhes <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="/accounts_receivable?status=o" class="small-box-footer">Mais detalhes <i
+                                    class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -51,7 +52,7 @@
                     <div class="col-lg col-6">
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3>R$ {{  Helper::formatBrazilianNumber($sumCloseAccountsPayable?? '') }}</h3>
+                                <h3>R$ {{ Helper::formatBrazilianNumber($sumCloseAccountsPayable ?? '') }}</h3>
                                 <p>Pagos: <strong>{{ $countCloseAccountsPayable }}</strong></p>
                             </div>
                             <div class="icon">
@@ -64,7 +65,7 @@
                     <div class="col-lg col-6">
                         <div class="small-box bg-warning">
                             <div class="inner">
-                                <h3>R$ {{  Helper::formatBrazilianNumber($balance?? '') }}</h3>
+                                <h3>R$ {{ Helper::formatBrazilianNumber($balance ?? '') }}</h3>
                                 <p>Balanço</p>
                             </div>
                             <div class="icon">
@@ -80,50 +81,6 @@
             <div class="row">
 
                 <div class="col-md-6">
-                    <x-adminlte-card title="Contas a Pagar - A vencer" theme="dark" icon="fa-solid fa-arrow-up-to-line">
-                        <div class="card-body table-responsive p-0">
-                            <table id="loans_table" class="table table-striped table-valign-middle ">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th class="text-center">Fornecedor</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Vencimeto</th>
-                                        <th class="text-center">Valor</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </x-adminlte-card>
-
-                </div>
-                <div class="col-md-6">
-                    <x-adminlte-card title="Contas a Pagar - Em Atraso" theme="dark" icon="fa-solid fa-arrow-up-to-line">
-                        <div class="card-body table-responsive p-0">
-                            <table id="loans_table" class="table table-striped table-valign-middle ">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th class="text-center">Fornecedor</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Vencimeto</th>
-                                        <th class="text-center">Valor</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </x-adminlte-card>
-
-                </div>
-                <div class="col-md-6">
                     <x-adminlte-card title="Contas a Receber - A vencer" theme="dark"
                         icon="fa-solid fa-arrow-down-to-line">
                         <div class="card-body table-responsive p-0">
@@ -133,17 +90,40 @@
                                         <th>#</th>
                                         <th class="text-center">Cliente</th>
                                         <th class="text-center">Status</th>
-                                        <th class="text-center">Vencimeto</th>
                                         <th class="text-center">Valor</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
+                                    @foreach ($receivables as $item)
+                                        <tr>
+                                            <td id="id">{{ $item->id }}</td>
+                                            <td class="text-center">{{ $item->customer ?? '' }}</td>
+                                            <td class="text-center"><span class="badge"
+                                                    style="background-color: {{ $item->status['color'] }};">{{ $item->status['message'] }}</span>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ Helper::formatBrazilianNumber($item->amount ?? '') }}
+                                            </td>
+
+                                            <td>
+                                                <div class="d-flex justify-content-end">
+                                                    <a id="edit_accounting_financial" class="text-muted mr-3"
+                                                        style="cursor: pointer;" title="Editar"
+                                                        href="accounts_receivable/edit/{{ $item->id }}">
+                                                        <i class="fas fa-search"></i>
+                                                    </a>
+
+                                                </div>
+
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
-
                     </x-adminlte-card>
 
                 </div>
@@ -157,7 +137,98 @@
                                         <th>#</th>
                                         <th class="text-center">Cliente</th>
                                         <th class="text-center">Status</th>
-                                        <th class="text-center">Vencimeto</th>
+                                        <th class="text-center">Valor</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($overDueReceivables as $item)
+                                        <tr>
+                                            <td id="id">{{ $item->id }}</td>
+                                            <td class="text-center text-danger">{{ $item->customer ?? '' }}</td>
+                                            <td class="text-center"><span class="badge"
+                                                    style="background-color: {{ $item->status['color'] }};">{{ $item->status['message'] }}</span>
+                                            </td>
+                                            <td class="text-center text-danger">
+                                                {{ Helper::formatBrazilianNumber($item->amount ?? '') }}
+                                            </td>
+
+                                            <td>
+                                                <div class="d-flex justify-content-end">
+                                                    <a id="edit_accounting_financial" class="text-muted mr-3"
+                                                        style="cursor: pointer;" title="Editar"
+                                                        href="accounts_receivable/edit/{{ $item->id }}">
+                                                        <i class="fas fa-search"></i>
+                                                    </a>
+
+                                                </div>
+
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </x-adminlte-card>
+
+                </div>
+                <div class="col-md-6">
+                    <x-adminlte-card title="Contas a Pagar - A vencer" theme="dark" icon="fa-solid fa-arrow-up-to-line">
+                        <div class="card-body table-responsive p-0">
+                            <table id="loans_table" class="table table-striped table-valign-middle ">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th class="text-center">Fornecedor</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Valor</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($payables as $item)
+                                        <tr>
+                                            <td id="id">{{ $item->id }}</td>
+                                            <td class="text-center">{{ $item->provider ?? '' }}</td>
+                                            <td class="text-center"><span class="badge"
+                                                    style="background-color: {{ $item->status['color'] }};">{{ $item->status['message'] }}</span>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ Helper::formatBrazilianNumber($item->amount ?? '') }}
+                                            </td>
+
+                                            <td>
+                                                <div class="d-flex justify-content-end">
+                                                    <a id="edit_accounting_financial" class="text-muted mr-3"
+                                                        style="cursor: pointer;" title="Editar"
+                                                        href="accounts_receivable/edit/{{ $item->id }}">
+                                                        <i class="fas fa-search"></i>
+                                                    </a>
+
+                                                </div>
+
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </x-adminlte-card>
+
+                </div>
+                <div class="col-md-6">
+                    <x-adminlte-card title="Contas a Pagar - Em Atraso" theme="dark"
+                        icon="fa-solid fa-arrow-up-to-line">
+                        <div class="card-body table-responsive p-0">
+                            <table id="loans_table" class="table table-striped table-valign-middle ">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th class="text-center">Fornecedor</th>
+                                        <th class="text-center">Status</th>
                                         <th class="text-center">Valor</th>
                                         <th></th>
                                     </tr>

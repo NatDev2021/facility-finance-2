@@ -34,12 +34,12 @@ class HomeController extends Controller
     public function dashboard()
     {
 
-        $accountsPayable = FinancialTransactions::select('financial_transactions.*', DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'),)->where('type', '=', 'p')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'))
+        $accountsPayable = FinancialTransactions::select('financial_transactions.*', DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'), 'person.name as provider')->where('type', '=', 'p')
             ->join('provider', 'financial_transactions.customer_provider_id', '=', 'provider.id')
             ->join('person', 'provider.person_id', '=', 'person.id');
 
         $opneAccountsPayable = clone $accountsPayable; // Clonando para evitar modificar $accountsPayable
-        $teste = $opneAccountsPayable->whereNull('pay_date'); // Filtrar onde pay_date é nulo
+        $opneAccountsPayable->whereNull('pay_date'); // Filtrar onde pay_date é nulo
         $countOpneAccountsPayable = $opneAccountsPayable->count();
         $sumOpneAccountsPayable = $opneAccountsPayable->sum('value');
 
@@ -50,7 +50,51 @@ class HomeController extends Controller
 
 
 
-        $accountsReceivable = FinancialTransactions::select('financial_transactions.*')->where('type', '=', 'r')->whereMonth('due_date', date('m'))->groupBy(DB::raw('YEAR(due_date), MONTH(due_date)'))
+
+        $opneAccountsPayable = $opneAccountsPayable->paginate(5);
+        $payables = [];
+        $overDuePayables = [];
+
+        foreach ($opneAccountsPayable as &$item) {
+            if (!empty($item['pay_date'])) {
+                $item['status'] = [
+                    'message' => 'Pago',
+                    'color' => '#a8f0cb'
+                ];
+            } else {
+                if ($item['date_diff_payment'] > 0) {
+                    $item['status'] = [
+                        'message' => 'Vence em ' . $item['date_diff_payment'] . ' dias.',
+                        'color' => '#a8c0f0'
+                    ];
+                } else if ($item['date_diff_payment'] < 0) {
+                    $item['status'] = [
+                        'message' => 'Venceu há ' . abs($item['date_diff_payment']) . ' dias.',
+                        'color' => '#f0a8a8'
+                    ];
+                } else {
+                    $item['status'] = [
+                        'message' => 'Vence Hoje.',
+                        'color' => '#eff0a8;
+                        '
+                    ];
+                }
+            }
+
+
+            if ($item['due_date'] >= date('Y-m-d')) {
+                $payables[] = $item;
+            } else {
+                $overDuePayables[] = $item;
+            }
+        }
+
+
+
+
+
+
+        $accountsReceivable = FinancialTransactions::select('financial_transactions.*', DB::raw('DATEDIFF(financial_transactions.due_date, NOW()) as date_diff_payment'), 'person.name as customer')->where('type', '=', 'r')
             ->join('customer', 'financial_transactions.customer_provider_id', '=', 'customer.id')
             ->join('person', 'customer.person_id', '=', 'person.id');
         $opneAccountsReceivable = clone $accountsReceivable; // Clonando para evitar modificar $accountsReceivable
@@ -65,7 +109,9 @@ class HomeController extends Controller
 
         $balance = ($sumCloseAccountsReceivable - $sumCloseAccountsPayable);
 
-        $opneAccountsReceivable = $opneAccountsReceivable->get();
+        $opneAccountsReceivable = $opneAccountsReceivable->paginate(5);
+        $receivables = [];
+        $overDueReceivables = [];
 
         foreach ($opneAccountsReceivable as &$item) {
             if (!empty($item['pay_date'])) {
@@ -92,10 +138,19 @@ class HomeController extends Controller
                     ];
                 }
             }
+
+
+            if ($item['due_date'] >= date('Y-m-d')) {
+                $receivables[] = $item;
+            } else {
+                $overDueReceivables[] = $item;
+            }
         }
 
 
-        dd($opneAccountsReceivable);die;
+
+
+
 
         return view('dashboard', [
             'countOpneAccountsPayable' => $countOpneAccountsPayable,
@@ -106,7 +161,11 @@ class HomeController extends Controller
             'sumOpneAccountsReceivable' => $sumOpneAccountsReceivable,
             'countCloseAccountsReceivable' => $countCloseAccountsReceivable,
             'sumCloseAccountsReceivable' => $sumCloseAccountsReceivable,
-            'balance' => $balance
+            'balance' => $balance,
+            'payables' => $payables,
+            'overDuePayables' => $overDuePayables,
+            'receivables' => $receivables,
+            'overDueReceivables' => $overDueReceivables
         ]);
     }
 
