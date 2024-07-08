@@ -504,13 +504,19 @@
 
         function lineChartCanvas() {
 
-            var data = [{
-                x: 10,
-                y: 20
-            }, {
-                x: 15,
-                y: 10
-            }];
+
+            const data = {
+                labels:  ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto',
+                    'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                ],
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            };
             var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
             var myLineChart = new Chart(lineChartCanvas, {
                 type: 'line',
