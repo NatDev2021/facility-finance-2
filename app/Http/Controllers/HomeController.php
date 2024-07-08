@@ -224,7 +224,10 @@ class HomeController extends Controller
             'donutChartCanvas2' => $donutChartCanvas2,
             'donutChartCanvas3' => $donutChartCanvas3,
             'monthlyPayable' => $monthlyPayable,
-            'monthlyReceivable' => $monthlyReceivable
+            'monthlyReceivable' => $monthlyReceivable,
+            'lineChartCanvas' => [
+                'label' => Helper::getMonthsFromCurrentMonth()
+            ]
         ]);
     }
 

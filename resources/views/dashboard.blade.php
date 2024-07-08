@@ -346,9 +346,7 @@
                                     <div class=""></div>
                                 </div>
                             </div>
-                            <canvas id="lineChart"
-                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 384px;"
-                                width="384" height="250" class="chartjs-render-monitor"></canvas>
+                            <canvas id="lineChart"  width="380" height="100" class="chartjs-render-monitor"></canvas>
                         </div>
                     </x-adminlte-card>
 
@@ -504,18 +502,25 @@
 
         function lineChartCanvas() {
 
+            let lineChartData = {!! json_encode($lineChartCanvas, JSON_HEX_TAG) !!}
 
             const data = {
-                labels:  ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto',
-                    'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-                ],
+                labels: lineChartData.label,
                 datasets: [{
-                    label: 'My First Dataset',
+                    label: 'Contas a Pagar',
                     data: [65, 59, 80, 81, 56, 55, 40],
                     fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
+                    borderColor: '#dc3545',
                     tension: 0.1
-                }]
+                },
+                {
+                    label: 'Contas a Receber',
+                    data: [70, 65, 70, 65, 60, 55, 50],
+                    fill: false,
+                    borderColor: '#28a745',
+                    tension: 0.1
+                }
+            ]
             };
             var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
             var myLineChart = new Chart(lineChartCanvas, {

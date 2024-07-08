@@ -185,4 +185,49 @@ class Helper
 
         return true;
     }
+
+    public static function getMonthsFromCurrentMonth()
+    {
+        // Set the timezone
+        date_default_timezone_set('America/Sao_Paulo');
+
+        // Get current year and month
+        $current_year = date('Y');
+        $current_month = date('n');
+
+        // Define the next year
+        $next_year = $current_year + 1;
+
+        // Array with month names
+        $month_names = [
+            1 => 'Janeiro', 
+            2 => 'Fevereiro', 
+            3 => 'Março', 
+            4 => 'Abril', 
+            5 => 'Maio', 
+            6 => 'Junho', 
+            7 => 'Julho', 
+            8 => 'Agosto', 
+            9 => 'Setembro', 
+            10 => 'Outubro', 
+            11 => 'Novembro', 
+            12 => 'Dezembro'
+        ];
+
+        // Initialize an array to store the months
+        $months = [];
+
+        // Loop to add months to the array
+        for ($month = $current_month; $month <= 12; $month++) {
+            $months[] = $month_names[$month];
+        }
+
+        // Add months from January to current month of next year
+        for ($month = 1; $month <= $current_month; $month++) {
+            $months[] = $month_names[$month];
+        }
+
+        // Return the array of months
+        return $months;
+    }
 }
